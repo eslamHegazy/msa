@@ -47,13 +47,37 @@ public class ReadWallService implements MyCommand {
             Post[]feedTotal=new Post[feedFromUsers.length+feedFromChannels.length];
             for (int i = 0; i < feedFromChannels.length ; i++) {
                 feedTotal[i]=feedFromChannels[i];
+                Instant time=(feedTotal[i].getTime());
+                if(time==null)
+                    time=Instant.now();
+                Date date=Date.from(time);
+                if(earliestTime.compareTo(date)<0){
+                   earliestTime=date;
+                }
+                if(latestTime.compareTo(date)>0){
+                   latestTime=date;
+                }
             }
             for (int i = 0; i < feedFromUsers.length ; i++) {
                 feedTotal[i+ feedFromChannels.length]=feedFromUsers[i];
+                Instant time=(feedTotal[i].getTime());
+                if(time==null)
+                    time=Instant.now();
+                Date date=Date.from(time);
+                if(earliestTime.compareTo(date)<0){
+                    earliestTime=date;
+                }
+                if(latestTime.compareTo(date)>0){
+                    latestTime=date;
+                }
             }
+            user.setEarliestTime(earliestTime);
+            user.setLatestTime(latestTime);
+            userRepository.save(user);
 
             return feedTotal ;
         } catch (Exception e) {
+
             return null;
         }
 
