@@ -3,6 +3,7 @@ import com.arangodb.springframework.annotation.ArangoId;
 import com.arangodb.springframework.annotation.Document;
 import org.springframework.data.annotation.Id;
 
+import java.time.Instant;
 import java.util.HashMap;
 
 @Document("posts")
@@ -19,6 +20,7 @@ public class Post {
     private String photoLink;
     private int upvoteCount;
     private int downvoteCount;
+    private Instant time;
     private HashMap<String, Comment> comments;
 
     public String getId() {
@@ -99,5 +101,12 @@ public class Post {
 
     public void setComments(HashMap<String,Comment> comments) {
         this.comments = comments;
+    }
+    public Instant getTime() {
+        return time;
+    }
+
+    public void setTime(Instant time) {
+        this.time = time;
     }
 }

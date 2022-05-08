@@ -1,8 +1,10 @@
 package com.example.demo.apps.reddit.runner;
 
 import com.example.demo.apps.reddit.entity.Character;
+import com.example.demo.apps.reddit.entity.Post;
 import com.example.demo.apps.reddit.entity.User;
 import com.example.demo.apps.reddit.repository.ChannelRepository;
+import com.example.demo.apps.reddit.repository.PostRepository;
 import com.example.demo.apps.reddit.repository.UserRepository;
 import com.example.demo.apps.reddit.repository.CharacterRepository;
 import com.arangodb.springframework.core.ArangoOperations;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
 
+import java.time.Instant;
 import java.util.*;
 
 @ComponentScan("com.example.demo")
@@ -23,6 +26,9 @@ public class CrudRunner implements CommandLineRunner {
     private UserRepository userRepository;
     @Autowired
     private ChannelRepository channelRepository;
+    @Autowired
+    private PostRepository postRepository;
+
     @Override
     public void run(String... args) throws Exception {
 //        User user=new User();
@@ -30,12 +36,42 @@ public class CrudRunner implements CommandLineRunner {
 //        HashSet<String>channels=new HashSet<>();
 //        channels.add("Channel1");
 //        userRepository.updateWithID(user.getUserNameId(),channels);
-       Iterable<User> all= userRepository.findAll();
-       HashSet<User>users=new HashSet<>();
-        for (User u:all) {
-            users.add(u);
-        }
-        channelRepository.updateModeratorsWithID("Channel1",users);
+//        userRepository.updateAllUsersFollowedUsersWithID(null);
+//       Iterable<User> all= userRepository.findAll();
+//       HashSet<User>users=new HashSet<>();
+//        for (User u:all) {
+//            HashMap<String,Boolean>hm=new HashMap<>();
+//            hm.put(u.getUserNameId(),true);
+//            u.setFollowedUsers(hm);
+//            userRepository.save(u);
+//        }
+//        HashMap<String, Boolean> ch = new HashMap<>();
+//        ch.put("Channel1", true);
+////        userRepository.updateAllUsersFollowedChannelsWithID(ch);
+//        userRepository.updateAllUsersFollowedUsersWithID();
+//        channelRepository.updateModeratorsWithID("Channel1",users);
+//        Post[]posts= postRepository.getPostsByTimeAndChannel(Instant.now(),"Channel1");
+//        System.out.println(posts.length);
+//        for (int i = 0; i < posts.length; i++) {
+//            System.out.println(posts[i].getBody());
+//        }
+        Optional<User> userOptional=userRepository.findById("userMod1Ch1");
+        User user=userOptional.get();
+        Date earliestTime=user.getEarliestTime()==null?Date.from(Instant.now()):user.getEarliestTime();
+        Date latestTime=user.getLatestTime()==null?Date.from(Instant.now()):user.getLatestTime();
+
+//       Post[]feedFromChannels=postRepository.getPostsByTimeAndChannel(earliestTime,latestTime, user.getFollowedChannels());
+//       Post[]feedFromUsers=(postRepository.getPostsByTimeAndUser(earliestTime,latestTime,user.getFollowedUsers()));
+//       Post[]feedTotal=new Post[feedFromUsers.length+feedFromChannels.length];
+//        for (int i = 0; i < feedFromChannels.length ; i++) {
+//            feedTotal[i]=feedFromChannels[i];
+//        }
+//        for (int i = 0; i < feedFromUsers.length ; i++) {
+//            feedTotal[i+ feedFromChannels.length]=feedFromUsers[i];
+//        }
+//        for (Post p:feedTotal) {
+//            System.out.println(p.getBody());
+//        }
 
         // first drop the database so that we can run this multiple times with the same dataset
 //        operations.dropDatabase();
@@ -73,28 +109,29 @@ public class CrudRunner implements CommandLineRunner {
 //        Collection<Character> top2 = repository.findTop2DistinctBySurnameIgnoreCaseOrderByAgeDesc("lannister");
 //        top2.forEach(System.out::println);
     }
-    public static Collection<Character> createCharacters(){
-        return Arrays.asList(new Character("Robert","Baratheon",false),
-                new Character("Jaime","Lannister",true,36),new Character("Catelyn","Stark",false,40),
-                new Character("Cersei","Lannister",true,36),new Character("Daenerys","Targaryen",true,16),
-                new Character("Jorah","Mormont",false),new Character("Petyr","Baelish",false),
-                new Character("Viserys","Targaryen",false),new Character("Jon","Snow",true,16),
-                new Character("Sansa","Stark",true,13),new Character("Arya","Stark",true,11),
-                new Character("Robb","Stark",false),new Character("Theon","Greyjoy",true,16),
-                new Character("Bran","Stark",true,10),new Character("Joffrey","Baratheon",false,19),
-                new Character("Sandor","Clegane",true),new Character("Tyrion","Lannister",true,32),
-                new Character("Khal","Drogo",false),new Character("Tywin","Lannister",false),
-                new Character("Davos","Seaworth",true,49),new Character("Samwell","Tarly",true,17),
-                new Character("Stannis","Baratheon",false),new Character("Melisandre",null,true),
-                new Character("Margaery","Tyrell",false),new Character("Jeor","Mormont",false),
-                new Character("Bronn",null,true),new Character("Varys",null,true),new Character("Shae",null,false),
-                new Character("Talisa","Maegyr",false),new Character("Gendry",null,false),
-                new Character("Ygritte",null,false),new Character("Tormund","Giantsbane",true),
-                new Character("Gilly",null,true),new Character("Brienne","Tarth",true,32),
-                new Character("Ramsay","Bolton",true),new Character("Ellaria","Sand",true),
-                new Character("Daario","Naharis",true),new Character("Missandei",null,true),
-                new Character("Tommen","Baratheon",true),new Character("Jaqen","H'ghar",true),
-                new Character("Roose","Bolton",true),new Character("The High Sparrow",null,true));
+
+    public static Collection<Character> createCharacters() {
+        return Arrays.asList(new Character("Robert", "Baratheon", false),
+                new Character("Jaime", "Lannister", true, 36), new Character("Catelyn", "Stark", false, 40),
+                new Character("Cersei", "Lannister", true, 36), new Character("Daenerys", "Targaryen", true, 16),
+                new Character("Jorah", "Mormont", false), new Character("Petyr", "Baelish", false),
+                new Character("Viserys", "Targaryen", false), new Character("Jon", "Snow", true, 16),
+                new Character("Sansa", "Stark", true, 13), new Character("Arya", "Stark", true, 11),
+                new Character("Robb", "Stark", false), new Character("Theon", "Greyjoy", true, 16),
+                new Character("Bran", "Stark", true, 10), new Character("Joffrey", "Baratheon", false, 19),
+                new Character("Sandor", "Clegane", true), new Character("Tyrion", "Lannister", true, 32),
+                new Character("Khal", "Drogo", false), new Character("Tywin", "Lannister", false),
+                new Character("Davos", "Seaworth", true, 49), new Character("Samwell", "Tarly", true, 17),
+                new Character("Stannis", "Baratheon", false), new Character("Melisandre", null, true),
+                new Character("Margaery", "Tyrell", false), new Character("Jeor", "Mormont", false),
+                new Character("Bronn", null, true), new Character("Varys", null, true), new Character("Shae", null, false),
+                new Character("Talisa", "Maegyr", false), new Character("Gendry", null, false),
+                new Character("Ygritte", null, false), new Character("Tormund", "Giantsbane", true),
+                new Character("Gilly", null, true), new Character("Brienne", "Tarth", true, 32),
+                new Character("Ramsay", "Bolton", true), new Character("Ellaria", "Sand", true),
+                new Character("Daario", "Naharis", true), new Character("Missandei", null, true),
+                new Character("Tommen", "Baratheon", true), new Character("Jaqen", "H'ghar", true),
+                new Character("Roose", "Bolton", true), new Character("The High Sparrow", null, true));
     }
 }
 

@@ -34,7 +34,7 @@ public class CommentService implements MyCommand {
 
 
             if (postCreatorOptional.isEmpty() ||
-                    !postCreatorOptional.get().getFollowedChannels().contains(channelId)) {
+                    !postCreatorOptional.get().getFollowedChannels().containsKey(channelId)) {
                 return "invalid Action";
             }
             commentRepository.save(comment);

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Optional;
 
 @ComponentScan("com.example.demo")
@@ -30,10 +31,11 @@ public class CreatePostService implements MyCommand {
             //Make necessary checks that the user follows this channel
             final Optional<User> postCreatorOptional = userRepository.findById(post.getUserNameId());
             if (postCreatorOptional.isEmpty() ||
-                    !postCreatorOptional.get().getFollowedChannels().contains(post.getChannelId())) {
+                    !postCreatorOptional.get().getFollowedChannels().containsKey(post.getChannelId())) {
                 return "invalid Action";
             }
-
+            Instant time=Instant.now();
+            post.setTime(time);
             postRepository.save(post);
             return "Post uploaded successfully";
         } catch (Exception e) {

@@ -3,7 +3,9 @@ import com.arangodb.springframework.annotation.ArangoId;
 import com.arangodb.springframework.annotation.Document;
 import org.springframework.data.annotation.Id;
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -17,23 +19,35 @@ public class User {
     private String email;
     private String password;
     private String profilePhotoLink;
-    private HashSet<String> followedChannels;
+    private HashMap<String,Boolean> followedChannels;
 
-    private HashSet<String>followedUsers;
+    private HashMap<String,Boolean>followedUsers;
+    private Date earliestTime;
+    private Date latestTime;
 
-    public HashSet<String> getFollowedChannels() {
+
+
+    public Date getLatestTime() {
+        return latestTime;
+    }
+
+    public void setLatestTime(Date latestTime) {
+        this.latestTime = latestTime;
+    }
+
+    public HashMap<String,Boolean> getFollowedChannels() {
         return followedChannels;
     }
 
-    public void setFollowedChannels(HashSet<String> followedChannels) {
+    public void setFollowedChannels(HashMap<String,Boolean> followedChannels) {
         this.followedChannels = followedChannels;
     }
 
-    public HashSet<String> getFollowedUsers() {
+    public HashMap<String,Boolean> getFollowedUsers() {
         return followedUsers;
     }
 
-    public void setFollowedUsers(HashSet<String> followedUsers) {
+    public void setFollowedUsers(HashMap<String,Boolean> followedUsers) {
         this.followedUsers = followedUsers;
     }
 
@@ -76,5 +90,12 @@ public class User {
 
     public void setProfilePhotoLink(String profilePhotoLink) {
         this.profilePhotoLink = profilePhotoLink;
+    }
+    public Date getEarliestTime() {
+        return earliestTime;
+    }
+
+    public void setEarliestTime(Date earliestTime) {
+        this.earliestTime = earliestTime;
     }
 }
