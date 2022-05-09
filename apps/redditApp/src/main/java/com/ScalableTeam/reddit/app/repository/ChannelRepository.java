@@ -1,0 +1,14 @@
+package com.ScalableTeam.reddit.app.repository;
+
+import com.ScalableTeam.reddit.app.entity.Channel;
+import com.ScalableTeam.reddit.app.entity.User;
+import com.arangodb.springframework.annotation.Query;
+import com.arangodb.springframework.repository.ArangoRepository;
+import org.springframework.data.repository.query.Param;
+
+import java.util.HashSet;
+
+public interface ChannelRepository extends ArangoRepository<Channel, String> {
+    @Query("FOR u IN channels UPDATE {_key:@key,moderators:@channels} IN channels")
+    void updateModeratorsWithID(@Param("key") String key, @Param("channels") HashSet<User> moderators);
+}
