@@ -38,6 +38,10 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -59,5 +63,6 @@
 
 	<modules>
 		<module>apps</module>
+		<module>amqp</module>
 	</modules>
 </project>
