@@ -25,6 +25,8 @@ public class User {
     private Date earliestTime;
     private Date latestTime;
 
+    private String latestReadPostId;
+
 
 
     public Date getLatestTime() {
@@ -97,5 +99,12 @@ public class User {
 
     public void setEarliestTime(Date earliestTime) {
         this.earliestTime = earliestTime;
+    }
+    public String getLatestReadPostId() {
+        return latestReadPostId;
+    }
+
+    public void setLatestReadPostId(String latestReadPostId) {
+        this.latestReadPostId = latestReadPostId;
     }
 }

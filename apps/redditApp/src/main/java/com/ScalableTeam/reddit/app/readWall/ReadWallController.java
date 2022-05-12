@@ -9,7 +9,7 @@ public class ReadWallController {
     @Autowired
     private ReadWallService readWallService;
     @RequestMapping("/feed/{userNameId}")
-    private Post[] createPost(@PathVariable String userNameId){
+    private Post[] createPost(@PathVariable String userNameId) throws Exception {
         return readWallService.execute(userNameId);
     }
 }

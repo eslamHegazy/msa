@@ -12,7 +12,7 @@ public class CreatePostController {
     @Autowired
     private CreatePostService createPostService;
     @RequestMapping(method = RequestMethod.POST,value = "/posts")
-    private String createPost(@RequestBody Post post){
+    private String createPost(@RequestBody Post post) throws Exception {
         return createPostService.execute(post);
     }
 }

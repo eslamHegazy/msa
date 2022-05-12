@@ -3,6 +3,7 @@ import com.arangodb.springframework.annotation.ArangoId;
 import com.arangodb.springframework.annotation.Document;
 import org.springframework.data.annotation.Id;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 @Document("channels")
@@ -14,7 +15,7 @@ public class Channel {
     private String arangoId;
     private String name;
     private String adminId;
-    private HashSet<User> moderators;
+    private HashMap<String,Boolean> moderators;
 
     public String getId() {
         return id;
@@ -48,9 +49,9 @@ public class Channel {
         this.adminId = adminId;
     }
 
-    public HashSet<User> getModerators() {return moderators;}
+    public HashMap<String,Boolean> getModerators() {return moderators;}
 
-    public void setModerators(HashSet<User> moderators) {
+    public void setModerators(HashMap<String,Boolean> moderators) {
         this.moderators = moderators;
     }
     @Override

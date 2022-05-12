@@ -13,6 +13,7 @@ public class Comment {
 //    private Comment reply;
     private boolean commentOnPost;
     private String commentParentId;
+    private String postId;
     private String body;
     private String userNameId;
     private int upvoteCount;
@@ -87,5 +88,12 @@ public class Comment {
 
     public void setUserNameId(String userNameId) {
         this.userNameId = userNameId;
+    }
+    public String getPostId() {
+        return postId;
+    }
+
+    public void setPostId(String postId) {
+        this.postId = postId;
     }
 }

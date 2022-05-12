@@ -24,7 +24,7 @@ public class CreatePostService implements MyCommand {
     private UserRepository userRepository;
 
     @Override
-    public String execute(Object postObj) {
+    public String execute(Object postObj) throws Exception {
         // TODO: CHECK THE USER IS AUTHENTICATED AND IS SAME USER IN POST
         try {
             Post post = (Post) postObj;
@@ -32,14 +32,15 @@ public class CreatePostService implements MyCommand {
             final Optional<User> postCreatorOptional = userRepository.findById(post.getUserNameId());
             if (postCreatorOptional.isEmpty() ||
                     !postCreatorOptional.get().getFollowedChannels().containsKey(post.getChannelId())) {
-                return "invalid Action";
+                throw new Exception();
             }
             Instant time=Instant.now();
             post.setTime(time);
             postRepository.save(post);
             return "Post uploaded successfully";
         } catch (Exception e) {
-            return "Error: Couldn't add post";
+            throw new Exception("Error: Couldn't add post");
+//            return "Error: Couldn't add post";
         }
 
 

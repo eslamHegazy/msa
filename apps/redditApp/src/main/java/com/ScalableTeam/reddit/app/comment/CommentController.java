@@ -12,7 +12,7 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
     @RequestMapping(method = RequestMethod.POST,value="/comments")
-    private String comment(@RequestBody Comment comment){
+    private String comment(@RequestBody Comment comment) throws Exception {
         return commentService.execute(comment);
     }
 }
