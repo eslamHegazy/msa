@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication(
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Bean;
                 "com.ScalableTeam.amqp",
         }
 )
+@EnableEurekaClient
 public class NotificationsApplication {
     public static void main(String[] args) {
         SpringApplication.run(NotificationsApplication.class, args);
