@@ -6,16 +6,20 @@ import com.ScalableTeam.reddit.app.entity.User;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
 import com.ScalableTeam.reddit.app.repository.UserRepository;
 import com.arangodb.springframework.core.ArangoOperations;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.Map;
 import java.util.Optional;
 
 @ComponentScan("com.ScalableTeam.reddit")
 @Service
+@Slf4j
 public class ReadWallService implements MyCommand {
     @Autowired
     private ArangoOperations operations;
@@ -23,9 +27,11 @@ public class ReadWallService implements MyCommand {
     private PostRepository postRepository;
     @Autowired
     private UserRepository userRepository;
+    @Value("#{${commands}}")
+    private Map<String, String> commands;
     @Override
     public Post[] execute(Object userNameIdString) throws Exception {
-
+        log.info(commands.get("readWall") + "Service", userNameIdString);
         try{
 
             String userNameId=(String)userNameIdString;

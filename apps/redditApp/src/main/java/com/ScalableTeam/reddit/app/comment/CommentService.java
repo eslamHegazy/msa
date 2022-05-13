@@ -9,16 +9,20 @@ import com.ScalableTeam.reddit.app.repository.CommentRepository;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
 import com.ScalableTeam.reddit.app.repository.UserRepository;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 
+import java.util.Map;
 import java.util.Optional;
 
 @ComponentScan("com.ScalableTeam.reddit")
 @Service
+@Slf4j
 public class CommentService implements MyCommand {
     @Autowired
     private PostRepository postRepository;
@@ -26,12 +30,14 @@ public class CommentService implements MyCommand {
     private UserRepository userRepository;
     @Autowired
     private CommentRepository commentRepository;
-
+    @Value("#{${commands}}")
+    private Map<String, String> commands;
     //    public CommentService(PostRepository postRepository) {
 //        this.postRepository = postRepository;
 //    }
     @Override
     public String execute(Object body) throws Exception{
+        log.info(commands.get("comment") + "Service", body);
         try {
 //            CommentResponseForm commentResponseForm=(CommentResponseForm) body;
 //            Comment comment=commentResponseForm.getComment();
