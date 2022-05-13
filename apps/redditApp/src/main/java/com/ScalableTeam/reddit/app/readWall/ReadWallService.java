@@ -5,6 +5,7 @@ import com.ScalableTeam.reddit.app.entity.Post;
 import com.ScalableTeam.reddit.app.entity.User;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
 import com.ScalableTeam.reddit.app.repository.UserRepository;
+import com.ScalableTeam.reddit.config.GeneralConfig;
 import com.arangodb.springframework.core.ArangoOperations;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +28,12 @@ public class ReadWallService implements MyCommand {
     private PostRepository postRepository;
     @Autowired
     private UserRepository userRepository;
-    @Value("#{${commands}}")
-    private Map<String, String> commands;
+    @Autowired
+    private GeneralConfig generalConfig;
+
     @Override
     public Post[] execute(Object userNameIdString) throws Exception {
-        log.info(commands.get("readWall") + "Service", userNameIdString);
+        log.info(generalConfig.getCommands().get("readWall") + "Service", userNameIdString);
         try{
 
             String userNameId=(String)userNameIdString;

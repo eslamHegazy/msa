@@ -1,6 +1,7 @@
 package com.ScalableTeam.reddit.app.createPost;
 
 import com.ScalableTeam.reddit.app.entity.Post;
+import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,11 +17,12 @@ import java.util.Map;
 public class CreatePostController {
     @Autowired
     private CreatePostService createPostService;
-    @Value("#{${commands}}")
-    private Map<String, String> commands;
+    @Autowired
+    private GeneralConfig generalConfig;
+
     @RequestMapping(method = RequestMethod.POST,value = "/posts")
     private String createPost(@RequestBody Post post) throws Exception {
-        log.info(commands.get("createPost") + "Controller", post);
+        log.info(generalConfig.getCommands().get("createPost") + "Controller", post);
         return createPostService.execute(post);
     }
 }

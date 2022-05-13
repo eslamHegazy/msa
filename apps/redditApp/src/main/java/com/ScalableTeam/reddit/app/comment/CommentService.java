@@ -9,6 +9,7 @@ import com.ScalableTeam.reddit.app.repository.CommentRepository;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
 import com.ScalableTeam.reddit.app.repository.UserRepository;
 
+import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,14 +31,14 @@ public class CommentService implements MyCommand {
     private UserRepository userRepository;
     @Autowired
     private CommentRepository commentRepository;
-    @Value("#{${commands}}")
-    private Map<String, String> commands;
+    @Autowired
+    private GeneralConfig generalConfig;
     //    public CommentService(PostRepository postRepository) {
 //        this.postRepository = postRepository;
 //    }
     @Override
     public String execute(Object body) throws Exception{
-        log.info(commands.get("comment") + "Service", body);
+        log.info(generalConfig.getCommands().get("comment") + "Service", body);
         try {
 //            CommentResponseForm commentResponseForm=(CommentResponseForm) body;
 //            Comment comment=commentResponseForm.getComment();
