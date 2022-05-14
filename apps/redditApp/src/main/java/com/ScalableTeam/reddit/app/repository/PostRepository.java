@@ -1,12 +1,14 @@
 package com.ScalableTeam.reddit.app.repository;
 
 import com.ScalableTeam.reddit.app.entity.Post;
+import com.ScalableTeam.reddit.app.entity.User;
 import com.arangodb.springframework.annotation.Query;
 import com.arangodb.springframework.repository.ArangoRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 
 
 public interface PostRepository extends ArangoRepository<Post, String> {
@@ -18,5 +20,9 @@ public interface PostRepository extends ArangoRepository<Post, String> {
     Post[] getPostsByTimeAndUser(@Param("latestReadPostId") String latestReadPostId,@Param("followedUsers") HashMap<String,Boolean> followedUsers);
     @Query("FOR p IN posts UPDATE {_key:@key,@fieldName:@fieldValue} IN posts")
     void updateFieldInPost(@Param("key") String key, @Param("fieldName") String fieldName, @Param("fieldValue") Object fieldValue);
+    @Query("FOR p IN posts FILTER HAS(@channelId,p.channelId)")
+    Post[] getPostsByChannel(@Param("followedChannels")String channelId);
 
+    @Query("FOR u IN posts UPDATE {_key:@key,reports:@report} IN posts")
+    void addReport(@Param("key") String key, @Param("report") HashMap<String, String> report);
 }
