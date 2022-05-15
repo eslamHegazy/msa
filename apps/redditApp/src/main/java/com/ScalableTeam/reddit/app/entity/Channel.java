@@ -4,26 +4,25 @@ import com.arangodb.springframework.annotation.Document;
 import org.springframework.data.annotation.Id;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 @Document("channels")
 public class Channel {
     @Id // db document field: _key
-    private String id;
+    private String channelNameId;
 
     @ArangoId // db document field: _id
     private String arangoId;
-    private String name;
+
     private String adminId;
     private HashMap<String,Boolean> moderators;
     private HashMap<String, Boolean> bannedUsers;
 
-    public String getId() {
-        return id;
+    public String getChannelNameId() {
+        return channelNameId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setChannelNameId(String channelNameId) {
+        this.channelNameId = channelNameId;
     }
 
     public String getArangoId() {
@@ -34,13 +33,7 @@ public class Channel {
         this.arangoId = arangoId;
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getAdminId() {
         return adminId;
@@ -66,6 +59,6 @@ public class Channel {
 
     @Override
     public String toString() {
-        return "Channel [id=" + id + ", name=" + name + ", adminId=" + adminId + moderators.toString()+"]";
+        return "Channel [id=" + channelNameId +", adminId=" + adminId + moderators.toString()+"]";
     }
 }

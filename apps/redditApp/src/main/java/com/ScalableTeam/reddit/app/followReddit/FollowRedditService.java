@@ -49,7 +49,7 @@ public class FollowRedditService implements MyCommand {
         }
 
 
-        if(reddit.get().getBannedUsers().containsKey(userId)){
+        if(reddit.get().getBannedUsers()!=null&&reddit.get().getBannedUsers().containsKey(userId)){
             return "User "+userId + " banned from this channel " + redditId;
         }
 

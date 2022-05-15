@@ -96,4 +96,8 @@ public class Comment {
     public void setPostId(String postId) {
         this.postId = postId;
     }
+    @Override
+    public String toString(){
+        return "comment Id: "+id+"Comment On Post: "+commentOnPost+"Parent Id: "+commentParentId+"userNameId: "+userNameId;
+    }
 }

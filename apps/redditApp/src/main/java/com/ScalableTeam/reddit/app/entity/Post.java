@@ -119,4 +119,9 @@ public class Post {
     public void setReports(HashMap<String, String> reports) {
         this.reports = reports;
     }
+    @Override
+    public String toString(){
+        return "Post Id: "+id+" userNameId: "+userNameId;
+    }
+
 }

@@ -1,8 +1,8 @@
-package com.ScalableTeam.reddit.app.responseForms;
+package com.ScalableTeam.reddit.app.requestForms;
 
 import com.ScalableTeam.reddit.app.entity.Comment;
 
-public class CommentResponseForm {
+public class CommentRequestForm {
     private String userId;
     private String postId;
     private Comment comment;

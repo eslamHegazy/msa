@@ -11,7 +11,7 @@ import java.util.HashSet;
 
 public interface ChannelRepository extends ArangoRepository<Channel, String> {
     @Query("FOR u IN channels UPDATE {_key:@key,moderators:@channels} IN channels")
-    void updateModeratorsWithID(@Param("key") String key, @Param("channels") HashSet<User> moderators);
+    void updateModeratorsWithID(@Param("key") String key, @Param("channels") HashMap<String,Boolean> moderators);
 
     @Query("FOR u IN channels UPDATE {_key:@key,bannedUsers:@channels} IN channels")
     void updateBannedUsersWithID(@Param("key") String key, @Param("channels") HashMap<String, Boolean> bannedUsers);

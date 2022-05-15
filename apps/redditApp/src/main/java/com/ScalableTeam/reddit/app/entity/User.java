@@ -107,4 +107,8 @@ public class User {
     public void setLatestReadPostId(String latestReadPostId) {
         this.latestReadPostId = latestReadPostId;
     }
+    @Override
+    public String toString(){
+        return "userNameId: "+userNameId;
+    }
 }
