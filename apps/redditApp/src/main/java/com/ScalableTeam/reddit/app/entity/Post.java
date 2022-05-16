@@ -25,6 +25,8 @@ public class Post {
     private Instant time;
     private HashMap<String, Comment> comments;
 
+    private HashMap<String, String> reports; //userId : reason
+
     public String getId() {
         return id;
     }
@@ -111,4 +113,17 @@ public class Post {
     public void setTime(Instant time) {
         this.time = time;
     }
+
+    public HashMap<String, String> getReports() {
+        return reports;
+    }
+
+    public void setReports(HashMap<String, String> reports) {
+        this.reports = reports;
+    }
+    @Override
+    public String toString(){
+        return "Post Id: "+id+" userNameId: "+userNameId;
+    }
+
 }

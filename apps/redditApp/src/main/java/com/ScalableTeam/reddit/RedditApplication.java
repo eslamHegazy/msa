@@ -9,6 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ConfigurationPropertiesScan
 @EnableEurekaClient
+@ComponentScan("com.ScalableTeam.reddit")
 public class RedditApplication {
 
     public static void main(String[] args) {
