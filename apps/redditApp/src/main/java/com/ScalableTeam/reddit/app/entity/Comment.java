@@ -1,9 +1,11 @@
 package com.ScalableTeam.reddit.app.entity;
 import com.arangodb.springframework.annotation.ArangoId;
 import com.arangodb.springframework.annotation.Document;
+import lombok.Builder;
 import org.springframework.data.annotation.Id;
 
 @Document("comments")
+@Builder
 public class Comment {
     @Id // db document field: _key
     private String id;
@@ -16,8 +18,8 @@ public class Comment {
     private String postId;
     private String body;
     private String userNameId;
-    private int upvoteCount;
-    private int downvoteCount;
+    private long upvoteCount;
+    private long downvoteCount;
 
     public String getId() {
         return id;
@@ -67,19 +69,19 @@ public class Comment {
         this.body = body;
     }
 
-    public int getUpvoteCount() {
+    public long getUpvoteCount() {
         return upvoteCount;
     }
 
-    public void setUpvoteCount(int upvoteCount) {
+    public void setUpvoteCount(long upvoteCount) {
         this.upvoteCount = upvoteCount;
     }
 
-    public int getDownvoteCount() {
+    public long getDownvoteCount() {
         return downvoteCount;
     }
 
-    public void setDownvoteCount(int downvoteCount) {
+    public void setDownvoteCount(long downvoteCount) {
         this.downvoteCount = downvoteCount;
     }
     public String getUserNameId() {

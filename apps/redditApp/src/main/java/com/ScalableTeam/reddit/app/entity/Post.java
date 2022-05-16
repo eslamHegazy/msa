@@ -1,12 +1,14 @@
 package com.ScalableTeam.reddit.app.entity;
 import com.arangodb.springframework.annotation.ArangoId;
 import com.arangodb.springframework.annotation.Document;
+import lombok.Builder;
 import org.springframework.data.annotation.Id;
 
 import java.time.Instant;
 import java.util.HashMap;
 
 @Document("posts")
+@Builder
 public class Post {
     @Id // db document field: _key
     private String id;
@@ -18,8 +20,8 @@ public class Post {
     private String title;
     private String body;
     private String photoLink;
-    private int upvoteCount;
-    private int downvoteCount;
+    private long upvoteCount;
+    private long downvoteCount;
     private Instant time;
     private HashMap<String, Comment> comments;
 
@@ -79,19 +81,19 @@ public class Post {
         this.photoLink = photoLink;
     }
 
-    public int getUpvoteCount() {
+    public long getUpvoteCount() {
         return upvoteCount;
     }
 
-    public void setUpvoteCount(int upvoteCount) {
+    public void setUpvoteCount(long upvoteCount) {
         this.upvoteCount = upvoteCount;
     }
 
-    public int getDownvoteCount() {
+    public long getDownvoteCount() {
         return downvoteCount;
     }
 
-    public void setDownvoteCount(int downvoteCount) {
+    public void setDownvoteCount(long downvoteCount) {
         this.downvoteCount = downvoteCount;
     }
 
