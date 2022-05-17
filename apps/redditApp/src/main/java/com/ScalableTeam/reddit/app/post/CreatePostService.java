@@ -1,4 +1,4 @@
-package com.ScalableTeam.reddit.app.createPost;
+package com.ScalableTeam.reddit.app.post;
 
 import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.entity.Post;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.Instant;
-import java.util.Map;
 import java.util.Optional;
 
 @ComponentScan("com.ScalableTeam.reddit")

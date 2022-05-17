@@ -1,4 +1,4 @@
-package com.ScalableTeam.reddit.app.createPost;
+package com.ScalableTeam.reddit.app.post;
 
 import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.entity.Post;

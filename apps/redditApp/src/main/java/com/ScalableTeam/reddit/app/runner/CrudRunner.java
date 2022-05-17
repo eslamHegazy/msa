@@ -6,6 +6,9 @@ import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
 import com.ScalableTeam.reddit.app.repository.UserRepository;
 import com.ScalableTeam.reddit.app.repository.CharacterRepository;
+import com.ScalableTeam.reddit.app.seeders.CommentSeeder;
+import com.ScalableTeam.reddit.app.seeders.PostSeeder;
+import com.ScalableTeam.reddit.app.seeders.UserSeeder;
 import com.arangodb.springframework.core.ArangoOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -27,9 +30,18 @@ public class CrudRunner implements CommandLineRunner {
     private ChannelRepository channelRepository;
     @Autowired
     private PostRepository postRepository;
-
+    @Autowired
+    private UserSeeder userSeeder;
+    @Autowired
+    private PostSeeder postSeeder;
+    @Autowired
+    private CommentSeeder commentSeeder;
     @Override
     public void run(String... args) throws Exception {
+        Set<String> users = userSeeder.seedUsers();
+        Set<String> posts = postSeeder.seedPosts(users);
+        Set<String> comments = commentSeeder.seedComments(users, posts);
+
 //        User user=new User();
 //        user.setUserNameId("userFollowsCh1");
 //        HashSet<String>channels=new HashSet<>();
@@ -54,10 +66,10 @@ public class CrudRunner implements CommandLineRunner {
 //        for (int i = 0; i < posts.length; i++) {
 //            System.out.println(posts[i].getBody());
 //        }
-        Optional<User> userOptional=userRepository.findById("userMod1Ch1");
-        User user=userOptional.get();
-        Date earliestTime=user.getEarliestTime()==null?Date.from(Instant.now()):user.getEarliestTime();
-        Date latestTime=user.getLatestTime()==null?Date.from(Instant.now()):user.getLatestTime();
+//        Optional<User> userOptional=userRepository.findById("userMod1Ch1");
+//        User user=userOptional.get();
+//        Date earliestTime=user.getEarliestTime()==null?Date.from(Instant.now()):user.getEarliestTime();
+//        Date latestTime=user.getLatestTime()==null?Date.from(Instant.now()):user.getLatestTime();
 
 //       Post[]feedFromChannels=postRepository.getPostsByTimeAndChannel(earliestTime,latestTime, user.getFollowedChannels());
 //       Post[]feedFromUsers=(postRepository.getPostsByTimeAndUser(earliestTime,latestTime,user.getFollowedUsers()));
