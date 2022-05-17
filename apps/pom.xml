@@ -13,5 +13,6 @@
 	<description>Semester 10 Scalable Reddit Microservices Container</description>
 	<modules>
 		<module>notificationsApp</module>
-	</modules>
+        <module>chatApp</module>
+    </modules>
 </project>
