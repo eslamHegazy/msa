@@ -1,6 +1,7 @@
 package com.ScalableTeam.reddit.app.comment;
 
 import com.ScalableTeam.reddit.app.entity.Comment;
+import com.ScalableTeam.reddit.app.entity.Post;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class CommentController {
     private GeneralConfig generalConfig;
 
     @RequestMapping(method = RequestMethod.POST,value="/comments")
-    private String comment(@RequestBody Comment comment) throws Exception {
+    private Post comment(@RequestBody Comment comment) throws Exception {
         log.info(generalConfig.getCommands().get("comment") + "Controller", comment);
         return commentService.execute(comment);
     }

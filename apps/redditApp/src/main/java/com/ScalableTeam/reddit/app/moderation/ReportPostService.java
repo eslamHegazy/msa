@@ -5,6 +5,7 @@ import com.ScalableTeam.reddit.app.entity.Post;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ public class ReportPostService implements MyCommand {
     }
 
     @Override
+    @CachePut("postsCache")
     public Object execute(Object body) throws Exception {
 
         HashMap<String,String> requestBody = (HashMap<String,String>) body;

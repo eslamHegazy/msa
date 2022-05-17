@@ -3,11 +3,12 @@ import com.arangodb.springframework.annotation.ArangoId;
 import com.arangodb.springframework.annotation.Document;
 import org.springframework.data.annotation.Id;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashMap;
 
 @Document("posts")
-public class Post {
+public class Post implements Serializable {
     @Id // db document field: _key
     private String id;
 

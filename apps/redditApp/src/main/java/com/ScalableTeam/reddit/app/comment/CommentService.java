@@ -13,6 +13,7 @@ import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,7 @@ public class CommentService implements MyCommand {
 //        this.postRepository = postRepository;
 //    }
     @Override
-    public String execute(Object body) throws Exception{
+    public Post execute(Object body) throws Exception{
         log.info(generalConfig.getCommands().get("comment") + "Service", body);
         try {
 //            CommentResponseForm commentResponseForm=(CommentResponseForm) body;
@@ -59,16 +60,31 @@ public class CommentService implements MyCommand {
                 throw new Exception();
 
             }
-            commentRepository.save(comment);
-            HashMap<String, Comment> hm = new HashMap<>();
-            //Comment Id is generated and set by save of commentRepository
-            hm.put(comment.getId(), comment);
-            postRepository.updateFieldInPost(postId, "comments", hm);
-            return "Comment added Successfully";
+            Post post=postParentOptional.get();
+            return continueExecuting(comment,post,postId);
         } catch (Exception e) {
 
             throw new Exception("Invalid Action");
             //return "Error: Couldn't add comment";
         }
+    }
+    @CachePut(cacheNames = {"postsCache","popularPostsCache"},key = "#postId")
+    public Post continueExecuting(Comment comment, Post post,String postId){
+        commentRepository.save(comment);
+        HashMap<String, Comment> hm = new HashMap<>();
+        //Comment Id is generated and set by save of commentRepository
+        //Update the post and return it to update cache
+        hm.put(comment.getId(), comment);
+        if(post.getComments()==null){
+            post.setComments(hm);
+        }
+        else {
+            hm=post.getComments();
+            hm.put(comment.getId(), comment);
+            post.setComments(hm);
+        }
+        postRepository.updateFieldInPost(postId, "comments", hm);
+        return post;
+
     }
 }

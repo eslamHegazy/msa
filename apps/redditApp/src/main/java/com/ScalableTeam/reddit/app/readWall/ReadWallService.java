@@ -10,11 +10,13 @@ import com.arangodb.springframework.core.ArangoOperations;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -32,6 +34,7 @@ public class ReadWallService implements MyCommand {
     private GeneralConfig generalConfig;
 
     @Override
+    @Cacheable(cacheNames = "postsCache")
     public Post[] execute(Object userNameIdString) throws Exception {
         log.info(generalConfig.getCommands().get("readWall") + "Service", userNameIdString);
         try{
@@ -48,8 +51,8 @@ public class ReadWallService implements MyCommand {
 //            Date earliestTime=user.getEarliestTime()==null?Date.from(Instant.now()):user.getEarliestTime();
 //            Date latestTime=user.getLatestTime()==null?Date.from(Instant.now()):user.getLatestTime();
             String newLatestReadPostId=user.getLatestReadPostId()==null?"":user.getLatestReadPostId();
-            Post[]feedFromChannels=postRepository.getPostsByTimeAndChannel(newLatestReadPostId, user.getFollowedChannels());
-            Post[]feedFromUsers=(postRepository.getPostsByTimeAndUser(newLatestReadPostId,user.getFollowedUsers()));
+            Post[]feedFromChannels=postRepository.getPostsByTimeAndChannel(newLatestReadPostId, user.getFollowedChannels());;
+            Post[]feedFromUsers=postRepository.getPostsByTimeAndUser(newLatestReadPostId,user.getFollowedUsers());
             Post[]feedTotal=new Post[feedFromUsers.length+feedFromChannels.length];
 
             for (int i = 0; i < feedFromChannels.length ; i++) {
@@ -95,6 +98,14 @@ public class ReadWallService implements MyCommand {
             throw new Exception("Exception When getting the feed");
         }
 
+    }
+    @Cacheable(cacheNames = "postsCache")
+    private Post[]getPostsFromFollowedChannels(String newLatestReadPostId, HashMap<String,Boolean>followedChannels){
+        return postRepository.getPostsByTimeAndChannel(newLatestReadPostId, followedChannels);
+    }
+    @Cacheable(cacheNames = "postsCache")
+    private Post[]getPostsFromFollowedUsers(String newLatestReadPostId,HashMap<String,Boolean>followedUsers){
+        return postRepository.getPostsByTimeAndUser(newLatestReadPostId,followedUsers);
     }
 
 }

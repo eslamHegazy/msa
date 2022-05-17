@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ import java.util.Optional;
 @ComponentScan("com.ScalableTeam.reddit")
 @Service
 @Slf4j
-public class CreatePostService implements MyCommand {
+public class GetPostService implements MyCommand {
     @Autowired
     private ArangoOperations operations;
     @Autowired
@@ -32,32 +33,24 @@ public class CreatePostService implements MyCommand {
     private UserRepository userRepository;
     @Autowired
     private GeneralConfig generalConfig;
-//    @Resource(name="redisTemplate")
+    //    @Resource(name="redisTemplate")
 //    private HashOperations<String, String, Post> hashOperations;
     @Override
-    public Post execute(Object postObj) throws Exception {
-        log.info(generalConfig.getCommands().get("createPost") + "Service", postObj);
+    public Post execute(Object postId) throws Exception {
+        log.info(generalConfig.getCommands().get("getPost") + "Service", postId);
         // TODO: CHECK THE USER IS AUTHENTICATED AND IS SAME USER IN POST
         try {
-            Post post = (Post) postObj;
+          String postIdString=(String)postId;
             //Make necessary checks that the user follows this channel
-            final Optional<User> postCreatorOptional = userRepository.findById(post.getUserNameId());
-            if (postCreatorOptional.isEmpty() ||
-                    !postCreatorOptional.get().getFollowedChannels().containsKey(post.getChannelId())) {
-                throw new Exception();
-            }
-            Instant time=Instant.now();
-            post.setTime(time);
-            postRepository.save(post);
-            return continueExecuting(post,post.getId());
+            return continueExecuting(postIdString);
         } catch (Exception e) {
             throw new Exception("Error: Couldn't add post");
 //            return "Error: Couldn't add post";
         }
     }
-    @CachePut(cacheNames = "postsCache",key="#postId")
-    public Post continueExecuting(Post post,String postId){
-        return post;
+    @Cacheable(cacheNames = "postsCache",key="#postId")
+    public Post continueExecuting(String postId){
+        return postRepository.findById(postId).get();
     }
 
 
