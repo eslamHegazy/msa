@@ -23,6 +23,9 @@ public class RabbitMQBinders {
     private final Config config;
     private final ConfigurableListableBeanFactory beanFactory;
 
+    private String getMethodName(String microservice) {
+        return "get" + microservice.substring(0, 1).toUpperCase() + microservice.substring(1);
+    }
     @Bean
     Map<String, Queue> queues() throws InvocationTargetException, IllegalAccessException {
         Map<String, Queue> queues = new HashMap<>();
@@ -36,14 +39,15 @@ public class RabbitMQBinders {
         Map<String, String> commands;
         for (Field micro : microservices) {
             String microservice = micro.getName();
-            String methodName = "get" + microservice.substring(0, 1).toUpperCase() + microservice.substring(1);
+            String methodName = getMethodName(microservice);
             try {
                 m = requestsClass.getMethod(methodName);
                 commands = (Map<String, String>) m.invoke(requests);
-                for (String key : commands.keySet()) {
-                    String queueName = commands.get(key);
-                    queues.put(queueName, createQueue(queueName));
-                }
+                if (null != commands)
+                    for (String key : commands.keySet()) {
+                        String queueName = commands.get(key);
+                        queues.put(queueName, createQueue(queueName));
+                    }
             } catch (NoSuchMethodException | SecurityException ignored) {
 
             }
@@ -51,11 +55,12 @@ public class RabbitMQBinders {
         microservices = responsesClass.getDeclaredFields();
         for (Field micro : microservices) {
             String microservice = micro.getName();
-            String methodName = "get" + microservice.substring(0, 1).toUpperCase() + microservice.substring(1);
+            String methodName = getMethodName(microservice);
             try {
                 m = responsesClass.getMethod(methodName);
                 commands = (Map<String, String>) m.invoke(responses);
-                for (String key : commands.keySet()) {
+                if (null != commands)
+                    for (String key : commands.keySet()) {
                     String queueName = commands.get(key);
                     queues.put(queueName, createQueue(queueName));
                 }
@@ -63,7 +68,6 @@ public class RabbitMQBinders {
 
             }
         }
-        System.out.println(queues);
         return queues;
     }
 
