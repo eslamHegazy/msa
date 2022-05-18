@@ -9,6 +9,7 @@ import java.time.Instant;
 import java.util.HashMap;
 
 @Document("posts")
+@Builder
 public class Post implements Serializable {
     @Id // db document field: _key
     private String id;

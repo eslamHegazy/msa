@@ -1,6 +1,5 @@
 package com.ScalableTeam.reddit.app.followReddit;
 
-import com.ScalableTeam.reddit.app.createPost.CreatePostService;
 import com.ScalableTeam.reddit.app.entity.Channel;
 import com.ScalableTeam.reddit.app.entity.Post;
 import com.ScalableTeam.reddit.app.entity.User;

@@ -15,11 +15,11 @@ public class DataLoader {
     private final PostSeeder postSeeder;
     private final CommentSeeder commentSeeder;
 
-    @PostConstruct
-    private void loadData() {
-        log.info("Data Loader:----");
-        Set<String> users = userSeeder.seedUsers();
-        Set<String> posts = postSeeder.seedPosts(users);
-        commentSeeder.seedComments(users, posts);
-    }
+//    @PostConstruct
+//    private void loadData() {
+//        log.info("Data Loader:----");
+//        Set<String> users = userSeeder.seedUsers();
+//        Set<String> posts = postSeeder.seedPosts(users);
+//        commentSeeder.seedComments(users, posts);
+//    }
 }
