@@ -10,12 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 
-@SpringBootApplication(
-        scanBasePackages = {
-                "com.ScalableTeam.notifications",
-                "com.ScalableTeam.amqp",
-        }
-)
+@SpringBootApplication(scanBasePackages = {"com.ScalableTeam.notifications", "com.ScalableTeam.amqp",})
 @EnableEurekaClient
 public class NotificationsApplication {
     public static void main(String[] args) {
@@ -23,13 +18,9 @@ public class NotificationsApplication {
     }
 
     @Bean
-    CommandLineRunner commandLineRunner(
-            RabbitMQMessageProducer producer) {
+    CommandLineRunner commandLineRunner(RabbitMQMessageProducer producer) {
         return args -> {
-            producer.publish(
-                    new Person("Maria", 23),
-                    "amq.direct",
-                    "notif");
+            producer.publish(new Person("Maria", 23), "amq.direct", "notif");
         };
     }
 }
