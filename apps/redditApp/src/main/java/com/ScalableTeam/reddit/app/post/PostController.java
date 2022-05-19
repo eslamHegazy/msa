@@ -21,12 +21,19 @@ public class PostController {
     private DownvotePostService downvotePostService;
     @Autowired
     private GeneralConfig generalConfig;
+    @Autowired
+    private GetPostService getPostService;
 
     @PostMapping
-    public String createPost(@RequestBody Post post) throws Exception {
+    public Post createPost(@RequestBody Post post) throws Exception {
         String indicator = generalConfig.getCommands().get("createPost");
         log.info(indicator + "Controller", post);
         return createPostService.execute(post);
+    }
+    @RequestMapping("/posts/{postId}")
+    private Post getPost(@PathVariable String postId) throws Exception {
+        log.info(generalConfig.getCommands().get("getPost") + "Controller", postId);
+        return getPostService.execute(postId);
     }
 
     @PostMapping("upvote/{id}")

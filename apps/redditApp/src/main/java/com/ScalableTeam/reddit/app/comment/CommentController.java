@@ -1,6 +1,7 @@
 package com.ScalableTeam.reddit.app.comment;
 
 import com.ScalableTeam.reddit.app.entity.Comment;
+import com.ScalableTeam.reddit.app.entity.Post;
 import com.ScalableTeam.reddit.app.post.DownvotePostService;
 import com.ScalableTeam.reddit.app.post.UpvotePostService;
 import com.ScalableTeam.reddit.config.GeneralConfig;
@@ -26,7 +27,7 @@ public class CommentController {
     private GeneralConfig generalConfig;
 
     @PostMapping
-    private String comment(@RequestBody Comment comment) throws Exception {
+    private Post comment(@RequestBody Comment comment) throws Exception {
         log.info(generalConfig.getCommands().get("comment") + "Controller", comment);
         return commentService.execute(comment);
     }

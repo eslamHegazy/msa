@@ -4,9 +4,11 @@ import com.arangodb.springframework.annotation.Document;
 import lombok.Builder;
 import org.springframework.data.annotation.Id;
 
+import java.io.Serializable;
+
 @Document("comments")
 @Builder
-public class Comment {
+public class Comment implements Serializable {
     @Id // db document field: _key
     private String id;
 
