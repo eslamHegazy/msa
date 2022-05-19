@@ -23,6 +23,5 @@ public interface PostRepository extends ArangoRepository<Post, String> {
     @Query("FOR p IN posts FILTER HAS(@channelId,p.channelId)")
     Post[] getPostsByChannel(@Param("followedChannels")String channelId);
 
-    @Query("FOR u IN posts UPDATE {_key:@key,reports:@report} IN posts")
-    void addReport(@Param("key") String key, @Param("report") HashMap<String, String> report);
+
 }

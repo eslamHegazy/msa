@@ -6,6 +6,7 @@ import com.ScalableTeam.reddit.app.entity.Channel;
 import com.ScalableTeam.reddit.app.entity.User;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import com.ScalableTeam.reddit.app.repository.UserRepository;
+import com.ScalableTeam.reddit.app.requestForms.BanUserForm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -31,31 +32,37 @@ BanUserService(ChannelRepository channelRepository, UserRepository userRepositor
 
 
     @Override
-    public Object execute(Object body) throws Exception {
+    public String execute(Object body) throws Exception {
 
-        HashMap<String,String> requestBody = (HashMap<String,String>) body;
-            String modId = requestBody.get("userId");
-            String requestedBanUserId = requestBody.get("requestedBanUserId");
-            String redditId = requestBody.get("redditId");
+try {
 
-        Optional<Channel> reddit  = channelRepository.findById(redditId);
-        if (!reddit.isPresent()){
-            throw new IllegalStateException("Reddit not found in DB!");
-        }
+    BanUserForm request = (BanUserForm) body;
+    String modId = request.getModId();
+    String requestedBanUserId =request.getRequestedBanUserId();
+    String redditId = request.getRedditId();
 
-        Optional<User> user = userRepository.findById(requestedBanUserId);
-        if(!user.isPresent()){
-            throw new IllegalStateException("User not found in DB!");
-        }
+    Optional<Channel> reddit = channelRepository.findById(redditId);
+    if (!reddit.isPresent()) {
+        throw new IllegalStateException("Reddit not found in DB!");
+    }
 
-        if(!reddit.get().getModerators().containsKey(modId)){
-            return "User " + modId + " is not a mod for channel "+ redditId;
-        }
+    Optional<User> user = userRepository.findById(requestedBanUserId);
+    if (!user.isPresent()) {
+        throw new IllegalStateException("User not found in DB!");
+    }
 
-        HashMap<String, Boolean> ban = new HashMap<String, Boolean>();
-        ban.put(requestedBanUserId,true);
-        channelRepository.updateBannedUsersWithID(redditId,ban);
+    if (!reddit.get().getModerators().containsKey(modId)) {
+        return "User " + modId + " is not a mod for channel " + redditId;
+    }
 
-        return "user " + requestedBanUserId + " banned successfully from channel "+ redditId;
+    HashMap<String, Boolean> ban = new HashMap<String, Boolean>();
+    ban.put(requestedBanUserId, true);
+    channelRepository.updateBannedUsersWithID(redditId, ban);
+
+    return "user " + requestedBanUserId + " banned successfully from channel " + redditId;
+}
+catch(Exception e){
+    return e.getMessage();
+}
     }
 }

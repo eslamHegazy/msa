@@ -16,6 +16,8 @@ public class Channel {
     private String adminId;
     private HashMap<String,Boolean> moderators;
     private HashMap<String, Boolean> bannedUsers;
+    private HashMap<String, Boolean> reports;
+
 
     public String getChannelNameId() {
         return channelNameId;
@@ -55,6 +57,14 @@ public class Channel {
 
     public void setBannedUsers(HashMap<String, Boolean> bannedUsers) {
         this.bannedUsers = bannedUsers;
+    }
+
+    public HashMap<String, Boolean> getReports() {
+        return reports;
+    }
+
+    public void setReports(HashMap<String, Boolean> reports) {
+        this.reports = reports;
     }
 
     @Override
