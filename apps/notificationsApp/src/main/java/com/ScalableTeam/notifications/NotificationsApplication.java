@@ -13,8 +13,10 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication(scanBasePackages = {"com.ScalableTeam.notifications", "com.ScalableTeam.amqp",})
 @EnableEurekaClient
 public class NotificationsApplication {
+
     public static void main(String[] args) {
         SpringApplication.run(NotificationsApplication.class, args);
+        FirebaseInitializer.initialize();
     }
 
     @Bean
