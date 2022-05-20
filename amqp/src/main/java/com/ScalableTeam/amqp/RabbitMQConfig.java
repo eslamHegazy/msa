@@ -38,5 +38,4 @@ public class RabbitMQConfig {
                 new Jackson2JsonMessageConverter();
         return jackson2JsonMessageConverter;
     }
-
 }

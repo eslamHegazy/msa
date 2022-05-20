@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @AllArgsConstructor
-public class RabbitMQMessageProducer {
+public class RabbitMQProducer {
 
     private final AmqpTemplate amqpTemplate;
 
