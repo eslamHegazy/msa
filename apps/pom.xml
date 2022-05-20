@@ -12,7 +12,6 @@
 	<name>apps</name>
 	<description>Semester 10 Scalable Reddit Microservices Container</description>
 	<modules>
-		<module>redditApp</module>
 		<module>notificationsApp</module>
 	</modules>
 </project>
