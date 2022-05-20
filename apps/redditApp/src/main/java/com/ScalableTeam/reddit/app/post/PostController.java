@@ -13,6 +13,8 @@ import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +33,8 @@ public class PostController extends MessagePublisher {
     private GetPostService getPostService;
     @Autowired
     private GeneralConfig generalConfig;
+    @Autowired
+    private GetPopularPostsService getPopularPostsService;
 
     @PostMapping
     public Post createPost(@RequestBody Post post) throws Exception {
@@ -39,13 +43,13 @@ public class PostController extends MessagePublisher {
         return createPostService.execute(post);
     }
 
-    @RequestMapping("/posts/{postId}")
+    @GetMapping("{postId}")
     private Post getPost(@PathVariable String postId) throws Exception {
         log.info(generalConfig.getCommands().get("getPost") + "Controller", postId);
         return getPostService.execute(postId);
     }
 
-    @GetMapping("/{postId}/comments")
+    @GetMapping("{postId}/comments")
     public Collection<Comment> getPostComments(@PathVariable String postId) throws Exception {
         String commandName = "getPostComments";
         String indicator = generalConfig.getCommands().get(commandName);
@@ -89,5 +93,11 @@ public class PostController extends MessagePublisher {
                 config.getExchange(),
                 config.getQueues().getRequest().getReddit().get(commandName),
                 messagePostProcessor);
+    }
+
+    @RequestMapping("/popularPosts")
+    private ArrayList<Post> getPopularPosts() throws Exception {
+        log.info(generalConfig.getCommands().get("getPopularPost") + "Controller");
+        return getPopularPostsService.execute(null);
     }
 }

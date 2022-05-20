@@ -16,6 +16,9 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.ScalableTeam.reddit.app.caching.CachingService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +33,12 @@ public class DownvotePostService implements MyCommand {
     private final PostVoteRepository postVoteRepository;
     private final GeneralConfig generalConfig;
     private final PostVoteValidation postVoteValidation;
+//    @Value("${popularPostsUpvoteThreshold}")
+
+    @Autowired
+    private CacheManager cacheManager;
+    @Autowired
+    private CachingService cachingService;
 
     @RabbitListener(queues = "${mq.queues.request.reddit.downvotePost}")
     public String execute(VotePostForm votePostForm, Message message) throws Exception {
@@ -42,6 +51,7 @@ public class DownvotePostService implements MyCommand {
     @Transactional(rollbackFor = {Exception.class})
     @Override
     public Object execute(Object obj) throws Exception {
+        int popularPostsUpvoteThreshold = 1;
         Map<String, Object> attributes = (Map<String, Object>) obj;
         VotePostForm votePostForm = (VotePostForm) attributes.get("form");
         Message message = (Message) attributes.get("message");
@@ -58,10 +68,18 @@ public class DownvotePostService implements MyCommand {
         PostVote postVote = postVoteRepository.findById(postId).get();
         Long upvotesCount = postVote.getUpvotes(), downvotesCount = postVote.getDownvotes();
         Post post = postRepository.findById(postId).get();
+        long previousUpvotes = post.getUpvoteCount();
         post.setUpvoteCount(upvotesCount);
         post.setDownvoteCount(downvotesCount);
         postRepository.save(post);
-
+        if (previousUpvotes == popularPostsUpvoteThreshold && upvotesCount == popularPostsUpvoteThreshold - 1) {
+            cachingService.removePreviouslyPopularPost(postId);
+        } else {
+            cachingService.updatePopularPostsCache(postId, post);
+        }
+        if (cacheManager.getCache("postsCache").get(postId) != null) {
+            cachingService.updatePostsCache(postId, post);
+        }
         // todo: integrate notifications
         return String.format("User %s %s %s", userNameId, responseMessage, postId);
     }

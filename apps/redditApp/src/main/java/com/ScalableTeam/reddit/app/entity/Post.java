@@ -1,4 +1,5 @@
 package com.ScalableTeam.reddit.app.entity;
+
 import com.arangodb.springframework.annotation.ArangoId;
 import com.arangodb.springframework.annotation.Document;
 import com.arangodb.springframework.annotation.Relations;
@@ -129,7 +130,19 @@ public class Post implements Serializable {
 
     @Override
     public String toString() {
-        return "Post Id: " + id + " userNameId: " + userNameId + " upvoteCount: " + upvoteCount + " downvoteCount: " + downvoteCount;
+        return "Post{" +
+                "id='" + id + '\'' +
+                ", arangoId='" + arangoId + '\'' +
+                ", channelId='" + channelId + '\'' +
+                ", userNameId='" + userNameId + '\'' +
+                ", title='" + title + '\'' +
+                ", body='" + body + '\'' +
+                ", photoLink='" + photoLink + '\'' +
+                ", upvoteCount=" + upvoteCount +
+                ", downvoteCount=" + downvoteCount +
+                ", time=" + time +
+                ", comments=" + comments +
+                ", reports=" + reports +
+                '}';
     }
-
 }

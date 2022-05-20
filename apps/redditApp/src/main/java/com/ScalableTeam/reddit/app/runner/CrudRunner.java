@@ -1,15 +1,27 @@
 package com.ScalableTeam.reddit.app.runner;
 
+import com.ScalableTeam.reddit.app.entity.Comment;
+import com.ScalableTeam.reddit.app.entity.Post;
+import com.ScalableTeam.reddit.app.entity.User;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
 import com.ScalableTeam.reddit.app.repository.UserRepository;
 import com.ScalableTeam.reddit.app.seeders.CommentSeeder;
 import com.ScalableTeam.reddit.app.seeders.PostSeeder;
 import com.ScalableTeam.reddit.app.seeders.UserSeeder;
+import com.ScalableTeam.reddit.app.topic.Topic;
 import com.arangodb.springframework.core.ArangoOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+import javax.annotation.Resource;
+import java.time.Instant;
+import java.util.*;
 
 @ComponentScan("com.ScalableTeam.reddit")
 public class CrudRunner implements CommandLineRunner {
@@ -28,8 +40,35 @@ public class CrudRunner implements CommandLineRunner {
     private PostSeeder postSeeder;
     @Autowired
     private CommentSeeder commentSeeder;
+    @Autowired
+    private CacheManager cacheManager;
+    @Resource(name = "redisTemplate")
+    private HashOperations<String, String, Post> hashOperations;
+
     @Override
     public void run(String... args) throws Exception {
+//        Set<String> users = userSeeder.seedUsers();
+//        Set<String> posts = postSeeder.seedPosts(users);
+//        Set<String> comments = commentSeeder.seedComments(users, posts);
+//        System.err.println("hello");
+//        System.err.println(cacheManager.getCacheNames());
+//        System.err.println(cacheManager.getCache("postsCache").get("userAdminChannel3"));
+//
+//
+//        System.err.println("heeloo"+ hashOperations.entries("postsCache"));
+        HashMap<String, Topic> hm = new HashMap<>();
+        Topic c=new Topic();
+        c.setDescription("hello");
+        hm.put("1",c);
+        System.err.println("hello"+hm);
+//        redisTemplate.setKeySerializer(new StringRedisSerializer());
+//        HashSet<String>keys= (HashSet<String>) ( ( RedisTemplate ) cacheManager.getCache("postsCache").getNativeCache() ).keys("*");
+//        Map<String,Post>res=(Map<String, Post>) redisTemplate.keys("postsCache"+"*").parallelStream().map(key->{
+//            Map<String,Post>cacheEntries=new HashMap<>();
+//            cacheEntries.put(key,(Post)cacheManager.getCache("postsCache").get(key));
+//            return cacheEntries ;
+//        });
+//        System.err.println(keys.size());
 //        User user=new User();
 //        user.setUserNameId("userFollowsCh1");
 //        HashSet<String>channels=new HashSet<>();
@@ -109,4 +148,3 @@ public class CrudRunner implements CommandLineRunner {
 //        top2.forEach(System.out::println);
     }
 }
-

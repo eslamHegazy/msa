@@ -109,6 +109,16 @@ public class Comment implements Serializable {
 
     @Override
     public String toString() {
-        return "comment Id: " + id + "Comment On Post: " + commentOnPost + "Parent Id: " + commentParentId + "userNameId: " + userNameId;
+        return "Comment{" +
+                "id='" + id + '\'' +
+                ", arangoId='" + arangoId + '\'' +
+                ", commentOnPost=" + commentOnPost +
+                ", commentParentId='" + commentParentId + '\'' +
+                ", postId='" + postId + '\'' +
+                ", body='" + body + '\'' +
+                ", userNameId='" + userNameId + '\'' +
+                ", upvoteCount=" + upvoteCount +
+                ", downvoteCount=" + downvoteCount +
+                '}';
     }
 }
