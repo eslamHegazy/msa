@@ -1,5 +1,6 @@
 package com.ScalableTeam.reddit.app.comment;
 
+import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.entity.Comment;
 import com.ScalableTeam.reddit.app.entity.CommentVote;
 import com.ScalableTeam.reddit.app.repository.CommentRepository;
@@ -19,7 +20,7 @@ import java.util.Map;
 @Service
 @Slf4j
 @AllArgsConstructor
-public class UpvoteCommentService {
+public class UpvoteCommentService implements MyCommand {
     private final CommentRepository commentRepository;
     private final UserVoteCommentRepository userVoteCommentRepository;
     private final CommentVoteRepository commentVoteRepository;

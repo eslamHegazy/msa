@@ -48,15 +48,16 @@ public class CreatePostService implements MyCommand {
             Instant time=Instant.now();
             post.setTime(time);
             postRepository.save(post);
-            return continueExecuting(post,post.getId());
+            continueExecuting(post,post.getId());
+            return post;
         } catch (Exception e) {
             throw new Exception("Error: Couldn't add post");
 //            return "Error: Couldn't add post";
         }
     }
     @CachePut(cacheNames = "postsCache",key="#postId")
-    public Post continueExecuting(Post post,String postId){
-        return post;
+    public String continueExecuting(Post post,String postId){
+        return post.toString();
     }
 
 

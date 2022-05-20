@@ -8,6 +8,7 @@ import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
 @Configuration
@@ -30,6 +31,7 @@ public class RedisConfig {
     public RedisTemplate<String, Post> redisTemplate(){
         RedisTemplate<String, Post> empTemplate = new RedisTemplate<>();
         empTemplate.setConnectionFactory(redisConnectionFactory());
+        empTemplate.setKeySerializer(new StringRedisSerializer());
         return empTemplate;
     }
 }

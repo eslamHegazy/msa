@@ -99,13 +99,13 @@ public class ReadWallService implements MyCommand {
         }
 
     }
-    @Cacheable(cacheNames = "postsCache")
-    private Post[]getPostsFromFollowedChannels(String newLatestReadPostId, HashMap<String,Boolean>followedChannels){
-        return postRepository.getPostsByTimeAndChannel(newLatestReadPostId, followedChannels);
-    }
-    @Cacheable(cacheNames = "postsCache")
-    private Post[]getPostsFromFollowedUsers(String newLatestReadPostId,HashMap<String,Boolean>followedUsers){
-        return postRepository.getPostsByTimeAndUser(newLatestReadPostId,followedUsers);
-    }
+//    @Cacheable(cacheNames = "postsCache")
+//    private Post[]getPostsFromFollowedChannels(String newLatestReadPostId, HashMap<String,Boolean>followedChannels){
+//        return postRepository.getPostsByTimeAndChannel(newLatestReadPostId, followedChannels);
+//    }
+//    @Cacheable(cacheNames = "postsCache")
+//    private Post[]getPostsFromFollowedUsers(String newLatestReadPostId,HashMap<String,Boolean>followedUsers){
+//        return postRepository.getPostsByTimeAndUser(newLatestReadPostId,followedUsers);
+//    }
 
 }

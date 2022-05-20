@@ -119,12 +119,26 @@ public class Post implements Serializable {
         return reports;
     }
 
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id='" + id + '\'' +
+                ", arangoId='" + arangoId + '\'' +
+                ", channelId='" + channelId + '\'' +
+                ", userNameId='" + userNameId + '\'' +
+                ", title='" + title + '\'' +
+                ", body='" + body + '\'' +
+                ", photoLink='" + photoLink + '\'' +
+                ", upvoteCount=" + upvoteCount +
+                ", downvoteCount=" + downvoteCount +
+                ", time=" + time +
+                ", comments=" + comments +
+                ", reports=" + reports +
+                '}';
+    }
+
     public void setReports(HashMap<String, String> reports) {
         this.reports = reports;
-    }
-    @Override
-    public String toString(){
-        return "Post Id: "+id+" userNameId: "+userNameId;
     }
 
 }

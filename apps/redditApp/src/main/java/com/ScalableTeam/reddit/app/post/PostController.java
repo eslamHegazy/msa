@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +24,8 @@ public class PostController {
     private GeneralConfig generalConfig;
     @Autowired
     private GetPostService getPostService;
+    @Autowired
+    private GetPopularPostsService getPopularPostsService;
 
     @PostMapping
     public Post createPost(@RequestBody Post post) throws Exception {
@@ -54,5 +57,10 @@ public class PostController {
         attributes.put("userNameId", userNameId);
         attributes.put("postId", id);
         return downvotePostService.execute(attributes);
+    }
+    @RequestMapping("/popularPosts")
+    private ArrayList<Post> getPopularPosts() throws Exception {
+        log.info(generalConfig.getCommands().get("getPopularPost") + "Controller");
+        return getPopularPostsService.execute(null);
     }
 }

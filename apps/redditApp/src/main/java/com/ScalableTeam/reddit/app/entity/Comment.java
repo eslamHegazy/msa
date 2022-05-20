@@ -1,4 +1,5 @@
 package com.ScalableTeam.reddit.app.entity;
+
 import com.arangodb.springframework.annotation.ArangoId;
 import com.arangodb.springframework.annotation.Document;
 import lombok.Builder;
@@ -14,7 +15,7 @@ public class Comment implements Serializable {
 
     @ArangoId // db document field: _id
     private String arangoId;
-//    private Comment reply;
+    //    private Comment reply;
     private boolean commentOnPost;
     private String commentParentId;
     private String postId;
@@ -86,6 +87,7 @@ public class Comment implements Serializable {
     public void setDownvoteCount(long downvoteCount) {
         this.downvoteCount = downvoteCount;
     }
+
     public String getUserNameId() {
         return userNameId;
     }
@@ -93,6 +95,7 @@ public class Comment implements Serializable {
     public void setUserNameId(String userNameId) {
         this.userNameId = userNameId;
     }
+
     public String getPostId() {
         return postId;
     }
@@ -100,8 +103,19 @@ public class Comment implements Serializable {
     public void setPostId(String postId) {
         this.postId = postId;
     }
+
     @Override
-    public String toString(){
-        return "comment Id: "+id+"Comment On Post: "+commentOnPost+"Parent Id: "+commentParentId+"userNameId: "+userNameId;
+    public String toString() {
+        return "Comment{" +
+                "id='" + id + '\'' +
+                ", arangoId='" + arangoId + '\'' +
+                ", commentOnPost=" + commentOnPost +
+                ", commentParentId='" + commentParentId + '\'' +
+                ", postId='" + postId + '\'' +
+                ", body='" + body + '\'' +
+                ", userNameId='" + userNameId + '\'' +
+                ", upvoteCount=" + upvoteCount +
+                ", downvoteCount=" + downvoteCount +
+                '}';
     }
 }
