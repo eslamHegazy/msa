@@ -1,4 +1,4 @@
-package com.ScalableTeam.reddit.app.moderation;
+package com.ScalableTeam.reddit.app.reportPost;
 
 import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.entity.Post;

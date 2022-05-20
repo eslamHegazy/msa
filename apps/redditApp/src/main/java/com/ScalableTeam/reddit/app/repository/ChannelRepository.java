@@ -15,4 +15,7 @@ public interface ChannelRepository extends ArangoRepository<Channel, String> {
 
     @Query("FOR u IN channels UPDATE {_key:@key,bannedUsers:@channels} IN channels")
     void updateBannedUsersWithID(@Param("key") String key, @Param("channels") HashMap<String, Boolean> bannedUsers);
+
+    @Query("FOR u IN channels UPDATE {_key:@key,reports:@report} IN channels")
+    void addReport(@Param("key") String key, @Param("report") HashMap<String, String> report);
 }

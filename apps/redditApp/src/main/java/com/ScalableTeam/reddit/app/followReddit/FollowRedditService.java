@@ -5,6 +5,7 @@ import com.ScalableTeam.reddit.app.entity.Channel;
 import com.ScalableTeam.reddit.app.entity.User;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import com.ScalableTeam.reddit.app.repository.UserRepository;
+import com.ScalableTeam.reddit.app.requestForms.FollowRedditForm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -33,10 +34,12 @@ public class FollowRedditService implements MyCommand {
     public String execute(Object body){
 
 
+        FollowRedditForm request = (FollowRedditForm) body;
 
-        String  userId = ((HashMap<String,String>) body).get("userId");
-        String redditId= ((HashMap<String,String>) body).get("redditId");
+        String  userId = request.getUserId();
+        String redditId= request.getRedditId();
 
+        try{
         Optional<Channel> reddit  = channelRepository.findById(redditId);
         if (!reddit.isPresent()){
             throw new IllegalStateException("Reddit not found in DB!");
@@ -59,6 +62,9 @@ public class FollowRedditService implements MyCommand {
 
         System.out.println(userId + "    "+redditId);
         return "Channel followed successfully";
+        }catch(Exception e){
+            return e.getMessage();
+        }
 
     }
 }
