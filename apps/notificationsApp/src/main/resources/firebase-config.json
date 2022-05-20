@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "reddit-guc-346805",
+  "private_key_id": "2219f82c284096579e566b60c5a6e8ae4b55edec",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDiPieDAon/fLXy\n+gGgMbJ+3WcN4egMoP9vqhh64yBNt81Ea+yF0CFhzcJA5kkZ2K3BcGerkqwOendL\nxhsha9oZ64IKgKhIol6F89n8SP/mV1gVzYjAsl5Mq8WePWLiehUDdHXcv/AEa/uJ\n7w1/Lyi2vKVfpbmT3AZqxkTmvkhUWZB+Cv3KwwOCwYziMuXIRNLfPe/usCRwTZJ3\n+JVpE0HbV7lowme7/2kdwn/jIwFv+7jw4EZy+RS25FSZrkaARzAI9zIgvX2aXyWr\nu+RnuphNv6/qdEgGCCUXMUfg+xB5qNZ83w+61FiRnZ/mPf7UPF7UQSfS0WXMRJsX\nX7OvrUXZAgMBAAECggEAb8+x7VBi7Q4wSe3+wbHt+j7ngHfmG9+xffk9cfYv79jn\nrGn+Eb/jz5dF6pclB44LiW9I/QVW3SzvKla079aCio7WzOP6xzLfrinu0H0vYyJF\nmTjj3gAJFLFL0EGcTjtxiSyUV03QjA7l2Kx5KiMfZvhibpvT1FxIG5rzUGo4Ct7u\n5jkIsmyNxvtzOdPPJo5xxTOySPJIeRD63fgcTDiL8UN70Vm4X08a6+vYD8x/hQrg\n7z7TgJr1AdUklhr1SSqxmRWV2/hEtfGe5QYI3QDNF4ND8nVkIDDn3TiRyAoYhmi/\nI2jcKwaz1pIja5pZcRAOsXHk+7i+qwtQHjSvBe1iNQKBgQDxEKSi4Oe4Vg4SvuP9\nA+obD+7PiHqlSxifNM73Y8syxC/lU/XPKKh05Z2MUgLQ6c3ShJnxd1kHHfra7jBV\nzAkY0EFzdGSv2y/b2KU2XlHOq6bOJBQPp1m9C92Db00tLNKjw3g8oc9aXSqppr0b\nMLNMLbuZjltN6UBJ9a74VGI4ywKBgQDwQm0/e7iwTxTR8sES2DZTZrZ9eoaEM3pM\nvDACaeA5UI7xO3HyujcbdklrlTMh+gYcqJ15guu8dxsTsxFIMQmkZSj+BtJwisl6\nsoJbFbfntIKwI/amnfOvD1jNWNKIrX/eAkCIkI8ztE+Zj5RzeJbqH4Skta3eQMoC\nKNI+H0J7awKBgQDewhJgsJNvs5WtnNfwpf1epIp5HBS5SXunIpVd5cmPT9syfzNW\nCqwf2U6Mq/wOMP8Q2ZenmjGacgms5Q2lOrXtSAQzPAsOteyzqq6AXwgZgmTReGVR\nUcOK/bvkCKW4aQL8cVRaMuv5BL63pmx5A7erXVdNvk6A4FmX/n+A2fkpoQKBgDEF\nnLzjRZ/Twu/DlFl//DWwM3QO1/uJdV7K1xDnAXUwVrop4uofzLaxv/FPlAtOtIiM\nbvUoHWlq8/9k/hW4y7rbWS3bvnxwFQQQAEENgWSplDDUZbNBb0M84mWjxfFVVU27\nL+etd0qZc9RlU2jsJf7HR41D9KHwnkcqhRtfzXTZAoGAXuYhJIEGdZL+rsPt3mDN\nV0YRIQ+GuZxszHAAcoxiuSemjjuJKn5+hL+JhNMj8/XRugI4SHYPHPOCUx2B710Y\ne8pQdEaZP7Ue223zgd0j6YYa2lu+MIOVbTA+893UCwGI3+bMjx7CpeWYUKqSIGZ3\nrwO1R87YKRa6QZjKy56fi+8=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firestore-db@reddit-guc-346805.iam.gserviceaccount.com",
+  "client_id": "105010127657917883529",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firestore-db%40reddit-guc-346805.iam.gserviceaccount.com"
+}

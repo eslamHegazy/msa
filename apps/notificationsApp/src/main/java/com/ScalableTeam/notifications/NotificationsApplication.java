@@ -21,11 +21,13 @@ import org.springframework.context.annotation.PropertySource;
 @EnableEurekaClient
 @PropertySource("classpath:message-queues.properties")
 public class NotificationsApplication {
+
     public static void main(String[] args) {
         SpringApplication.run(NotificationsApplication.class, args);
+        FirebaseInitializer.initialize();
     }
 
-    @Bean
+        @Bean
     CommandLineRunner commandLineRunner(
             RabbitMQProducer producer, Config config) {
         return args -> {
