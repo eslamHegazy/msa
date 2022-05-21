@@ -23,11 +23,11 @@ import org.springframework.context.annotation.PropertySource;
 public class NotificationsApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(NotificationsApplication.class, args);
         FirebaseInitializer.initialize();
+        SpringApplication.run(NotificationsApplication.class, args);
     }
 
-        @Bean
+    @Bean
     CommandLineRunner commandLineRunner(
             RabbitMQProducer producer, Config config) {
         return args -> {
