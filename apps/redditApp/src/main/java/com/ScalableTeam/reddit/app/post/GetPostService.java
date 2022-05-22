@@ -2,24 +2,15 @@ package com.ScalableTeam.reddit.app.post;
 
 import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.entity.Post;
-import com.ScalableTeam.reddit.app.entity.User;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
 import com.ScalableTeam.reddit.app.repository.UserRepository;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import com.arangodb.springframework.core.ArangoOperations;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-import java.time.Instant;
-import java.util.Map;
-import java.util.Optional;
 
 @ComponentScan("com.ScalableTeam.reddit")
 @Service
@@ -52,6 +43,4 @@ public class GetPostService implements MyCommand {
     public Post continueExecuting(String postId){
         return postRepository.findById(postId).get();
     }
-
-
 }

@@ -40,6 +40,7 @@ public class DownvoteCommentService implements MyCommand {
     }
 
     @Transactional(rollbackFor = {Exception.class})
+    @Override
     public Object execute(Object obj) throws Exception {
         Map<String, Object> attributes = (Map<String, Object>) obj;
         VoteCommentForm voteCommentForm = (VoteCommentForm) attributes.get("form");

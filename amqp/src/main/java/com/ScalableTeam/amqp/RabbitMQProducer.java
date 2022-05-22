@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.MessagePostProcessor;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -25,4 +26,8 @@ public class RabbitMQProducer {
         log.info("Published to {} using routingKey {}. Payload: {}", exchange, routingKey, payload);
     }
 
+    public Object publishSynchronous(Object payload, String exchange, String routingKey) {
+        log.info("Publishing to {} using routingKey {}. Payload: {}", exchange, routingKey, payload);
+        return amqpTemplate.convertSendAndReceiveAsType(exchange, routingKey, payload, new ParameterizedTypeReference<>() {});
+    }
 }

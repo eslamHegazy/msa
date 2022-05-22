@@ -24,7 +24,7 @@ public class Comment implements Serializable {
     private String userNameId;
     private long upvoteCount;
     private long downvoteCount;
-    @Relations(edges = CommentToComment.class, lazy = true, direction = Relations.Direction.INBOUND)
+    @Relations(edges = CommentToComment.class, lazy = true, direction = Relations.Direction.OUTBOUND)
     private Collection<Comment> comments;
 
     public String getId() {
