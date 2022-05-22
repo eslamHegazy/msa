@@ -5,15 +5,16 @@ import com.ScalableTeam.reddit.app.entity.vote.PostVote;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
 import com.ScalableTeam.reddit.app.repository.vote.PostVoteRepository;
 import com.ScalableTeam.reddit.app.repository.vote.UserVotePostRepository;
+import com.ScalableTeam.reddit.app.requestForms.VotePostForm;
 import com.ScalableTeam.reddit.app.validation.PostVoteValidation;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Map;
 
 @ComponentScan("com.ScalableTeam.reddit")
 @Service
@@ -27,12 +28,13 @@ public class DownvotePostService {
     private final PostVoteValidation postVoteValidation;
 
     @Transactional(rollbackFor = {Exception.class})
-    public String execute(Object obj) throws Exception {
-        Map<String, Object> attributes = (Map<String, Object>) obj;
-        String userNameId = (String) attributes.get("userNameId");
-        String postId = (String) attributes.get("postId");
+    @RabbitListener(queues = "${mq.queues.request.reddit.downvotePost}")
+    public String execute(VotePostForm votePostForm, Message message) throws Exception {
+        String userNameId = votePostForm.getUserNameId();
+        String postId = votePostForm.getPostId();
+        String correlationId = message.getMessageProperties().getCorrelationId();
         String indicator = generalConfig.getCommands().get("downvotePost");
-        log.info(indicator + "Service::Post Id={}, User Id={}", postId, userNameId);
+        log.info(indicator + "Service::Post Id={}, User Id={}, correlationId={}", postId, userNameId, correlationId);
 
         postVoteValidation.validatePostVote(userNameId, postId);
         String responseMessage = userVotePostRepository.downvotePost(userNameId, postId);
@@ -46,6 +48,13 @@ public class DownvotePostService {
 
         // todo: integrate notifications
         return String.format("User %s %s %s", userNameId, responseMessage, postId);
+    }
+
+    @RabbitListener(queues = "${mq.queues.response.reddit.downvotePost}")
+    public void receive(String response, Message message) {
+        String indicator = generalConfig.getCommands().get("downvotePost");
+        String correlationId = message.getMessageProperties().getCorrelationId();
+        log.info(indicator + "Service::CorrelationId: {}, message: {}", correlationId, response);
     }
 
 }
