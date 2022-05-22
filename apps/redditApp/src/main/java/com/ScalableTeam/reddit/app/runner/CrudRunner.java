@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
 
-import java.util.Set;
-
 @ComponentScan("com.ScalableTeam.reddit")
 public class CrudRunner implements CommandLineRunner {
 
@@ -32,10 +30,6 @@ public class CrudRunner implements CommandLineRunner {
     private CommentSeeder commentSeeder;
     @Override
     public void run(String... args) throws Exception {
-        Set<String> users = userSeeder.seedUsers();
-        Set<String> posts = postSeeder.seedPosts(users);
-        Set<String> comments = commentSeeder.seedComments(users, posts);
-
 //        User user=new User();
 //        user.setUserNameId("userFollowsCh1");
 //        HashSet<String>channels=new HashSet<>();
@@ -114,29 +108,5 @@ public class CrudRunner implements CommandLineRunner {
 //        Collection<Character> top2 = repository.findTop2DistinctBySurnameIgnoreCaseOrderByAgeDesc("lannister");
 //        top2.forEach(System.out::println);
     }
-
-//    public static Collection<Character> createCharacters() {
-//        return Arrays.asList(new Character("Robert", "Baratheon", false),
-//                new Character("Jaime", "Lannister", true, 36), new Character("Catelyn", "Stark", false, 40),
-//                new Character("Cersei", "Lannister", true, 36), new Character("Daenerys", "Targaryen", true, 16),
-//                new Character("Jorah", "Mormont", false), new Character("Petyr", "Baelish", false),
-//                new Character("Viserys", "Targaryen", false), new Character("Jon", "Snow", true, 16),
-//                new Character("Sansa", "Stark", true, 13), new Character("Arya", "Stark", true, 11),
-//                new Character("Robb", "Stark", false), new Character("Theon", "Greyjoy", true, 16),
-//                new Character("Bran", "Stark", true, 10), new Character("Joffrey", "Baratheon", false, 19),
-//                new Character("Sandor", "Clegane", true), new Character("Tyrion", "Lannister", true, 32),
-//                new Character("Khal", "Drogo", false), new Character("Tywin", "Lannister", false),
-//                new Character("Davos", "Seaworth", true, 49), new Character("Samwell", "Tarly", true, 17),
-//                new Character("Stannis", "Baratheon", false), new Character("Melisandre", null, true),
-//                new Character("Margaery", "Tyrell", false), new Character("Jeor", "Mormont", false),
-//                new Character("Bronn", null, true), new Character("Varys", null, true), new Character("Shae", null, false),
-//                new Character("Talisa", "Maegyr", false), new Character("Gendry", null, false),
-//                new Character("Ygritte", null, false), new Character("Tormund", "Giantsbane", true),
-//                new Character("Gilly", null, true), new Character("Brienne", "Tarth", true, 32),
-//                new Character("Ramsay", "Bolton", true), new Character("Ellaria", "Sand", true),
-//                new Character("Daario", "Naharis", true), new Character("Missandei", null, true),
-//                new Character("Tommen", "Baratheon", true), new Character("Jaqen", "H'ghar", true),
-//                new Character("Roose", "Bolton", true), new Character("The High Sparrow", null, true));
-//    }
 }
 

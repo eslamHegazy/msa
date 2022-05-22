@@ -1,10 +1,13 @@
 package com.ScalableTeam.reddit.app.entity;
+
 import com.arangodb.springframework.annotation.ArangoId;
 import com.arangodb.springframework.annotation.Document;
+import com.arangodb.springframework.annotation.Relations;
 import lombok.Builder;
 import org.springframework.data.annotation.Id;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 @Document("comments")
 @Builder
@@ -14,7 +17,6 @@ public class Comment implements Serializable {
 
     @ArangoId // db document field: _id
     private String arangoId;
-//    private Comment reply;
     private boolean commentOnPost;
     private String commentParentId;
     private String postId;
@@ -22,6 +24,8 @@ public class Comment implements Serializable {
     private String userNameId;
     private long upvoteCount;
     private long downvoteCount;
+    @Relations(edges = CommentToComment.class, lazy = true, direction = Relations.Direction.INBOUND)
+    private Collection<Comment> comments;
 
     public String getId() {
         return id;
@@ -39,13 +43,13 @@ public class Comment implements Serializable {
         this.arangoId = arangoId;
     }
 
-//    public Comment getReply() {
-//        return reply;
-//    }
-//
-//    public void setReply(Comment reply) {
-//        this.reply = reply;
-//    }
+    public Collection<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Collection<Comment> comments) {
+        this.comments = comments;
+    }
 
     public boolean isCommentOnPost() {
         return commentOnPost;
@@ -86,6 +90,7 @@ public class Comment implements Serializable {
     public void setDownvoteCount(long downvoteCount) {
         this.downvoteCount = downvoteCount;
     }
+
     public String getUserNameId() {
         return userNameId;
     }
@@ -93,6 +98,7 @@ public class Comment implements Serializable {
     public void setUserNameId(String userNameId) {
         this.userNameId = userNameId;
     }
+
     public String getPostId() {
         return postId;
     }
@@ -100,8 +106,9 @@ public class Comment implements Serializable {
     public void setPostId(String postId) {
         this.postId = postId;
     }
+
     @Override
-    public String toString(){
-        return "comment Id: "+id+"Comment On Post: "+commentOnPost+"Parent Id: "+commentParentId+"userNameId: "+userNameId;
+    public String toString() {
+        return "comment Id: " + id + "Comment On Post: " + commentOnPost + "Parent Id: " + commentParentId + "userNameId: " + userNameId;
     }
 }

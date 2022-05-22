@@ -1,5 +1,6 @@
 package com.ScalableTeam.reddit.app.post;
 
+import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.entity.Post;
 import com.ScalableTeam.reddit.app.entity.vote.PostVote;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
@@ -16,20 +17,34 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @ComponentScan("com.ScalableTeam.reddit")
 @Service
 @Slf4j
 @AllArgsConstructor
-public class DownvotePostService {
+public class DownvotePostService implements MyCommand {
     private final PostRepository postRepository;
     private final UserVotePostRepository userVotePostRepository;
     private final PostVoteRepository postVoteRepository;
     private final GeneralConfig generalConfig;
     private final PostVoteValidation postVoteValidation;
 
-    @Transactional(rollbackFor = {Exception.class})
     @RabbitListener(queues = "${mq.queues.request.reddit.downvotePost}")
     public String execute(VotePostForm votePostForm, Message message) throws Exception {
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("form", votePostForm);
+        attributes.put("message", message);
+        return (String) execute(attributes);
+    }
+
+    @Transactional(rollbackFor = {Exception.class})
+    public Object execute(Object obj) throws Exception {
+        Map<String, Object> attributes = (Map<String, Object>) obj;
+        VotePostForm votePostForm = (VotePostForm) attributes.get("form");
+        Message message = (Message) attributes.get("message");
+
         String userNameId = votePostForm.getUserNameId();
         String postId = votePostForm.getPostId();
         String correlationId = message.getMessageProperties().getCorrelationId();

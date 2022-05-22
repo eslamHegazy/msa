@@ -1,11 +1,13 @@
 package com.ScalableTeam.reddit.app.entity;
 import com.arangodb.springframework.annotation.ArangoId;
 import com.arangodb.springframework.annotation.Document;
+import com.arangodb.springframework.annotation.Relations;
 import lombok.Builder;
 import org.springframework.data.annotation.Id;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.HashMap;
 
 @Document("posts")
@@ -24,9 +26,18 @@ public class Post implements Serializable {
     private long upvoteCount;
     private long downvoteCount;
     private Instant time;
-    private HashMap<String, Comment> comments;
 
+    @Relations(edges = PostToComment.class, lazy = true, direction = Relations.Direction.OUTBOUND)
+    private Collection<Comment> comments;
     private HashMap<String, String> reports; //userId : reason
+
+    public Collection<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Collection<Comment> comments) {
+        this.comments = comments;
+    }
 
     public String getId() {
         return id;
@@ -100,13 +111,6 @@ public class Post implements Serializable {
         this.downvoteCount = downvoteCount;
     }
 
-    public HashMap<String,Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(HashMap<String,Comment> comments) {
-        this.comments = comments;
-    }
     public Instant getTime() {
         return time;
     }
@@ -122,9 +126,10 @@ public class Post implements Serializable {
     public void setReports(HashMap<String, String> reports) {
         this.reports = reports;
     }
+
     @Override
-    public String toString(){
-        return "Post Id: "+id+" userNameId: "+userNameId;
+    public String toString() {
+        return "Post Id: " + id + " userNameId: " + userNameId + " upvoteCount: " + upvoteCount + " downvoteCount: " + downvoteCount;
     }
 
 }

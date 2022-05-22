@@ -1,5 +1,6 @@
 package com.ScalableTeam.reddit.app.comment;
 
+import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.entity.Comment;
 import com.ScalableTeam.reddit.app.entity.vote.CommentVote;
 import com.ScalableTeam.reddit.app.repository.CommentRepository;
@@ -16,20 +17,34 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @ComponentScan("com.ScalableTeam.reddit")
 @Service
 @Slf4j
 @AllArgsConstructor
-public class UpvoteCommentService {
+public class UpvoteCommentService implements MyCommand {
     private final CommentRepository commentRepository;
     private final UserVoteCommentRepository userVoteCommentRepository;
     private final CommentVoteRepository commentVoteRepository;
     private final GeneralConfig generalConfig;
     private final CommentVoteValidation commentVoteValidation;
 
-    @Transactional(rollbackFor = {Exception.class})
     @RabbitListener(queues = "${mq.queues.request.reddit.upvoteComment}")
     public String execute(VoteCommentForm voteCommentForm, Message message) throws Exception {
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("form", voteCommentForm);
+        attributes.put("message", message);
+        return (String) execute(attributes);
+    }
+
+    @Transactional(rollbackFor = {Exception.class})
+    public Object execute(Object obj) throws Exception {
+        Map<String, Object> attributes = (Map<String, Object>) obj;
+        VoteCommentForm voteCommentForm = (VoteCommentForm) attributes.get("form");
+        Message message = (Message) attributes.get("message");
+
         String userNameId = voteCommentForm.getUserNameId();
         String commentId = voteCommentForm.getCommentId();
         String correlationId = message.getMessageProperties().getCorrelationId();
