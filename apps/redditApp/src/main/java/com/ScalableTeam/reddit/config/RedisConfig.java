@@ -1,4 +1,4 @@
-package com.ScalableTeam.reddit;
+package com.ScalableTeam.reddit.config;
 
 import com.ScalableTeam.reddit.app.entity.Post;
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;

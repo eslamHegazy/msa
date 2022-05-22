@@ -1,4 +1,4 @@
-package com.ScalableTeam.reddit.app.entity;
+package com.ScalableTeam.reddit.app.entity.vote;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

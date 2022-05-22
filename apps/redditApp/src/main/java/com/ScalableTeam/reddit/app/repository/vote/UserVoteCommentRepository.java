@@ -1,6 +1,6 @@
-package com.ScalableTeam.reddit.app.repository;
+package com.ScalableTeam.reddit.app.repository.vote;
 
-import com.ScalableTeam.reddit.app.entity.UserVoteComment;
+import com.ScalableTeam.reddit.app.entity.vote.UserVoteComment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;

@@ -1,10 +1,10 @@
 package com.ScalableTeam.reddit.app.comment;
 
 import com.ScalableTeam.reddit.app.entity.Comment;
-import com.ScalableTeam.reddit.app.entity.CommentVote;
+import com.ScalableTeam.reddit.app.entity.vote.CommentVote;
 import com.ScalableTeam.reddit.app.repository.CommentRepository;
-import com.ScalableTeam.reddit.app.repository.CommentVoteRepository;
-import com.ScalableTeam.reddit.app.repository.UserVoteCommentRepository;
+import com.ScalableTeam.reddit.app.repository.vote.CommentVoteRepository;
+import com.ScalableTeam.reddit.app.repository.vote.UserVoteCommentRepository;
 import com.ScalableTeam.reddit.app.validation.CommentVoteValidation;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.AllArgsConstructor;
@@ -26,7 +26,7 @@ public class UpvoteCommentService {
     private final GeneralConfig generalConfig;
     private final CommentVoteValidation commentVoteValidation;
 
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public String execute(Object obj) throws Exception {
         Map<String, Object> attributes = (Map<String, Object>) obj;
         String userNameId = (String) attributes.get("userNameId");

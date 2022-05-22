@@ -9,4 +9,5 @@ import java.util.Map;
 @Data
 public class GeneralConfig {
     private Map<String, String> commands;
+    private String environment;
 }

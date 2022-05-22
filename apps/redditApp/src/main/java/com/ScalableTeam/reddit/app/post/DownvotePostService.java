@@ -1,19 +1,18 @@
 package com.ScalableTeam.reddit.app.post;
 
 import com.ScalableTeam.reddit.app.entity.Post;
-import com.ScalableTeam.reddit.app.entity.PostVote;
+import com.ScalableTeam.reddit.app.entity.vote.PostVote;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
-import com.ScalableTeam.reddit.app.repository.PostVoteRepository;
-import com.ScalableTeam.reddit.app.repository.UserRepository;
-import com.ScalableTeam.reddit.app.repository.UserVotePostRepository;
+import com.ScalableTeam.reddit.app.repository.vote.PostVoteRepository;
+import com.ScalableTeam.reddit.app.repository.vote.UserVotePostRepository;
 import com.ScalableTeam.reddit.app.validation.PostVoteValidation;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Map;
 
 @ComponentScan("com.ScalableTeam.reddit")
@@ -27,7 +26,7 @@ public class DownvotePostService {
     private final GeneralConfig generalConfig;
     private final PostVoteValidation postVoteValidation;
 
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public String execute(Object obj) throws Exception {
         Map<String, Object> attributes = (Map<String, Object>) obj;
         String userNameId = (String) attributes.get("userNameId");
