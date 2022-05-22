@@ -1,6 +1,7 @@
 package com.ScalableTeam.reddit.app.entity;
 import com.arangodb.springframework.annotation.ArangoId;
 import com.arangodb.springframework.annotation.Document;
+import lombok.Builder;
 import org.springframework.data.annotation.Id;
 
 import java.util.HashMap;
@@ -70,5 +71,14 @@ public class Channel {
     @Override
     public String toString() {
         return "Channel [id=" + channelNameId +", adminId=" + adminId + moderators.toString()+"]";
+    }
+
+    public Channel() {
+    }
+
+    public Channel(String channelNameId, String adminId) {
+        this.channelNameId = channelNameId;
+        this.adminId = adminId;
+        moderators.put(adminId,true);
     }
 }
