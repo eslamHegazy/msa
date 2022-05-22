@@ -30,6 +30,10 @@ public class NotificationsRepository {
         firestore.collection(Collections.USERS).document(deviceToken.getUserId()).update(Fields.TOKENS, FieldValue.arrayUnion(deviceToken.getDeviceToken())).get();
     }
 
+    public void unregisterDeviceToken(DeviceTokenRequest deviceToken) throws InterruptedException, ExecutionException {
+        firestore.collection(Collections.USERS).document(deviceToken.getUserId()).update(Fields.TOKENS, FieldValue.arrayRemove(deviceToken.getDeviceToken())).get();
+    }
+
     public List<String> getDeviceTokens(List<String> users) throws InterruptedException, ExecutionException {
         List<String> tokens = new ArrayList<>();
 
