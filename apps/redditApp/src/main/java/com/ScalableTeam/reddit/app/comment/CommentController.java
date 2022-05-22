@@ -1,29 +1,30 @@
 package com.ScalableTeam.reddit.app.comment;
 
-import com.ScalableTeam.amqp.Config;
-import com.ScalableTeam.amqp.RabbitMQProducer;
-import com.ScalableTeam.reddit.app.MessagePublisher;
 import com.ScalableTeam.reddit.app.entity.Comment;
 import com.ScalableTeam.reddit.app.entity.Post;
-import com.ScalableTeam.reddit.app.requestForms.VoteCommentForm;
+import com.ScalableTeam.reddit.app.post.DownvotePostService;
+import com.ScalableTeam.reddit.app.post.UpvotePostService;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @Slf4j
 @RequestMapping("/comments")
-public class CommentController extends MessagePublisher {
+public class CommentController {
     @Autowired
     private CommentService commentService;
     @Autowired
-    private RabbitMQProducer rabbitMQProducer;
+    private UpvoteCommentService upvoteCommentService;
+    @Autowired
+    private DownvoteCommentService downvoteCommentService;
     @Autowired
     private GeneralConfig generalConfig;
-    @Autowired
-    private Config config;
 
     @PostMapping
     private Post comment(@RequestBody Comment comment) throws Exception {
@@ -32,34 +33,22 @@ public class CommentController extends MessagePublisher {
     }
 
     @PostMapping("upvote/{id}")
-    public void upvoteComment(@RequestParam String userNameId, @PathVariable String id) throws Exception {
+    public String upvoteComment(@RequestParam String userNameId, @PathVariable String id) throws Exception {
         String indicator = generalConfig.getCommands().get("upvoteComment");
         log.info(indicator + "Controller::Comment Id={}, User Id={}", id, userNameId);
-        VoteCommentForm voteCommentForm = VoteCommentForm.builder()
-                .commentId(id)
-                .userNameId(userNameId)
-                .build();
-        MessagePostProcessor messagePostProcessor = getMessageHeaders(config.getQueues().getResponse().getReddit().get("upvoteComment"));
-        rabbitMQProducer.publishAsynchronous(
-                voteCommentForm,
-                config.getExchange(),
-                config.getQueues().getRequest().getReddit().get("upvoteComment"),
-                messagePostProcessor);
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("userNameId", userNameId);
+        attributes.put("commentId", id);
+        return upvoteCommentService.execute(attributes);
     }
 
     @PostMapping("downvote/{id}")
-    public void downvoteComment(@RequestParam String userNameId, @PathVariable String id) throws Exception {
+    public String downvoteComment(@RequestParam String userNameId, @PathVariable String id) throws Exception {
         String indicator = generalConfig.getCommands().get("downvoteComment");
         log.info(indicator + "Controller::Comment Id={}, User Id={}", id, userNameId);
-        VoteCommentForm voteCommentForm = VoteCommentForm.builder()
-                .commentId(id)
-                .userNameId(userNameId)
-                .build();
-        MessagePostProcessor messagePostProcessor = getMessageHeaders(config.getQueues().getResponse().getReddit().get("downvoteComment"));
-        rabbitMQProducer.publishAsynchronous(
-                voteCommentForm,
-                config.getExchange(),
-                config.getQueues().getRequest().getReddit().get("downvoteComment"),
-                messagePostProcessor);
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("userNameId", userNameId);
+        attributes.put("commentId", id);
+        return downvoteCommentService.execute(attributes);
     }
 }

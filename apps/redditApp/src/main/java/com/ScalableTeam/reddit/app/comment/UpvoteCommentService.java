@@ -5,13 +5,10 @@ import com.ScalableTeam.reddit.app.entity.vote.CommentVote;
 import com.ScalableTeam.reddit.app.repository.CommentRepository;
 import com.ScalableTeam.reddit.app.repository.vote.CommentVoteRepository;
 import com.ScalableTeam.reddit.app.repository.vote.UserVoteCommentRepository;
-import com.ScalableTeam.reddit.app.requestForms.VoteCommentForm;
 import com.ScalableTeam.reddit.app.validation.CommentVoteValidation;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,13 +27,12 @@ public class UpvoteCommentService {
     private final CommentVoteValidation commentVoteValidation;
 
     @Transactional(rollbackFor = {Exception.class})
-    @RabbitListener(queues = "${mq.queues.request.reddit.upvoteComment}")
-    public String execute(VoteCommentForm voteCommentForm, Message message) throws Exception {
-        String userNameId = voteCommentForm.getUserNameId();
-        String commentId = voteCommentForm.getCommentId();
-        String correlationId = message.getMessageProperties().getCorrelationId();
+    public String execute(Object obj) throws Exception {
+        Map<String, Object> attributes = (Map<String, Object>) obj;
+        String userNameId = (String) attributes.get("userNameId");
+        String commentId = (String) attributes.get("commentId");
         String indicator = generalConfig.getCommands().get("upvoteComment");
-        log.info(indicator + "Service::Comment Id={}, User Id={}, CorrelationId={}", commentId, userNameId, correlationId);
+        log.info(indicator + "Service::Comment Id={}, User Id={}", commentId, userNameId);
 
         commentVoteValidation.validateCommentVote(userNameId, commentId);
         String responseMessage = userVoteCommentRepository.upvoteComment(userNameId, commentId);
@@ -52,10 +48,4 @@ public class UpvoteCommentService {
         return String.format("User %s %s %s", userNameId, responseMessage, commentId);
     }
 
-    @RabbitListener(queues = "${mq.queues.response.reddit.upvoteComment}")
-    public void receive(String response, Message message) {
-        String indicator = generalConfig.getCommands().get("upvoteComment");
-        String correlationId = message.getMessageProperties().getCorrelationId();
-        log.info(indicator + "Service::CorrelationId: {}, message: {}", correlationId, response);
-    }
 }
