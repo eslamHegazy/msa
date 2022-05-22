@@ -20,9 +20,9 @@ public class ReportPostController {
     @Autowired
     private GeneralConfig generalConfig;
 
-//    @RequestMapping(method = RequestMethod.POST,value = "/reportPost")
-//    private String reportPost(@RequestBody ReportPostForm reportPostForm) throws Exception {
-//        log.info(generalConfig.getCommands().get("reportPost") + "Controller", reportPostForm);
-//        return reportPostService.execute(reportPostForm);
-//    }
+    @RequestMapping(method = RequestMethod.POST,value = "/reportPost")
+    private String reportPost(@RequestBody ReportPostForm reportPostForm) throws Exception {
+        log.info(generalConfig.getCommands().get("reportPost") + "Controller", reportPostForm);
+        return reportPostService.execute(reportPostForm);
+    }
 }
