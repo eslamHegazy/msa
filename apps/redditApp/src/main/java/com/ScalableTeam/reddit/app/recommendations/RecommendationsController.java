@@ -20,7 +20,7 @@ public class RecommendationsController {
     private GeneralConfig generalConfig;
 
     @RequestMapping("/redditRecommendations/{userNameId}")
-    private Post[] redditsRecommendations(@PathVariable String userNameId) throws Exception {
+    private String [] redditsRecommendations(@PathVariable String userNameId) throws Exception {
         log.info(generalConfig.getCommands().get("redditRecommendations") + "Controller", userNameId);
         return redditsRecommendationsService.execute(userNameId);
     }

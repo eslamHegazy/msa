@@ -1,7 +1,7 @@
 package com.ScalableTeam.reddit.app.recommendations;
 
+
 import com.ScalableTeam.reddit.MyCommand;
-import com.ScalableTeam.reddit.app.entity.Post;
 import com.ScalableTeam.reddit.app.entity.User;
 import com.ScalableTeam.reddit.app.repository.UserRepository;
 import com.ScalableTeam.reddit.config.GeneralConfig;
@@ -15,12 +15,12 @@ import java.util.*;
 @ComponentScan("com.ScalableTeam.reddit")
 @Service
 @Slf4j
-public class RedditsRecommendationsService implements MyCommand {
-
+public class RecommendationsBasedOnFollowersService implements MyCommand {
     @Autowired
     private final UserRepository userRepository;
 
-    public RedditsRecommendationsService(UserRepository userRepository) {
+    @Autowired
+    public RecommendationsBasedOnFollowersService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
     @Autowired
@@ -52,15 +52,15 @@ public class RedditsRecommendationsService implements MyCommand {
                 if(u.isPresent()){
                     User u2 = u.get();
                     if(u2.getFollowedChannels()!=null){
-                    Set<String> rList = u2.getFollowedChannels().keySet();
-                    for (String r : rList) {
+                        Set<String> rList = u2.getFollowedChannels().keySet();
+                        for (String r : rList) {
 
-                        if (frequencies.containsKey(r)) {
-                            frequencies.replace(r, frequencies.get(r) + 1);
-                        } else {
-                            frequencies.put(r, 1);
+                            if (frequencies.containsKey(r)) {
+                                frequencies.replace(r, frequencies.get(r) + 1);
+                            } else {
+                                frequencies.put(r, 1);
+                            }
                         }
-                    }
 
                     }
 
@@ -77,9 +77,9 @@ public class RedditsRecommendationsService implements MyCommand {
                 result[counter] = (String) me2.getKey();
                 counter--;
             }
-        return result;
+            return result;
 
-    }catch (Exception e){
+        }catch (Exception e){
             throw e;
         }
 
