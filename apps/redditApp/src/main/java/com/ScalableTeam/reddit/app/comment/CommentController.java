@@ -32,14 +32,16 @@ public class CommentController extends MessagePublisher {
     }
 
     @PostMapping("upvote/{id}")
-    public void upvoteComment(@RequestParam String userNameId, @PathVariable String id) throws Exception {
-        String indicator = generalConfig.getCommands().get("upvoteComment");
+    public void upvoteComment(@RequestParam String userNameId, @PathVariable String id) {
+        String commandName = "upvoteComment";
+        String indicator = generalConfig.getCommands().get(commandName);
         log.info(indicator + "Controller::Comment Id={}, User Id={}", id, userNameId);
         VoteCommentForm voteCommentForm = VoteCommentForm.builder()
                 .commentId(id)
                 .userNameId(userNameId)
                 .build();
-        MessagePostProcessor messagePostProcessor = getMessageHeaders(config.getQueues().getResponse().getReddit().get("upvoteComment"));
+        MessagePostProcessor messagePostProcessor = getMessageHeaders(
+                config.getQueues().getResponse().getReddit().get(commandName));
         rabbitMQProducer.publishAsynchronous(
                 voteCommentForm,
                 config.getExchange(),
@@ -48,18 +50,20 @@ public class CommentController extends MessagePublisher {
     }
 
     @PostMapping("downvote/{id}")
-    public void downvoteComment(@RequestParam String userNameId, @PathVariable String id) throws Exception {
-        String indicator = generalConfig.getCommands().get("downvoteComment");
+    public void downvoteComment(@RequestParam String userNameId, @PathVariable String id) {
+        String commandName = "downvoteComment";
+        String indicator = generalConfig.getCommands().get(commandName);
         log.info(indicator + "Controller::Comment Id={}, User Id={}", id, userNameId);
         VoteCommentForm voteCommentForm = VoteCommentForm.builder()
                 .commentId(id)
                 .userNameId(userNameId)
                 .build();
-        MessagePostProcessor messagePostProcessor = getMessageHeaders(config.getQueues().getResponse().getReddit().get("downvoteComment"));
+        MessagePostProcessor messagePostProcessor = getMessageHeaders(
+                config.getQueues().getResponse().getReddit().get(commandName));
         rabbitMQProducer.publishAsynchronous(
                 voteCommentForm,
                 config.getExchange(),
-                config.getQueues().getRequest().getReddit().get("downvoteComment"),
+                config.getQueues().getRequest().getReddit().get(commandName),
                 messagePostProcessor);
     }
 }
