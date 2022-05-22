@@ -6,10 +6,11 @@ import com.ScalableTeam.reddit.app.entity.User;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
 import com.ScalableTeam.reddit.app.repository.UserRepository;
+import com.ScalableTeam.reddit.app.seeders.ChannelSeeder;
 import com.ScalableTeam.reddit.app.seeders.CommentSeeder;
 import com.ScalableTeam.reddit.app.seeders.PostSeeder;
 import com.ScalableTeam.reddit.app.seeders.UserSeeder;
-import com.ScalableTeam.reddit.app.topic.Topic;
+//import com.ScalableTeam.reddit.app.topic.Topic;
 import com.arangodb.springframework.core.ArangoOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -41,6 +42,8 @@ public class CrudRunner implements CommandLineRunner {
     @Autowired
     private CommentSeeder commentSeeder;
     @Autowired
+    private ChannelSeeder channelSeeder;
+    @Autowired
     private CacheManager cacheManager;
     @Resource(name = "redisTemplate")
     private HashOperations<String, String, Post> hashOperations;
@@ -50,17 +53,19 @@ public class CrudRunner implements CommandLineRunner {
 //        Set<String> users = userSeeder.seedUsers();
 //        Set<String> posts = postSeeder.seedPosts(users);
 //        Set<String> comments = commentSeeder.seedComments(users, posts);
+//        Set<String> channels = channelSeeder.seedChannels();
+
 //        System.err.println("hello");
 //        System.err.println(cacheManager.getCacheNames());
 //        System.err.println(cacheManager.getCache("postsCache").get("userAdminChannel3"));
 //
 //
 //        System.err.println("heeloo"+ hashOperations.entries("postsCache"));
-        HashMap<String, Topic> hm = new HashMap<>();
-        Topic c=new Topic();
-        c.setDescription("hello");
-        hm.put("1",c);
-        System.err.println("hello"+hm);
+//        HashMap<String, Topic> hm = new HashMap<>();
+//        Topic c=new Topic();
+//        c.setDescription("hello");
+//        hm.put("1",c);
+//        System.err.println("hello"+hm);
 //        redisTemplate.setKeySerializer(new StringRedisSerializer());
 //        HashSet<String>keys= (HashSet<String>) ( ( RedisTemplate ) cacheManager.getCache("postsCache").getNativeCache() ).keys("*");
 //        Map<String,Post>res=(Map<String, Post>) redisTemplate.keys("postsCache"+"*").parallelStream().map(key->{

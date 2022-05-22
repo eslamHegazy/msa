@@ -24,7 +24,7 @@ public class PostSeeder {
 
     public Set<String> seedPosts(Set<String> userNameIds) {
         log.info("Seed Posts:-----");
-        ArrayList<String> users = new ArrayList<>(userNameIds);
+            ArrayList<String> users = new ArrayList<>(userNameIds);
         Set<String> posts = new HashSet<>();
         int postNum = 0;
         for (int i = 0; i < userNameIds.size(); i++) {
@@ -41,6 +41,7 @@ public class PostSeeder {
                         .upvoteCount(0)
                         .downvoteCount(0)
                         .time(Instant.now())
+                        .channelId("JJK")
                         .build();
                 postRepository.save(post);
             }
