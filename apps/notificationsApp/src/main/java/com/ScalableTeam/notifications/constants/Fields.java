@@ -6,5 +6,6 @@ public class Fields {
     public static final String TITLE = "title";
     public static final String BODY = "body";
     public static final String TIMESTAMP = "timestamp";
+    public static final String IS_READ = "is_read";
     public static final String TOKENS = "tokens";
 }

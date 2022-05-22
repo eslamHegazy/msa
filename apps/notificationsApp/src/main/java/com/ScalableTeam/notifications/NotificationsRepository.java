@@ -5,6 +5,7 @@ import com.ScalableTeam.notifications.constants.Fields;
 import com.ScalableTeam.notifications.exceptions.FirebaseCredentialsException;
 import com.ScalableTeam.notifications.exceptions.FirebaseNotificationException;
 import com.ScalableTeam.notifications.models.requests.DeviceTokenRequest;
+import com.ScalableTeam.notifications.models.requests.NotificationReadRequest;
 import com.ScalableTeam.notifications.models.requests.NotificationRequest;
 import com.ScalableTeam.notifications.models.responses.NotificationResponse;
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -63,6 +64,7 @@ public class NotificationsRepository {
         document.put(Fields.TITLE, notification.getTitle());
         document.put(Fields.BODY, notification.getBody());
         document.put(Fields.TIMESTAMP, FieldValue.serverTimestamp());
+        document.put(Fields.IS_READ, false);
 
         // Store the notification.
         for (String receiver : notification.getReceivers()) {
@@ -80,14 +82,20 @@ public class NotificationsRepository {
         QuerySnapshot query = firestore.collection(Collections.USERS).document(userId).collection(Collections.NOTIFICATIONS).get().get();
 
         for (DocumentSnapshot document : query.getDocuments()) {
+            String id = document.getId();
             String title = document.getString(Fields.TITLE);
             String body = document.getString(Fields.BODY);
             String sender = document.getString(Fields.SENDER);
             Date timestamp = document.getDate(Fields.TIMESTAMP);
+            boolean isRead = Boolean.TRUE.equals(document.getBoolean(Fields.IS_READ));
 
-            notifications.add(new NotificationResponse(title, body, sender, timestamp));
+            notifications.add(new NotificationResponse(id, title, body, sender, timestamp, isRead));
         }
 
         return notifications;
+    }
+
+    public void markNotificationAsRead(NotificationReadRequest notificationRead) throws InterruptedException, ExecutionException {
+        firestore.collection(Collections.USERS).document(notificationRead.getUserId()).collection(Collections.NOTIFICATIONS).document(notificationRead.getNotificationId()).update(Fields.IS_READ, true).get();
     }
 }
