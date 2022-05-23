@@ -55,6 +55,11 @@ try {
         return "User " + modId + " is not a mod for channel " + redditId;
     }
 
+    User toban = user.get();
+    if(toban.getFollowedChannels().isEmpty() || !toban.getFollowedChannels().containsKey(redditId)){
+        return "User " + requestedBanUserId + " is not following channel " + redditId;
+    }
+
     HashMap<String, Boolean> ban = new HashMap<String, Boolean>();
     ban.put(requestedBanUserId, true);
     channelRepository.updateBannedUsersWithID(redditId, ban);

@@ -15,10 +15,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @ComponentScan("com.ScalableTeam.reddit")
 @Service
@@ -35,7 +32,7 @@ public class ReadWallService implements MyCommand {
 
     @Override
     @Cacheable(cacheNames = "postsCache")
-    public Post[] execute(Object userNameIdString) throws Exception {
+    public String execute(Object userNameIdString) throws Exception {
         log.info(generalConfig.getCommands().get("readWall") + "Service", userNameIdString);
         try{
 
@@ -92,7 +89,12 @@ public class ReadWallService implements MyCommand {
             user.setLatestReadPostId(newLatestReadPostId);
             userRepository.save(user);
 
-            return feedTotal ;
+            ArrayList<Post> feedArray = new ArrayList<Post>();
+            for (Post p : feedTotal){
+                feedArray.add(p);
+            }
+            return feedArray.toString();
+//            return feedTotal.toString() ;
         } catch (Exception e) {
 
             throw new Exception("Exception When getting the feed");

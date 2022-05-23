@@ -28,4 +28,12 @@ public class ReportPostForm {
 //    public void setReason(String reason) {
 //        this.reason = reason;
 //    }
+
+    @Override
+    public String toString() {
+        return "ReportPostForm{" +
+                "userId='" + userId + '\'' +
+                ", postId='" + postId + '\'' +
+                '}';
+    }
 }

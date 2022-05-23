@@ -19,4 +19,12 @@ public class ViewReportsForm {
     public void setRedditId(String redditId) {
         this.redditId = redditId;
     }
+
+    @Override
+    public String toString() {
+        return "ViewReportsForm{" +
+                "modId='" + modId + '\'' +
+                ", redditId='" + redditId + '\'' +
+                '}';
+    }
 }

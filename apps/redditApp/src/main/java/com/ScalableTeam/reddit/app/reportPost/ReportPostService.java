@@ -51,13 +51,21 @@ try {
             throw new IllegalStateException("Channel with Id: "+ redditId + "does not exist in the database");
         }
 
+        Channel actualReddit = reddit.get();
         HashMap<String, String> report = new HashMap<String, String>();
         report.put(postId,userId);
         try {
-            channelRepository.addReport(postId, report);
+            if (actualReddit.getReports().isEmpty()){
+                actualReddit.setReports(report);
+                channelRepository.save(actualReddit);
+
+            }else{
+                channelRepository.addReport(redditId, report);
+
+            }
         }
         catch (Exception e){
-            return e.getMessage();
+            throw e;
         }
 
         return "report added successfully";}

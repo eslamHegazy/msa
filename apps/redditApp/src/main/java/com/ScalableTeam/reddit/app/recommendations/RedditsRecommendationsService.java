@@ -34,17 +34,20 @@ public class RedditsRecommendationsService implements MyCommand {
 
         try{
             String userId = (String) body;
-
             Optional<User> userO = userRepository.findById(userId);
+
             if(!userO.isPresent()){
                 throw new IllegalStateException("User " + userId + "not found in DataBase");
             }
+
 
             User user = userO.get();
             if (user.getFollowedUsers()==null){
                 return new String[0];
             }
+
             HashMap<String,Boolean> followedUsers = user.getFollowedUsers();
+
             HashMap<String, Integer> frequencies = new HashMap<String, Integer>();
 
             for (String uId : followedUsers.keySet()){
@@ -67,6 +70,7 @@ public class RedditsRecommendationsService implements MyCommand {
                 }
 
             }
+
             int counter = 5;
             String [] result = new String[counter];
             Set set2 = frequencies.entrySet();
@@ -74,7 +78,7 @@ public class RedditsRecommendationsService implements MyCommand {
             while(iterator2.hasNext() && counter>0)
             {
                 Map.Entry me2 = (Map.Entry)iterator2.next();
-                result[counter] = (String) me2.getKey();
+                result[counter-1] = (String) me2.getKey();
                 counter--;
             }
         return result;

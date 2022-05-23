@@ -1,16 +1,15 @@
 package com.ScalableTeam.reddit.app.recommendations;
 
-import com.ScalableTeam.reddit.app.entity.Post;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.stereotype.Service;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-@ComponentScan("com.ScalableTeam.reddit")
-@Service
+@RestController
 @Slf4j
 public class RecommendationsController {
 
@@ -19,9 +18,9 @@ public class RecommendationsController {
     @Autowired
     private GeneralConfig generalConfig;
 
-    @RequestMapping("/redditRecommendations/{userNameId}")
+    @RequestMapping(method = RequestMethod.GET,value="/redditRecommendations/{userNameId}")
     private String [] redditsRecommendations(@PathVariable String userNameId) throws Exception {
-        log.info(generalConfig.getCommands().get("redditRecommendations") + "Controller", userNameId);
+        log.info(generalConfig.getCommands().get("redditsRecommendations") + "Controller", userNameId);
         return redditsRecommendationsService.execute(userNameId);
     }
 

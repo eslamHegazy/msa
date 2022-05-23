@@ -23,6 +23,6 @@ public class ReportPostController {
     @RequestMapping(method = RequestMethod.POST,value = "/reportPost")
     private String reportPost(@RequestBody ReportPostForm reportPostForm) throws Exception {
         log.info(generalConfig.getCommands().get("reportPost") + "Controller", reportPostForm);
-        return (String) reportPostService.execute(reportPostForm);
+        return reportPostService.execute(reportPostForm);
     }
 }

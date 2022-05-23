@@ -18,7 +18,7 @@ public class ReadWallController {
     private GeneralConfig generalConfig;
 
     @RequestMapping("/feed/{userNameId}")
-    private Post[] readWall(@PathVariable String userNameId) throws Exception {
+    private String readWall(@PathVariable String userNameId) throws Exception {
         log.info(generalConfig.getCommands().get("readWall") + "Controller", userNameId);
         return readWallService.execute(userNameId);
     }

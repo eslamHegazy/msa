@@ -1,4 +1,4 @@
-package com.ScalableTeam.reddit.app.entity;
+package com.ScalableTeam.reddit.app.entity.vote;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,11 +30,10 @@ import javax.persistence.*;
 )
 public class RedditFollowers {
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "reddit_followers_sequence"
-    )
-    private Long id;
+//    @GeneratedValue(
+//            strategy = GenerationType.SEQUENCE,
+//            generator = "reddit_followers_sequence"
+//    )
     @Column(name = "redditId")
     private String channelNameId;
     private int followerCount;

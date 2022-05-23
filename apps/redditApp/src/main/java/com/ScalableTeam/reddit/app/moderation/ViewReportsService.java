@@ -41,15 +41,19 @@ public class ViewReportsService implements MyCommand {
             }
 
             Channel channel = reddit.get();
+            System.out.println(channel.getReports());
             if(channel.getModerators().containsKey(request.getModId())){
                 if (channel.getReports()!=null){
                     return channel.getReports().toString();
+                }else{
+                    return "no reports for this channel";
                 }
+            }else{
+                return "user "+ request.getModId()+" is not a mod of channel "+request.getRedditId();
             }
         }catch(Exception e){
-    return e.getMessage();
+throw  e;
         }
 
-        return "reports:";
     }
 }

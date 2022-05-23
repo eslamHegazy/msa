@@ -28,4 +28,6 @@ public class BanUserForm {
     public void setRedditId(String redditId) {
         this.redditId = redditId;
     }
+
+
 }

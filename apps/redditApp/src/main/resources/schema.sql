@@ -201,3 +201,32 @@ as
 ';
 
 alter procedure downvote_comment(varchar, varchar, out varchar) owner to maria;
+
+create or replace procedure follow_reddit(IN in_redditId character varying, OUT message character varying)
+    language plpgsql
+as
+'
+    DECLARE
+        follow reddit_followers%rowtype;
+    BEGIN
+        SELECT *
+        FROM reddit_followers
+        WHERE redditId = in_redditId
+        LIMIT 1
+        INTO follow;
+
+        IF NOT FOUND THEN
+            message := ''reddit followed!'';
+            INSERT INTO reddit_followers (redditId, followercount)
+            VALUES (in_reddiId, 1);
+
+        ELSE
+           UPDATE reddit_followers
+            SET followercount   = followercount + 1
+            WHERE redditId = in_redditId;
+
+        END IF;
+    END;
+';
+
+alter procedure follow_reddit(varchar, out varchar) owner to maria;
