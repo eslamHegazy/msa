@@ -5,6 +5,7 @@ import com.ScalableTeam.notifications.constants.Fields;
 import com.ScalableTeam.notifications.exceptions.FirebaseCredentialsException;
 import com.ScalableTeam.notifications.exceptions.FirebaseNotificationException;
 import com.ScalableTeam.notifications.models.requests.DeviceTokenRequest;
+import com.ScalableTeam.notifications.models.requests.NotificationDeleteRequest;
 import com.ScalableTeam.notifications.models.requests.NotificationReadRequest;
 import com.ScalableTeam.notifications.models.requests.NotificationSendRequest;
 import com.ScalableTeam.notifications.models.responses.NotificationResponse;
@@ -97,5 +98,9 @@ public class NotificationsRepository {
 
     public void markNotificationAsRead(NotificationReadRequest notification) throws InterruptedException, ExecutionException {
         firestore.collection(Collections.USERS).document(notification.getUserId()).collection(Collections.NOTIFICATIONS).document(notification.getNotificationId()).update(Fields.IS_READ, true).get();
+    }
+
+    public void deleteNotification(NotificationDeleteRequest notification) throws InterruptedException, ExecutionException {
+        firestore.collection(Collections.USERS).document(notification.getUserId()).collection(Collections.NOTIFICATIONS).document(notification.getNotificationId()).delete().get();
     }
 }
