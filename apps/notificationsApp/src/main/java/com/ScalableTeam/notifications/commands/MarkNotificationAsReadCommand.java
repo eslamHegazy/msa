@@ -14,8 +14,8 @@ public class MarkNotificationAsReadCommand implements Command {
 
     @Override
     public Integer execute(Object body) throws Exception {
-        NotificationReadRequest notificationRead = (NotificationReadRequest) body;
-        notificationsRepository.markNotificationAsRead(notificationRead);
+        NotificationReadRequest notification = (NotificationReadRequest) body;
+        notificationsRepository.markNotificationAsRead(notification);
         return 200;
     }
 }

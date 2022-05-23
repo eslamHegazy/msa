@@ -6,7 +6,7 @@ import com.ScalableTeam.notifications.exceptions.FirebaseCredentialsException;
 import com.ScalableTeam.notifications.exceptions.FirebaseNotificationException;
 import com.ScalableTeam.notifications.models.requests.DeviceTokenRequest;
 import com.ScalableTeam.notifications.models.requests.NotificationReadRequest;
-import com.ScalableTeam.notifications.models.requests.NotificationRequest;
+import com.ScalableTeam.notifications.models.requests.NotificationSendRequest;
 import com.ScalableTeam.notifications.models.responses.NotificationResponse;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.FieldValue;
@@ -57,7 +57,7 @@ public class NotificationsRepository {
         return tokens;
     }
 
-    public void sendNotification(NotificationRequest notification) throws FirebaseCredentialsException, FirebaseNotificationException, InterruptedException, ExecutionException {
+    public void sendNotification(NotificationSendRequest notification) throws FirebaseCredentialsException, FirebaseNotificationException, InterruptedException, ExecutionException {
         HashMap<String, Object> document = new HashMap<>();
 
         document.put(Fields.SENDER, notification.getSender());
@@ -95,7 +95,7 @@ public class NotificationsRepository {
         return notifications;
     }
 
-    public void markNotificationAsRead(NotificationReadRequest notificationRead) throws InterruptedException, ExecutionException {
-        firestore.collection(Collections.USERS).document(notificationRead.getUserId()).collection(Collections.NOTIFICATIONS).document(notificationRead.getNotificationId()).update(Fields.IS_READ, true).get();
+    public void markNotificationAsRead(NotificationReadRequest notification) throws InterruptedException, ExecutionException {
+        firestore.collection(Collections.USERS).document(notification.getUserId()).collection(Collections.NOTIFICATIONS).document(notification.getNotificationId()).update(Fields.IS_READ, true).get();
     }
 }

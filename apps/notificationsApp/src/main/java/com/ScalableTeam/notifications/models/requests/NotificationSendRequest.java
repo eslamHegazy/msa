@@ -2,14 +2,14 @@ package com.ScalableTeam.notifications.models.requests;
 
 import java.util.List;
 
-public class NotificationRequest {
+public class NotificationSendRequest {
 
     private final String title;
     private final String body;
     private final String sender;
     private final List<String> receivers;
 
-    public NotificationRequest(String title, String body, String sender, List<String> receivers) {
+    public NotificationSendRequest(String title, String body, String sender, List<String> receivers) {
         this.title = title;
         this.body = body;
         this.sender = sender;
