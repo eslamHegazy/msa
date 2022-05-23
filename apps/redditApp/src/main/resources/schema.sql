@@ -218,7 +218,7 @@ as
         IF NOT FOUND THEN
             message := ''reddit followed!'';
             INSERT INTO reddit_followers (redditId, followercount)
-            VALUES (in_reddiId, 1);
+            VALUES (in_redditId, 1);
 
         ELSE
            UPDATE reddit_followers
