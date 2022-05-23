@@ -1,6 +1,5 @@
 package com.ScalableTeam.notifications;
 
-import com.ScalableTeam.amqp.Config;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class NotificationConsumer {
+public class NotificationsConsumer {
 
     @RabbitListener(queues = "${mq.queues.request.notifications.publishNotification}")
     public void onMessage(Message message) throws JSONException {

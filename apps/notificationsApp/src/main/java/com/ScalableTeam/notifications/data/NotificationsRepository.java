@@ -1,4 +1,4 @@
-package com.ScalableTeam.notifications;
+package com.ScalableTeam.notifications.data;
 
 import com.ScalableTeam.notifications.constants.Collections;
 import com.ScalableTeam.notifications.constants.Fields;

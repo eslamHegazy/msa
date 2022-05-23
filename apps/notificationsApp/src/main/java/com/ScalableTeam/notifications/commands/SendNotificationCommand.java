@@ -1,7 +1,7 @@
 package com.ScalableTeam.notifications.commands;
 
-import com.ScalableTeam.notifications.Command;
-import com.ScalableTeam.notifications.NotificationsRepository;
+import com.ScalableTeam.notifications.utils.Command;
+import com.ScalableTeam.notifications.data.NotificationsRepository;
 import com.ScalableTeam.notifications.models.requests.NotificationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

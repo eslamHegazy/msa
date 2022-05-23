@@ -1,4 +1,4 @@
-package com.ScalableTeam.notifications;
+package com.ScalableTeam.notifications.data;
 
 import com.ScalableTeam.notifications.exceptions.FirebaseCredentialsException;
 import com.ScalableTeam.notifications.exceptions.FirebaseNotificationException;

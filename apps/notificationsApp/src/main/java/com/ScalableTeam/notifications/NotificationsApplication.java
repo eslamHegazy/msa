@@ -2,9 +2,7 @@ package com.ScalableTeam.notifications;
 
 import com.ScalableTeam.amqp.Config;
 import com.ScalableTeam.amqp.RabbitMQProducer;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.ScalableTeam.notifications.utils.FirebaseInitializer;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -28,21 +26,10 @@ public class NotificationsApplication {
     }
 
     @Bean
-    CommandLineRunner commandLineRunner(
-            RabbitMQProducer producer, Config config) {
-        return args -> {
-            producer.publish(
-                    new Person("Maria", 23),
-                    config.getExchange(),
-                    config.getQueues().getRequest().getNotifications().get("publishNotification"));
-        };
+    CommandLineRunner commandLineRunner(RabbitMQProducer producer, Config config) {
+        return args -> producer.publish(
+                new Person("Maria", 23),
+                config.getExchange(),
+                config.getQueues().getRequest().getNotifications().get("publishNotification"));
     }
-}
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-class Person {
-    private String name;
-    private int age;
 }
