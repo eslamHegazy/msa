@@ -1,19 +1,27 @@
 package com.ScalableTeam.reddit.app.entity;
 
-import com.arangodb.springframework.annotation.ArangoId;
-import com.arangodb.springframework.annotation.Document;
-import com.arangodb.springframework.annotation.Relations;
+import com.arangodb.springframework.annotation.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 
 @Document("posts")
+@AllArgsConstructor
 @Builder
+@NoArgsConstructor
+@PersistentIndex(fields = {"_key", "userNameId"})
+@PersistentIndex(fields = {"_key","channelId"})
+
+
 public class Post implements Serializable {
+    @Field("_key")
     @Id // db document field: _key
     private String id;
 
@@ -26,11 +34,13 @@ public class Post implements Serializable {
     private String photoLink;
     private long upvoteCount;
     private long downvoteCount;
-    private Instant time;
+    private Date time;
 
     @Relations(edges = PostToComment.class, lazy = true, direction = Relations.Direction.OUTBOUND)
     private Collection<Comment> comments;
     private HashMap<String, String> reports; //userId : reason
+
+//    public Post(){}
 
     public Collection<Comment> getComments() {
         return comments;
@@ -112,11 +122,11 @@ public class Post implements Serializable {
         this.downvoteCount = downvoteCount;
     }
 
-    public Instant getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(Instant time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 

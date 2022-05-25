@@ -1,12 +1,17 @@
 package com.ScalableTeam.reddit.app.entity;
 import com.arangodb.springframework.annotation.ArangoId;
 import com.arangodb.springframework.annotation.Document;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
 import java.util.HashMap;
 
 @Document("channels")
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor
 public class Channel {
     @Id // db document field: _key
     private String channelNameId;
@@ -73,8 +78,7 @@ public class Channel {
         return "Channel [id=" + channelNameId +", adminId=" + adminId + moderators.toString()+"]";
     }
 
-    public Channel() {
-    }
+
 
     public Channel(String channelNameId, String adminId) {
         this.channelNameId = channelNameId;

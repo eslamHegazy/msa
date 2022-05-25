@@ -21,7 +21,7 @@ public class FollowRedditController {
     private GeneralConfig generalConfig;
 
     @RequestMapping(method = RequestMethod.POST,value = "/followReddit")
-    private String createPost(@RequestBody FollowRedditForm followRedditForm){
+    private String followReddit(@RequestBody FollowRedditForm followRedditForm){
         log.info(generalConfig.getCommands().get("followReddit") + "Controller", followRedditForm);
         return followRedditService.execute(followRedditForm);
     }

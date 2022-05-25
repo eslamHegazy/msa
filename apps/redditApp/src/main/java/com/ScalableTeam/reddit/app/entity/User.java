@@ -2,14 +2,18 @@ package com.ScalableTeam.reddit.app.entity;
 
 import com.arangodb.springframework.annotation.ArangoId;
 import com.arangodb.springframework.annotation.Document;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
 import java.util.Date;
 import java.util.HashMap;
 
 @Document("users")
+@AllArgsConstructor
 @Builder
+@NoArgsConstructor
 public class User {
     @Id // db document field: _key
     private String userNameId;

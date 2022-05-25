@@ -1,13 +1,20 @@
 package com.ScalableTeam.reddit.app.requestForms;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor
 public class CreateChannelForm {
     private String adminId;
     private String channelNameId;
 
-    public CreateChannelForm(String adminId, String channelNameId) {
-        this.adminId = adminId;
-        this.channelNameId = channelNameId;
-    }
+//    public CreateChannelForm(String adminId, String channelNameId) {
+//        this.adminId = adminId;
+//        this.channelNameId = channelNameId;
+//    }
 
     public String getAdminId() {
         return adminId;

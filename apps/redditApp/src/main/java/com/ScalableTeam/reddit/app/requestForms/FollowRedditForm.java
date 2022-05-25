@@ -1,7 +1,13 @@
 package com.ScalableTeam.reddit.app.requestForms;
 
-import java.util.HashMap;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor
 public class FollowRedditForm {
 
 
