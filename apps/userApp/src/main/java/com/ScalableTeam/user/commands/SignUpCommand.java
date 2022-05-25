@@ -1,13 +1,13 @@
-package com.ScalableTeam.user.amqp.commands;
+package com.ScalableTeam.user.commands;
 
+import com.ScalableTeam.user.repositories.UserProfileRepository;
 import com.password4j.Hash;
 import com.password4j.Password;
-import com.ScalableTeam.user.amqp.entity.UserProfile;
+import com.ScalableTeam.user.entity.UserProfile;
 import lombok.AllArgsConstructor;
 import models.SignUpBody;
 import models.SignUpResponse;
 import org.springframework.stereotype.Service;
-import com.ScalableTeam.user.amqp.repositories.UserProfileRepository;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

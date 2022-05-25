@@ -1,4 +1,4 @@
-package com.ScalableTeam.user.amqp.entity;
+package com.ScalableTeam.user.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

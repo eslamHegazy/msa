@@ -1,7 +1,7 @@
-package com.ScalableTeam.user.amqp;
+package com.ScalableTeam.user;
 
 import com.ScalableTeam.user.amqp.MessageConfig;
-import com.ScalableTeam.user.amqp.commands.ICommand;
+import com.ScalableTeam.user.commands.ICommand;
 import lombok.AllArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.messaging.Message;

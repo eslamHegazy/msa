@@ -1,4 +1,4 @@
-package com.ScalableTeam.user.amqp;
+package com.ScalableTeam.user;
 
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;

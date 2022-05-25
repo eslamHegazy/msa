@@ -1,13 +1,13 @@
-package com.ScalableTeam.user.amqp.commands;
+package com.ScalableTeam.user.commands;
 
+import com.ScalableTeam.user.entity.UserProfile;
+import com.ScalableTeam.user.jwt.JwtUtil;
+import com.ScalableTeam.user.repositories.UserProfileRepository;
 import com.password4j.Password;
-import com.ScalableTeam.user.amqp.entity.UserProfile;
-import com.ScalableTeam.user.amqp.jwt.JwtUtil;
 import lombok.AllArgsConstructor;
 import models.LoginBody;
 import models.LoginResponse;
 import org.springframework.stereotype.Service;
-import com.ScalableTeam.user.amqp.repositories.UserProfileRepository;
 
 import java.util.Optional;
 

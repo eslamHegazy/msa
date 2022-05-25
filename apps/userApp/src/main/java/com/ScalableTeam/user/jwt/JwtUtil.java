@@ -1,4 +1,4 @@
-package com.ScalableTeam.user.amqp.jwt;
+package com.ScalableTeam.user.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
