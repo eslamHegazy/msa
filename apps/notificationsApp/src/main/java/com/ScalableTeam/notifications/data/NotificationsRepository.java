@@ -9,6 +9,7 @@ import com.ScalableTeam.notifications.models.requests.NotificationDeleteRequest;
 import com.ScalableTeam.notifications.models.requests.NotificationReadRequest;
 import com.ScalableTeam.notifications.models.requests.NotificationSendRequest;
 import com.ScalableTeam.notifications.models.responses.NotificationResponse;
+import com.ScalableTeam.notifications.utils.FirebaseInitializer;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
@@ -26,7 +27,12 @@ import java.util.concurrent.ExecutionException;
 @Repository
 public class NotificationsRepository {
 
-    private final Firestore firestore = FirestoreClient.getFirestore();
+    private final Firestore firestore;
+
+    public NotificationsRepository() {
+        FirebaseInitializer.initialize();
+        firestore = FirestoreClient.getFirestore();
+    }
 
     public void registerDeviceToken(DeviceTokenRequest deviceToken) throws InterruptedException, ExecutionException {
         firestore.collection(Collections.USERS).document(deviceToken.getUserId()).update(Fields.TOKENS, FieldValue.arrayUnion(deviceToken.getDeviceToken())).get();
