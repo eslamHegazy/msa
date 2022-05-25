@@ -2,9 +2,11 @@ package com.ScalableTeam.reddit.config;
 
 import com.ScalableTeam.reddit.app.entity.Post;
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -19,6 +21,8 @@ public class RedisConfig {
                 .withCacheConfiguration("postsCache",
                         RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(10)))
                 .withCacheConfiguration("popularPostsCache",
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofDays(7)))
+                .withCacheConfiguration("popularChannelsCache",
                         RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofDays(7)));
     }
     @Bean
@@ -28,10 +32,13 @@ public class RedisConfig {
 
     //Creating RedisTemplate for Entity 'Post'
     @Bean
-    public RedisTemplate<String, Post> redisTemplate(){
-        RedisTemplate<String, Post> empTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, String> redisTemplate(){
+        RedisTemplate<String, String> empTemplate = new RedisTemplate<>();
         empTemplate.setConnectionFactory(redisConnectionFactory());
         empTemplate.setKeySerializer(new StringRedisSerializer());
+//        empTemplate.setHashKeySerializer(new StringRedisSerializer());
+//        empTemplate.setHashValueSerializer(new StringRedisSerializer());
         return empTemplate;
     }
+
 }

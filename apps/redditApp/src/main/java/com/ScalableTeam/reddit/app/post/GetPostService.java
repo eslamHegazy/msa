@@ -7,6 +7,8 @@ import com.ScalableTeam.reddit.app.repository.UserRepository;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import com.arangodb.springframework.core.ArangoOperations;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.ComponentScan;
@@ -26,8 +28,15 @@ public class GetPostService implements MyCommand {
     private GeneralConfig generalConfig;
     //    @Resource(name="redisTemplate")
 //    private HashOperations<String, String, Post> hashOperations;
+    @RabbitListener(queues = "${mq.queues.request.reddit.getPost}")
+    public String listenToRequestQueue(String postId, Message message) throws Exception {
+        String correlationId = message.getMessageProperties().getCorrelationId();
+        String indicator = generalConfig.getCommands().get("getPost");
+        log.info(indicator + "Service::Get Post, CorrelationId={}", correlationId);
+        return execute(postId);
+    }
     @Override
-    public Post execute(Object postId) throws Exception {
+    public String execute(Object postId) throws Exception {
         log.info(generalConfig.getCommands().get("getPost") + "Service", postId);
         // TODO: CHECK THE USER IS AUTHENTICATED AND IS SAME USER IN POST
         try {
@@ -40,7 +49,7 @@ public class GetPostService implements MyCommand {
         }
     }
     @Cacheable(cacheNames = "postsCache",key="#postId")
-    public Post continueExecuting(String postId){
-        return postRepository.findById(postId).get();
+    public String continueExecuting(String postId){
+        return postRepository.findById(postId).get().toString();
     }
 }

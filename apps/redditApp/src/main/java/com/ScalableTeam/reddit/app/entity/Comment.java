@@ -3,14 +3,18 @@ package com.ScalableTeam.reddit.app.entity;
 import com.arangodb.springframework.annotation.ArangoId;
 import com.arangodb.springframework.annotation.Document;
 import com.arangodb.springframework.annotation.Relations;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
 import java.io.Serializable;
 import java.util.Collection;
 
 @Document("comments")
+@AllArgsConstructor
 @Builder
+@NoArgsConstructor
 public class Comment implements Serializable {
     @Id // db document field: _key
     private String id;

@@ -7,10 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @AllArgsConstructor
 @Component
@@ -40,7 +37,7 @@ public class PostSeeder {
                         .photoLink(photoLink)
                         .upvoteCount(0)
                         .downvoteCount(0)
-                        .time(Instant.now())
+                        .time(Date.from(Instant.now()))
                         .channelId("JJK")
                         .build();
                 postRepository.save(post);

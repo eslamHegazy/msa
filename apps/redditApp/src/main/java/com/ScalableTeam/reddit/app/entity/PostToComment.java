@@ -6,10 +6,11 @@ import com.arangodb.springframework.annotation.To;
 import lombok.Builder;
 
 import javax.persistence.Id;
+import java.io.Serializable;
 
 @Edge("postToComment")
 @Builder
-public class PostToComment {
+public class PostToComment implements Serializable {
     @Id
     private String id;
     @From

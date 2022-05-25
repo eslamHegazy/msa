@@ -1,7 +1,13 @@
 package com.ScalableTeam.reddit.app.requestForms;
 
 import com.ScalableTeam.reddit.app.entity.Comment;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor
 public class CommentRequestForm {
     private String userId;
     private String postId;

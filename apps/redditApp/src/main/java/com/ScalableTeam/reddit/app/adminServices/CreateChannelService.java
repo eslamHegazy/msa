@@ -5,10 +5,13 @@ import com.ScalableTeam.reddit.app.entity.Channel;
 import com.ScalableTeam.reddit.app.entity.User;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import com.ScalableTeam.reddit.app.repository.UserRepository;
+import com.ScalableTeam.reddit.app.requestForms.AssignModeratorsForm;
 import com.ScalableTeam.reddit.app.requestForms.CreateChannelForm;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import com.arangodb.springframework.core.ArangoOperations;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,13 @@ public class CreateChannelService implements MyCommand {
     private UserRepository userRepository;
     @Autowired
     private GeneralConfig generalConfig;
+    @RabbitListener(queues = "${mq.queues.request.reddit.createChannel}")
+    public String listenToRequestQueue(CreateChannelForm createChannelForm, Message message) throws Exception {
+        String correlationId = message.getMessageProperties().getCorrelationId();
+        String indicator = generalConfig.getCommands().get("createChannel");
+        log.info(indicator + "Service::CreateChannel, CorrelationId={}", correlationId);
+        return execute(createChannelForm);
+    }
     @Override
     public String execute(Object createChannelFormObj) throws Exception {
         log.info(generalConfig.getCommands().get("createChannel") + "Service", createChannelFormObj);
@@ -60,5 +70,11 @@ public class CreateChannelService implements MyCommand {
         catch (Exception e){
             throw new Exception("Error: Couldn't add Channel");
         }
+    }
+    @RabbitListener(queues = "${mq.queues.response.reddit.createChannel}")
+    public void receive(String response, Message message) {
+        String indicator = generalConfig.getCommands().get("createChannel");
+        String correlationId = message.getMessageProperties().getCorrelationId();
+        log.info(indicator + "Service::CorrelationId: {}, message: {}", correlationId, response);
     }
 }

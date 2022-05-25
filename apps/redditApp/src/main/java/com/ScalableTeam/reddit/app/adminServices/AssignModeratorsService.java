@@ -9,6 +9,8 @@ import com.ScalableTeam.reddit.app.requestForms.AssignModeratorsForm;
 import com.ScalableTeam.reddit.app.requestForms.CreateChannelForm;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,13 @@ public class AssignModeratorsService implements MyCommand {
     private ChannelRepository channelRepository;
     @Autowired
     private UserRepository userRepository;
+    @RabbitListener(queues = "${mq.queues.request.reddit.assignModerators}")
+    public String listenToRequestQueue(AssignModeratorsForm assignModeratorsForm, Message message) throws Exception {
+        String correlationId = message.getMessageProperties().getCorrelationId();
+        String indicator = generalConfig.getCommands().get("assignModerators");
+        log.info(indicator + "Service::AssignModerators, CorrelationId={}", correlationId);
+        return execute(assignModeratorsForm);
+    }
     @Override
     public String execute(Object assignModeratorsFormObj) throws Exception {
         log.info(generalConfig.getCommands().get("assignModerators") + "Service", assignModeratorsFormObj);
@@ -58,5 +67,11 @@ public class AssignModeratorsService implements MyCommand {
         catch (Exception e){
             throw new Exception("Error: Couldn't add Channel");
         }
+    }
+    @RabbitListener(queues = "${mq.queues.response.reddit.assignModerators}")
+    public void receive(String response, Message message) {
+        String indicator = generalConfig.getCommands().get("assignModerators");
+        String correlationId = message.getMessageProperties().getCorrelationId();
+        log.info(indicator + "Service::CorrelationId: {}, message: {}", correlationId, response);
     }
 }

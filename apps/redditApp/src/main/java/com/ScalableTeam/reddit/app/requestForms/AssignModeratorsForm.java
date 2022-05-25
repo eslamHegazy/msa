@@ -1,5 +1,12 @@
 package com.ScalableTeam.reddit.app.requestForms;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor
 public class AssignModeratorsForm {
     private String adminId;
     private String channelNameId;

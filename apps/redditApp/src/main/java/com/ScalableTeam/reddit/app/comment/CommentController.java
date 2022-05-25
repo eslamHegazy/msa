@@ -26,9 +26,17 @@ public class CommentController extends MessagePublisher {
     private Config config;
 
     @PostMapping
-    private Post comment(@RequestBody Comment comment) throws Exception {
+    private void comment(@RequestBody Comment comment) throws Exception {
         log.info(generalConfig.getCommands().get("comment") + "Controller", comment);
-        return commentService.execute(comment);
+        String commandName="comment";
+        MessagePostProcessor messagePostProcessor = getMessageHeaders(
+                config.getQueues().getResponse().getReddit().get(commandName));
+        rabbitMQProducer.publishAsynchronous(
+                comment,
+                config.getExchange(),
+                config.getQueues().getRequest().getReddit().get("comment"),
+                messagePostProcessor);
+        //return commentService.execute(comment);
     }
 
     @PostMapping("upvote/{id}")
