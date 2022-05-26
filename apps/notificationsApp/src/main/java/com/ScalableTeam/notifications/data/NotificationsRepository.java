@@ -65,6 +65,7 @@ public class NotificationsRepository {
     }
 
     public void sendNotification(NotificationSendRequest notification) throws FirebaseCredentialsException, FirebaseNotificationException, InterruptedException, ExecutionException {
+        // Store the notification.
         HashMap<String, Object> document = new HashMap<>();
 
         document.put(Fields.SENDER, notification.getSender());
@@ -73,12 +74,15 @@ public class NotificationsRepository {
         document.put(Fields.TIMESTAMP, FieldValue.serverTimestamp());
         document.put(Fields.IS_READ, false);
 
-        // Store the notification.
         for (String receiver : notification.getReceivers()) {
             firestore.collection(Collections.USERS).document(receiver).collection(Collections.NOTIFICATIONS).add(document).get();
         }
 
         // Send the notification.
+        notifyUser(notification);
+    }
+
+    protected void notifyUser(NotificationSendRequest notification) throws FirebaseCredentialsException, FirebaseNotificationException, ExecutionException, InterruptedException {
         NotificationEventHandler handler = NotificationEventHandler.getInstance();
         handler.notify(getDeviceTokens(notification.getReceivers()), notification.getTitle(), notification.getBody());
     }
