@@ -1,4 +1,4 @@
-package com.ScalableTeam.chat.app.config;
+package com.ScalableTeam.chat.config;
 
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +9,6 @@ import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;

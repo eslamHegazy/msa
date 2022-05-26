@@ -27,8 +27,6 @@ public class CreateChatCommand implements MyCommand {
             final Firestore database = FirestoreClient.getFirestore();
             ApiFuture<DocumentReference> addedDocRef = database.collection("PrivateChats")
                     .add(privateChat);
-            System.out.println(reqBody);
-            System.out.println("helloooooo  "+userIds);
             System.out.println("Added document with ID: " + addedDocRef.get().getId());
             return "Success";
         } catch (Exception e) {

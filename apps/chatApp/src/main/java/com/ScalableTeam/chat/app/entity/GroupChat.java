@@ -1,12 +1,13 @@
 package com.ScalableTeam.chat.app.entity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GroupChat {
 
     String groupChatId;
-    ArrayList<String> users;
-    ArrayList<Message> messages;
+    List<String> users;
+    List<Message> messages;
     String name;
     String description;
     String adminId;
@@ -31,7 +32,7 @@ public class GroupChat {
     public GroupChat(String name,
                      String description,
                      String adminId,
-                     ArrayList<String> users) {
+                     List<String> users) {
         this.name = name;
         this.description = description;
         this.adminId = adminId;
@@ -61,7 +62,7 @@ public class GroupChat {
         this.groupChatId = groupChatId;
     }
 
-    public ArrayList<String> getUsers() {
+    public List<String> getUsers() {
         return users;
     }
 
@@ -69,7 +70,7 @@ public class GroupChat {
         this.users = users;
     }
 
-    public ArrayList<Message> getMessages() {
+    public List<Message> getMessages() {
         return messages;
     }
 
