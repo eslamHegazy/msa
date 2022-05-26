@@ -92,5 +92,6 @@
         <module>service-discovery</module>
         <module>swagger-docs</module>
         <module>lib</module>
+        <module>mediaApp</module>
     </modules>
 </project>
