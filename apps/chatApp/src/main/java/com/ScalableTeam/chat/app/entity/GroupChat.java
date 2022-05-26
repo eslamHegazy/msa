@@ -1,12 +1,11 @@
 package com.ScalableTeam.chat.app.entity;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class GroupChat {
 
     String groupChatId;
-    ArrayList<String> userIds;
+    ArrayList<String> users;
     ArrayList<Message> messages;
     String name;
     String description;
@@ -32,22 +31,22 @@ public class GroupChat {
     public GroupChat(String name,
                      String description,
                      String adminId,
-                     ArrayList<String> userIds) {
+                     ArrayList<String> users) {
         this.name = name;
         this.description = description;
         this.adminId = adminId;
-        this.userIds = userIds;
+        this.users = users;
     }
 
 
     public GroupChat(String groupChatId,
-                     ArrayList<String> userIds,
+                     ArrayList<String> users,
                      ArrayList<Message> messages,
                      String name,
                      String description,
                      String adminId) {
         this.groupChatId = groupChatId;
-        this.userIds = userIds;
+        this.users = users;
         this.messages = messages;
         this.name = name;
         this.description = description;
@@ -62,12 +61,12 @@ public class GroupChat {
         this.groupChatId = groupChatId;
     }
 
-    public ArrayList<String> getUserIds() {
-        return userIds;
+    public ArrayList<String> getUsers() {
+        return users;
     }
 
-    public void setUserIds(ArrayList<String> userIds) {
-        this.userIds = userIds;
+    public void setUsers(ArrayList<String> users) {
+        this.users = users;
     }
 
     public ArrayList<Message> getMessages() {

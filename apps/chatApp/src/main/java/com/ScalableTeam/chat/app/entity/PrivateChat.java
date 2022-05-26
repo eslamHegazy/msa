@@ -8,7 +8,6 @@ public class PrivateChat {
     List<String> users;
 //    List<Message> messages;
 
-
     public PrivateChat() {
 
     }
