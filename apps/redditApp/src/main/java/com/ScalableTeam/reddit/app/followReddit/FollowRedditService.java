@@ -5,6 +5,7 @@ import com.ScalableTeam.reddit.app.entity.Channel;
 import com.ScalableTeam.reddit.app.entity.User;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import com.ScalableTeam.reddit.app.repository.UserRepository;
+import com.ScalableTeam.reddit.app.repository.vote.RedditFollowRepository;
 import com.ScalableTeam.reddit.app.requestForms.FollowRedditForm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,13 @@ public class FollowRedditService implements MyCommand {
     private final UserRepository userRepository;
 
     @Autowired
-    public FollowRedditService(ChannelRepository channelRepository, UserRepository userRepository) {
+    RedditFollowRepository redditFollowRepository;
+
+    @Autowired
+    public FollowRedditService(ChannelRepository channelRepository, UserRepository userRepository, RedditFollowRepository redditFollowRepository) {
         this.channelRepository = channelRepository;
         this.userRepository=userRepository;
+        this.redditFollowRepository = redditFollowRepository;
     }
 
 
@@ -58,10 +63,11 @@ public class FollowRedditService implements MyCommand {
 
         HashMap<String, Boolean> follow = new HashMap<String, Boolean>();
         follow.put(redditId, true);
-        userRepository.updateFollowedChannelsWithID(userId, follow);
+            String msg = redditFollowRepository.followReddit(redditId);
+            userRepository.updateFollowedChannelsWithID(userId, follow);
+            System.out.println(msg);
 
-        System.out.println(userId + "    "+redditId);
-        return "Channel followed successfully";
+        return msg;
         }catch(Exception e){
             return e.getMessage();
         }

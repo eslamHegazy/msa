@@ -211,20 +211,20 @@ as
     BEGIN
         SELECT *
         FROM reddit_followers
-        WHERE redditId = in_redditId
+        WHERE redditid = in_redditId
         LIMIT 1
         INTO follow;
 
         IF NOT FOUND THEN
-            message := ''reddit followed!'';
-            INSERT INTO reddit_followers (redditId, followercount)
+            INSERT INTO reddit_followers (redditid, followercount)
             VALUES (in_redditId, 1);
+            message := ''adding reddit'';
 
         ELSE
            UPDATE reddit_followers
             SET followercount   = followercount + 1
-            WHERE redditId = in_redditId;
-
+            WHERE redditid = in_redditId;
+            message :=''reddit followed!'';
         END IF;
     END;
 ';
