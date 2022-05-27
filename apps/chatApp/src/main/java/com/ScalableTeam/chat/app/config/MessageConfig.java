@@ -9,14 +9,12 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
 @Configuration
 public class MessageConfig {
 
     public final static String QUEUE_NAME = "chatMQ";
     public final static String TOPIC_NAME = "generic_exchange";
     public final static String ROUTING_KEY = "chat_routingKey";
-
 
     @Bean
     public Queue queue() {
@@ -41,8 +39,8 @@ public class MessageConfig {
     @Bean
     public ConnectionFactory connectionFactory(){
         CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
-//        cachingConnectionFactory.setUsername("rabbit");
-//        cachingConnectionFactory.setPassword("password");
+        cachingConnectionFactory.setUsername("rabbit");
+        cachingConnectionFactory.setPassword("password");
         return cachingConnectionFactory;
     }
 
