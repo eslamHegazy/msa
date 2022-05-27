@@ -34,7 +34,7 @@ public class GetPostCommentsService implements ICommand<String, Collection<Comme
     @Override
     public Collection<Comment> execute(String postId) throws Exception {
         String indicator = generalConfig.getCommands().get("getPostComments");
-        log.info(indicator + "Service::Post Id={}, CorrelationId={}", postId);
+        log.info(indicator + "Service::Post Id={}", postId);
 
         Optional<Post> post = postRepository.findById(postId);
         if (post.isEmpty()) {

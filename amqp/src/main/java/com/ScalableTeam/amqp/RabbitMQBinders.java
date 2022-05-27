@@ -1,5 +1,6 @@
 package com.ScalableTeam.amqp;
 
+import com.ScalableTeam.amqp.Config;
 import lombok.AllArgsConstructor;
 import org.springframework.amqp.core.*;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;

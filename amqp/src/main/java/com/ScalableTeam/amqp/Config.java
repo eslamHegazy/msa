@@ -36,6 +36,7 @@ public class Config {
         @Data
         public static class Response {
             private Map<String, String> reddit;
+            private Map<String, String> notifications;
         }
     }
 }

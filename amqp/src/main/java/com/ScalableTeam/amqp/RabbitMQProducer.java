@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 public class RabbitMQProducer {
 
     private final AmqpTemplate amqpTemplate;
-
     public void publish(Object payload, String exchange, String routingKey) {
         log.info("Publishing to {} using routingKey {}. Payload: {}", exchange, routingKey, payload);
         amqpTemplate.convertAndSend(exchange, routingKey, payload);
