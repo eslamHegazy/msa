@@ -31,8 +31,9 @@ public class NotificationsController {
     @RequestMapping(method = RequestMethod.POST, value = "/sendNotification")
     private void sendNotification(@RequestBody NotificationSendRequest notificationSendRequest) {
         String commandName = "sendNotification";
+        String indicator = generalConfig.getCommands().get(commandName);
 
-        log.info(generalConfig.getCommands().get(commandName), notificationSendRequest);
+        log.info(indicator + "Controller, Body: {}", notificationSendRequest);
 
         MessagePostProcessor messagePostProcessor = getMessageHeaders(
                 config.getQueues().getResponse().getNotifications().get(commandName));
@@ -46,8 +47,9 @@ public class NotificationsController {
     @RequestMapping(method = RequestMethod.GET, value = "/getNotifications/{userId}")
     private Object getNotifications(@PathVariable String userId) {
         String commandName = "getNotifications";
+        String indicator = generalConfig.getCommands().get(commandName);
 
-        log.info(generalConfig.getCommands().get(commandName), userId);
+        log.info(indicator + "Controller, Body: {}", userId);
 
         return rabbitMQProducer.publishSynchronous(userId,
                 config.getExchange(),
@@ -57,8 +59,9 @@ public class NotificationsController {
     @RequestMapping(method = RequestMethod.PUT, value = "/markNotificationAsRead")
     private void markNotificationAsRead(@RequestBody NotificationReadRequest notificationReadRequest) {
         String commandName = "markNotificationAsRead";
+        String indicator = generalConfig.getCommands().get(commandName);
 
-        log.info(generalConfig.getCommands().get(commandName), notificationReadRequest);
+        log.info(indicator + "Controller, Body: {}", notificationReadRequest);
 
         MessagePostProcessor messagePostProcessor = getMessageHeaders(
                 config.getQueues().getResponse().getNotifications().get(commandName));
@@ -72,8 +75,9 @@ public class NotificationsController {
     @RequestMapping(method = RequestMethod.DELETE, value = "/deleteNotification")
     private void deleteNotification(@RequestBody NotificationDeleteRequest notificationDeleteRequest) {
         String commandName = "deleteNotification";
+        String indicator = generalConfig.getCommands().get(commandName);
 
-        log.info(generalConfig.getCommands().get(commandName), notificationDeleteRequest);
+        log.info(indicator + "Controller, Body: {}", notificationDeleteRequest);
 
         MessagePostProcessor messagePostProcessor = getMessageHeaders(
                 config.getQueues().getResponse().getNotifications().get(commandName));

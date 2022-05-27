@@ -32,8 +32,9 @@ public class DeviceTokensController {
     @RequestMapping(method = RequestMethod.PUT, value = "/registerDeviceToken")
     private void registerDeviceToken(@RequestBody DeviceTokenRequest deviceTokenRequest) {
         String commandName = "registerDeviceToken";
+        String indicator = generalConfig.getCommands().get(commandName);
 
-        log.info(generalConfig.getCommands().get(commandName), deviceTokenRequest);
+        log.info(indicator + "Controller, Body: {}", deviceTokenRequest);
 
         MessagePostProcessor messagePostProcessor = getMessageHeaders(
                 config.getQueues().getResponse().getNotifications().get(commandName));
@@ -47,8 +48,9 @@ public class DeviceTokensController {
     @RequestMapping(method = RequestMethod.PUT, value = "/unregisterDeviceToken")
     private void unregisterDeviceToken(@RequestBody DeviceTokenRequest deviceTokenRequest) {
         String commandName = "unregisterDeviceToken";
+        String indicator = generalConfig.getCommands().get(commandName);
 
-        log.info(generalConfig.getCommands().get(commandName), deviceTokenRequest);
+        log.info(indicator + "Controller, Body: {}", deviceTokenRequest);
 
         MessagePostProcessor messagePostProcessor = getMessageHeaders(
                 config.getQueues().getResponse().getNotifications().get(commandName));
