@@ -17,7 +17,7 @@ import java.util.Arrays;
 @Service
 @Slf4j
 @AllArgsConstructor
-public class searchByChannelService implements MyCommand {
+public class SearchByChannelService implements MyCommand {
     private PostRepository postRepository;
     @Autowired
     private GeneralConfig generalConfig;

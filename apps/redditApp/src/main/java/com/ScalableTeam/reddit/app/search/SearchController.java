@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @RequestMapping("/search")
-public class searchController extends MessagePublisher {
+public class SearchController extends MessagePublisher {
     @Autowired
     private GeneralConfig generalConfig;
     @Autowired

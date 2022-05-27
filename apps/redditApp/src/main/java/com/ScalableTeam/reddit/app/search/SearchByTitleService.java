@@ -17,7 +17,7 @@ import java.util.Arrays;
 @Service
 @Slf4j
 @AllArgsConstructor
-public class searchByTitleService implements MyCommand {
+public class SearchByTitleService implements MyCommand {
     @Autowired
     private PostRepository postRepository;
     @Autowired

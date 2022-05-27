@@ -24,14 +24,9 @@ public interface PostRepository extends ArangoRepository<Post, String> {
     @Query("FOR p IN posts FILTER HAS(@channelId,p.channelId)")
     Post[] getPostsByChannel(@Param("followedChannels") String channelId);
 
-    @Query("FOR p IN posts SEARCH ANALYZER" +
-            "(p.title IN TOKENS(@title, \"text_en\"), \"text_en\")" +
-            "RETURN p")
+    @Query("FOR p IN posts FILTER CONTAINS(LOWER(p.title), LOWER(@title)) RETURN p")
     Post[] getPostsByPostTitle(@Param("title") String title);
 
-    @Query("FOR p IN posts SEARCH ANALYZER" +
-            "(STARTS_WITH(p.channelId, LOWER(LTRIM(@id))) OR " +
-            "PHRASE(p.channelId, @id), \"text_en\") RETURN p")
+    @Query("FOR p IN posts FILTER STARTS_WITH(LOWER(p.channelId), LOWER(LTRIM(@id))) RETURN p")
     Post[] getPostsByChannelId(@Param("id") String id);
-
 }
