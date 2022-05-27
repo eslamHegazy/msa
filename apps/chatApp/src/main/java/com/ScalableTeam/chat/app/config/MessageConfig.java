@@ -41,8 +41,8 @@ public class MessageConfig {
     @Bean
     public ConnectionFactory connectionFactory(){
         CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
-        cachingConnectionFactory.setUsername("rabbit");
-        cachingConnectionFactory.setPassword("password");
+//        cachingConnectionFactory.setUsername("rabbit");
+//        cachingConnectionFactory.setPassword("password");
         return cachingConnectionFactory;
     }
 

@@ -7,9 +7,11 @@ import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.cloud.FirestoreClient;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+@Service
 public class SendMessageToGroupCommand implements MyCommand {
     @Override
     public Object execute(Map<String, Object> newMessage) {
@@ -28,7 +30,7 @@ public class SendMessageToGroupCommand implements MyCommand {
                     .document(groupChatId)
                     .collection("Messages").add(m);
             System.out.println("Added document with ID: " + addedDocRef.get().getId());
-            return "0";
+            return addedDocRef.get().getId();
         } catch (Exception e) {
             System.out.println(e);
             return "Internal Server Error";

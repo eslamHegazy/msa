@@ -12,8 +12,12 @@ public class GroupChat {
     String description;
     String adminId;
 
-    public GroupChat(){
+    public GroupChat() {
 
+    }
+
+    public GroupChat(String groupChatId) {
+        this.groupChatId = groupChatId;
     }
 
     public GroupChat(String name,
@@ -21,6 +25,7 @@ public class GroupChat {
         this.name = name;
         this.description = description;
     }
+
     public GroupChat(String name,
                      String description,
                      String adminId) {
@@ -39,6 +44,19 @@ public class GroupChat {
         this.users = users;
     }
 
+
+    public GroupChat(String groupChatId,
+                     String name,
+                     String description,
+                     String adminId,
+                     List<String> users
+    ) {
+        this.groupChatId = groupChatId;
+        this.users = users;
+        this.name = name;
+        this.description = description;
+        this.adminId = adminId;
+    }
 
     public GroupChat(String groupChatId,
                      ArrayList<String> users,
@@ -100,5 +118,17 @@ public class GroupChat {
 
     public void setAdminId(String adminId) {
         this.adminId = adminId;
+    }
+
+    @Override
+    public String toString() {
+        return "GroupChat{" +
+                "groupChatId='" + groupChatId + '\'' +
+                ", users=" + users +
+                ", messages=" + messages +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", adminId='" + adminId + '\'' +
+                '}';
     }
 }

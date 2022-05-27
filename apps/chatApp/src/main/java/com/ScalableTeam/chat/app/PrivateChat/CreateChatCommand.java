@@ -28,7 +28,7 @@ public class CreateChatCommand implements MyCommand {
             ApiFuture<DocumentReference> addedDocRef = database.collection("PrivateChats")
                     .add(privateChat);
             System.out.println("Added document with ID: " + addedDocRef.get().getId());
-            return "Success";
+            return addedDocRef.get().getId();
         } catch (Exception e) {
             System.out.println(e);
             return e.toString();

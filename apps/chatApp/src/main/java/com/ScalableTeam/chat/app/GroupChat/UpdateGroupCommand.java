@@ -7,10 +7,12 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
 public class UpdateGroupCommand implements MyCommand {
     @Override
     public Object execute(Map<String, Object> groupChatDetails) {
@@ -35,7 +37,10 @@ public class UpdateGroupCommand implements MyCommand {
             DocumentReference documentReference = database.collection("GroupChats").document(chatId);
             ApiFuture<WriteResult> updatedDocRef = documentReference.set(chatUpdates, SetOptions.merge());
             System.out.println("Updated document with ID: " + updatedDocRef.get());
-            return "0";
+
+            DocumentReference updatedDocumentReference = database.collection("GroupChats").document(chatId);
+
+            return updatedDocumentReference.get().get().getData();
         } catch (Exception e) {
             System.out.println(e);
             return "Internal Server Error";

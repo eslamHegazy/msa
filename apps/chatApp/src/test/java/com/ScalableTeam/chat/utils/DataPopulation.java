@@ -57,6 +57,7 @@ public class DataPopulation {
     }
 
     public static void clearDB() throws ExecutionException, InterruptedException {
+
         // clear private chats
         ApiFuture<QuerySnapshot> future = database.collection("PrivateChats").get();
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();

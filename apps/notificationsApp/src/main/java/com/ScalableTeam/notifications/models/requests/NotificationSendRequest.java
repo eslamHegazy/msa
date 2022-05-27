@@ -1,7 +1,10 @@
 package com.ScalableTeam.notifications.models.requests;
 
+import lombok.Data;
+
 import java.util.List;
 
+@Data
 public class NotificationSendRequest {
 
     private final String title;

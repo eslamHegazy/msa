@@ -22,7 +22,7 @@ public class AddMessageCommand implements MyCommand {
                     .document((String) newMessage.get("privateChatId"))
                     .collection("Messages").add(m);
             System.out.println("Added document with ID: " + addedDocRef.get().getId());
-            return "Success";
+            return addedDocRef.get().getId();
         } catch (Exception e) {
             System.out.println(e);
             return e.toString();

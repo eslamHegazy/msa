@@ -21,7 +21,6 @@ public class GetChatCommand implements MyCommand {
         try {
             String privateChatId = (String) data.get("chatId");
             String lastMessageId = (String) data.get("lastMessageId");
-            System.out.println(privateChatId);
             final Firestore database = FirestoreClient.getFirestore();
             DocumentReference docRef = database.collection("PrivateChats")
                     .document(privateChatId)

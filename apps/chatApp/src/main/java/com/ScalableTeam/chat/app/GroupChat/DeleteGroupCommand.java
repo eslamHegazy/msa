@@ -5,9 +5,11 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+@Service
 public class DeleteGroupCommand implements MyCommand {
     @Override
     public Object execute(Map<String, Object> object) {
