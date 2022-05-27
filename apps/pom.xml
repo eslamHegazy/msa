@@ -19,6 +19,7 @@
         <module>notificationsApp</module>
         <module>redditApp</module>
         <module>userApp</module>
+        <module>mediaApp</module>
     </modules>
 
     <properties>
