@@ -1,11 +1,14 @@
 package com.ScalableTeam.reddit.app.recommendations;
 
+import com.ScalableTeam.amqp.Config;
 import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.entity.Post;
 import com.ScalableTeam.reddit.app.entity.User;
 import com.ScalableTeam.reddit.app.repository.UserRepository;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
@@ -18,13 +21,23 @@ import java.util.*;
 public class RedditsRecommendationsService implements MyCommand {
 
     @Autowired
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
 
-    public RedditsRecommendationsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-    @Autowired
+   @Autowired
     private GeneralConfig generalConfig;
+
+   @Autowired
+   private Config config;
+
+   private final String serviceName ="redditsRecommendations";
+
+    @RabbitListener(queues = "${mq.queues.request.reddit."+serviceName+"}",returnExceptions = "true")
+    public String[] listenToRequestQueue(String userId, Message message) throws Exception {
+        String correlationId = message.getMessageProperties().getCorrelationId();
+        String indicator = generalConfig.getCommands().get(serviceName);
+        log.info(indicator + "Service::View Reports, CorrelationId={}", correlationId);
+        return execute(userId);
+    }
     @Override
     public String [] execute(Object body) throws Exception {
         //    1. get all/10 random/first entries in user's followedUsers

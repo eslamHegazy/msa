@@ -1,4 +1,5 @@
 package com.ScalableTeam.reddit.app.entity;
+import com.ScalableTeam.reddit.app.requestForms.ReportPostForm;
 import com.arangodb.springframework.annotation.ArangoId;
 import com.arangodb.springframework.annotation.Document;
 import lombok.AllArgsConstructor;
@@ -6,6 +7,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @Document("channels")
@@ -22,8 +24,8 @@ public class Channel {
     private String adminId;
     private HashMap<String,Boolean> moderators;
     private HashMap<String, Boolean> bannedUsers;
-    private HashMap<String, String> reports;
-
+//    private HashMap<String, ReportPostForm> reports;
+    private HashMap<String, Boolean>reports;
 
     public String getChannelNameId() {
         return channelNameId;
@@ -65,11 +67,11 @@ public class Channel {
         this.bannedUsers = bannedUsers;
     }
 
-    public HashMap<String, String> getReports() {
+    public HashMap<String, Boolean> getReports() {
         return reports;
     }
 
-    public void setReports(HashMap<String, String> reports) {
+    public void setReports(HashMap<String,Boolean> reports) {
         this.reports = reports;
     }
 

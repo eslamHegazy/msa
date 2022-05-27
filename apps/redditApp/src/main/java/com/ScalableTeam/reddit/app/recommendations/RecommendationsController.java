@@ -17,11 +17,19 @@ public class RecommendationsController {
     private RedditsRecommendationsService redditsRecommendationsService;
     @Autowired
     private GeneralConfig generalConfig;
+    @Autowired
+    RecommendationsBasedOnFollowersService recommendationsBasedOnFollowersService;
 
     @RequestMapping(method = RequestMethod.GET,value="/redditRecommendations/{userNameId}")
     private String [] redditsRecommendations(@PathVariable String userNameId) throws Exception {
         log.info(generalConfig.getCommands().get("redditsRecommendations") + "Controller", userNameId);
         return redditsRecommendationsService.execute(userNameId);
+    }
+
+    @RequestMapping(method = RequestMethod.GET,value="/recommendationsBasedOnFollowers/{userNameId}")
+    private String [] recommendationsBasedOnFollowersService(@PathVariable String userNameId) throws Exception {
+        log.info(generalConfig.getCommands().get("recommendationsBasedOnFollowersService") + "Controller", userNameId);
+        return recommendationsBasedOnFollowersService.execute(userNameId);
     }
 
 }

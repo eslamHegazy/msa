@@ -1,11 +1,15 @@
 package com.ScalableTeam.reddit.app.recommendations;
 
 
+import com.ScalableTeam.amqp.Config;
 import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.entity.User;
 import com.ScalableTeam.reddit.app.repository.UserRepository;
+import com.ScalableTeam.reddit.app.requestForms.ViewReportsForm;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
@@ -17,14 +21,24 @@ import java.util.*;
 @Slf4j
 public class RecommendationsBasedOnFollowersService implements MyCommand {
     @Autowired
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
+
+
+    private final String serviceName = "recommendationsBasedOnFollowersService";
 
     @Autowired
-    public RecommendationsBasedOnFollowersService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private Config config;
+
     @Autowired
     private GeneralConfig generalConfig;
+
+    @RabbitListener(queues = "${mq.queues.request.reddit."+serviceName+"}",returnExceptions = "true")
+    public String[] listenToRequestQueue(String userId, Message message) throws Exception {
+        String correlationId = message.getMessageProperties().getCorrelationId();
+        String indicator = generalConfig.getCommands().get(serviceName);
+        log.info(indicator + "Service::View Reports, CorrelationId={}", correlationId);
+        return execute(userId);
+    }
     @Override
     public String [] execute(Object body) throws Exception {
         //    1. get all/10 random/first entries in user's followedUsers
@@ -74,7 +88,7 @@ public class RecommendationsBasedOnFollowersService implements MyCommand {
             while(iterator2.hasNext() && counter>0)
             {
                 Map.Entry me2 = (Map.Entry)iterator2.next();
-                result[counter] = (String) me2.getKey();
+                result[counter-1] = (String) me2.getKey();
                 counter--;
             }
             return result;
