@@ -28,7 +28,7 @@ public class GetPostService implements MyCommand {
     private GeneralConfig generalConfig;
     //    @Resource(name="redisTemplate")
 //    private HashOperations<String, String, Post> hashOperations;
-    @RabbitListener(queues = "${mq.queues.request.reddit.getPost}")
+    @RabbitListener(queues = "${mq.queues.request.reddit.getPost}", returnExceptions = "true")
     public String listenToRequestQueue(String postId, Message message) throws Exception {
         String correlationId = message.getMessageProperties().getCorrelationId();
         String indicator = generalConfig.getCommands().get("getPost");

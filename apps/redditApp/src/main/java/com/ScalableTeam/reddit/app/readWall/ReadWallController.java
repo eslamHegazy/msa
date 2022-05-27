@@ -25,7 +25,7 @@ public class ReadWallController extends MessagePublisher {
     private Config config;
 
     @RequestMapping("/wall")
-    private String readWall(@RequestParam String userNameId) throws Exception {
+    private Object readWall(@RequestParam String userNameId) throws Exception {
         log.info(generalConfig.getCommands().get("readWall") + "Controller", userNameId);
         String commandName="readWall";
         return (String) rabbitMQProducer.publishSynchronous(userNameId,
