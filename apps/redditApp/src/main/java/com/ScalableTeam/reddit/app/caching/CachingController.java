@@ -2,25 +2,13 @@ package com.ScalableTeam.reddit.app.caching;
 
 import com.ScalableTeam.amqp.Config;
 import com.ScalableTeam.amqp.RabbitMQProducer;
-import com.ScalableTeam.reddit.app.MessagePublisher;
-import com.ScalableTeam.reddit.app.entity.Comment;
-import com.ScalableTeam.reddit.app.entity.Post;
-import com.ScalableTeam.reddit.app.post.CreatePostService;
-import com.ScalableTeam.reddit.app.post.GetPopularPostsService;
 import com.ScalableTeam.reddit.app.post.GetPostService;
-import com.ScalableTeam.reddit.app.requestForms.VoteCommentForm;
-import com.ScalableTeam.reddit.app.requestForms.VotePostForm;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j

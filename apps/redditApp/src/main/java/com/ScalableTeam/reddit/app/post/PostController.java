@@ -2,10 +2,7 @@ package com.ScalableTeam.reddit.app.post;
 
 import com.ScalableTeam.amqp.Config;
 import com.ScalableTeam.amqp.RabbitMQProducer;
-import com.ScalableTeam.reddit.app.MessagePublisher;
-import com.ScalableTeam.reddit.app.entity.Comment;
 import com.ScalableTeam.reddit.app.entity.Post;
-import com.ScalableTeam.reddit.app.requestForms.VoteCommentForm;
 import com.ScalableTeam.reddit.app.requestForms.VotePostForm;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -13,16 +10,12 @@ import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import static com.ScalableTeam.amqp.MessagePublisher.getMessageHeaders;
 
 @RestController
 @Slf4j
 @RequestMapping("/posts")
-public class PostController extends MessagePublisher {
+public class PostController {
     @Autowired
     private CreatePostService createPostService;
     @Autowired

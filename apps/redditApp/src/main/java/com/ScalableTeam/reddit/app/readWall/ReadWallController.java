@@ -2,19 +2,16 @@ package com.ScalableTeam.reddit.app.readWall;
 
 import com.ScalableTeam.amqp.Config;
 import com.ScalableTeam.amqp.RabbitMQProducer;
-import com.ScalableTeam.reddit.app.MessagePublisher;
-import com.ScalableTeam.reddit.app.entity.Post;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
-public class ReadWallController extends MessagePublisher {
+public class ReadWallController {
     @Autowired
     private ReadWallService readWallService;
     @Autowired
@@ -27,7 +24,7 @@ public class ReadWallController extends MessagePublisher {
     @RequestMapping("/wall")
     private String readWall(@RequestParam String userNameId) throws Exception {
         log.info(generalConfig.getCommands().get("readWall") + "Controller", userNameId);
-        String commandName="readWall";
+        String commandName = "readWall";
         return (String) rabbitMQProducer.publishSynchronous(userNameId,
                 config.getExchange(),
                 config.getQueues().getRequest().getReddit().get(commandName));

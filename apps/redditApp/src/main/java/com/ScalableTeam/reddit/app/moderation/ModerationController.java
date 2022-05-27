@@ -2,10 +2,7 @@ package com.ScalableTeam.reddit.app.moderation;
 
 import com.ScalableTeam.amqp.Config;
 import com.ScalableTeam.amqp.RabbitMQProducer;
-import com.ScalableTeam.reddit.app.MessagePublisher;
-import com.ScalableTeam.reddit.app.requestForms.AssignModeratorsForm;
 import com.ScalableTeam.reddit.app.requestForms.BanUserForm;
-import com.ScalableTeam.reddit.app.requestForms.CreateChannelForm;
 import com.ScalableTeam.reddit.app.requestForms.ViewReportsForm;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -13,11 +10,11 @@ import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Provider;
+import static com.ScalableTeam.amqp.MessagePublisher.getMessageHeaders;
 
 @RestController
 @Slf4j
-public class ModerationController extends MessagePublisher {
+public class ModerationController {
 
     @Autowired
     private ViewReportsService viewReportsService;
