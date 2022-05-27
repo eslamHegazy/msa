@@ -3,6 +3,7 @@ package com.ScalableTeam.notifications;
 import com.ScalableTeam.notifications.utils.FirebaseInitializer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.PropertySource;
 
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.PropertySource;
                 "com.ScalableTeam.notifications",
         }
 )
+@ConfigurationPropertiesScan
 @EnableEurekaClient
 @PropertySource("classpath:message-queues.properties")
 public class NotificationsApplication {
