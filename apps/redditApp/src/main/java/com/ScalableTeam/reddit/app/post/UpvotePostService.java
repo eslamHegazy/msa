@@ -1,7 +1,7 @@
 package com.ScalableTeam.reddit.app.post;
 
 import com.ScalableTeam.reddit.ICommand;
-import com.ScalableTeam.reddit.MyCommand;
+import com.ScalableTeam.reddit.app.caching.CachingService;
 import com.ScalableTeam.reddit.app.entity.Post;
 import com.ScalableTeam.reddit.app.entity.vote.PostVote;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
@@ -14,15 +14,11 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
-import com.ScalableTeam.reddit.app.caching.CachingService;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @ComponentScan("com.ScalableTeam.reddit")
 @Service
@@ -35,10 +31,10 @@ public class UpvotePostService implements ICommand<VotePostForm, String> {
     private final GeneralConfig generalConfig;
     private final PostVoteValidation postVoteValidation;
     //    @Value("${popularPostsUpvoteThreshold}")
-//    @Value("${popularPostsCache}")
-//    private String popularPostsCache;
-//    @Value("${postsCache}")
-//    private String postsCache;
+    //    @Value("${popularPostsCache}")
+    //    private String popularPostsCache;
+    //    @Value("${postsCache}")
+    //    private String postsCache;
     @Autowired
     CacheManager cacheManager;
     @Autowired
@@ -59,7 +55,7 @@ public class UpvotePostService implements ICommand<VotePostForm, String> {
         String userNameId = votePostForm.getUserNameId();
         String postId = votePostForm.getPostId();
         String indicator = generalConfig.getCommands().get("upvotePost");
-        log.info(indicator + "Service::Post Id={}, User Id={}, CorrelationId={}", postId, userNameId);
+        log.info(indicator + "Service::Post Id={}, User Id={}", postId, userNameId);
 
         postVoteValidation.validatePostVote(userNameId, postId);
         String responseMessage = userVotePostRepository.upvotePost(userNameId, postId);
