@@ -19,7 +19,7 @@ public class DeleteGroupCommand implements MyCommand {
 
             ApiFuture<WriteResult> deletedDocRef = database.collection("GroupChats").document(groupChatId).delete();
             System.out.println("Deleted document with ID: " + deletedDocRef.get());
-            return "0";
+            return deletedDocRef.get();
         } catch (Exception e) {
             System.out.println(e);
             return "Internal Server Error";
