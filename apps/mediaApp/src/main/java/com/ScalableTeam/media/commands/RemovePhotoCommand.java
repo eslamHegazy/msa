@@ -6,9 +6,11 @@ import io.minio.RemoveObjectArgs;
 import models.media.RemovePhotoBody;
 import models.media.RemovePhotoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.net.URL;
 
+@Service
 public class RemovePhotoCommand implements ICommand<RemovePhotoBody, RemovePhotoResponse> {
     @Autowired
     MinioClient minioClient;

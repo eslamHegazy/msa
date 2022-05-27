@@ -4,14 +4,16 @@ import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 import models.media.DownloadPhotoBody;
 import models.media.DownloadPhotoResponse;
-import org.apache.commons.compress.utils.IOUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.net.URLConnection;
 
+@Service
 public class DownloadPhotoCommand implements ICommand<DownloadPhotoBody, DownloadPhotoResponse> {
 
     @Autowired
@@ -22,6 +24,7 @@ public class DownloadPhotoCommand implements ICommand<DownloadPhotoBody, Downloa
     @Override
     public DownloadPhotoResponse execute(DownloadPhotoBody body) {
         try {
+            System.out.println("Default Bucket name: "+defaultBucketName);
             String fileName = body.getFileName();
             String contentType = URLConnection.guessContentTypeFromName(fileName);
             System.out.println("content type from file name is: " + contentType);

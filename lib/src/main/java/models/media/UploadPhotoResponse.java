@@ -12,6 +12,5 @@ public class UploadPhotoResponse {
     // In case of success, url of image.
     // In case of failure, the reason.
     private String message;
-
     private boolean successful;
 }

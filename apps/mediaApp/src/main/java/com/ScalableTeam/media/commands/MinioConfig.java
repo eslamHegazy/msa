@@ -1,4 +1,4 @@
-package com.ScalableTeam.media;
+package com.ScalableTeam.media.commands;
 
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;

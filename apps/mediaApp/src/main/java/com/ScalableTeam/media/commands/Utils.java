@@ -4,12 +4,12 @@ import org.springframework.http.MediaType;
 
 public class Utils {
     public static String getImageExtensions(String contentType){
-        if (contentType.equals(MediaType.IMAGE_PNG_VALUE))
+        if (MediaType.IMAGE_PNG_VALUE.equals(contentType))
             return "png";
-        if (contentType.equals(MediaType.IMAGE_JPEG_VALUE))
+        if (MediaType.IMAGE_JPEG_VALUE.equals(contentType))
             return "jpeg";
-        if (contentType.equals(MediaType.IMAGE_GIF_VALUE))
+        if (MediaType.IMAGE_GIF_VALUE.equals(contentType))
             return "gif";
-        throw new RuntimeException("Unsupported file");
+        throw new RuntimeException("You can upload only a JPG/PNG/GIF image!");
     }
 }
