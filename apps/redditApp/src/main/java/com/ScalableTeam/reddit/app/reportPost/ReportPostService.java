@@ -16,6 +16,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -65,12 +66,13 @@ try {
         }
 
         Channel actualReddit = reddit.get();
-        HashMap<String, String> report = new HashMap<String, String>();
-        report.put(postId,userId);
+        HashMap<String, Boolean> report = new HashMap<String, Boolean>();
+        report.put(request.toString(),true);
         try {
-            if (actualReddit.getReports().isEmpty()){
+            if (actualReddit.getReports()==null){
                 actualReddit.setReports(report);
                 channelRepository.save(actualReddit);
+
 
             }else{
                 channelRepository.addReport(redditId, report);

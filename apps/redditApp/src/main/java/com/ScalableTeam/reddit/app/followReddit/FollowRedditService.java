@@ -2,12 +2,17 @@ package com.ScalableTeam.reddit.app.followReddit;
 
 import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.entity.Channel;
+import com.ScalableTeam.reddit.app.entity.Post;
 import com.ScalableTeam.reddit.app.entity.User;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import com.ScalableTeam.reddit.app.repository.UserRepository;
 import com.ScalableTeam.reddit.app.repository.vote.RedditFollowRepository;
+import com.ScalableTeam.reddit.app.requestForms.BanUserForm;
 import com.ScalableTeam.reddit.app.requestForms.FollowRedditForm;
+import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
@@ -21,20 +26,24 @@ import java.util.Optional;
 @Slf4j
 public class FollowRedditService implements MyCommand {
     @Autowired
-    private final ChannelRepository channelRepository;
+    private ChannelRepository channelRepository;
     @Autowired
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    RedditFollowRepository redditFollowRepository;
-
+    private GeneralConfig generalConfig;
     @Autowired
-    public FollowRedditService(ChannelRepository channelRepository, UserRepository userRepository, RedditFollowRepository redditFollowRepository) {
-        this.channelRepository = channelRepository;
-        this.userRepository=userRepository;
-        this.redditFollowRepository = redditFollowRepository;
+    private RedditFollowRepository redditFollowRepository;
+
+    private final String serviceName = "followReddit";
+
+    @RabbitListener(queues = "${mq.queues.request.reddit."+serviceName+"}")
+    public String listenToRequestQueue(FollowRedditForm followRedditForm, Message message) throws Exception {
+        String correlationId = message.getMessageProperties().getCorrelationId();
+        String indicator = generalConfig.getCommands().get(serviceName);
+        log.info(indicator + "Service::"+serviceName+", CorrelationId={}", correlationId);
+        return execute(followRedditForm);
     }
-
 
     public String execute(Object body){
 
@@ -61,18 +70,36 @@ public class FollowRedditService implements MyCommand {
             return "User "+userId + " banned from this channel " + redditId;
         }
 
+        User actualUser = user.get();
+
+
         HashMap<String, Boolean> follow = new HashMap<String, Boolean>();
         follow.put(redditId, true);
-            String msg = redditFollowRepository.followReddit(redditId);
+        if (actualUser.getFollowedChannels()==null){
+            actualUser.setFollowedChannels(follow);
+            userRepository.save(actualUser);
+        }else {
+            if( actualUser.getFollowedChannels().containsKey(redditId)){
+                return "user already following channel";
+            }
             userRepository.updateFollowedChannelsWithID(userId, follow);
-            System.out.println(msg);
+        }
+            String msg = redditFollowRepository.followReddit(redditId);
 
-        return msg;
+            return msg;
         }catch(Exception e){
-            return e.getMessage();
+            throw e;
         }
 
     }
+    @RabbitListener(queues = "${mq.queues.response.reddit."+serviceName+"}")
+    public void receive(String response, Message message) {
+        String indicator = generalConfig.getCommands().get(serviceName);
+        String correlationId = message.getMessageProperties().getCorrelationId();
+        log.info(indicator + "Service::CorrelationId: {}, message: {}", correlationId, response);
+    }
+
+
 }
 
 
