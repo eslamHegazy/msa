@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class RegisterDeviceTokenCommand implements Command {
+public class RegisterDeviceTokenCommand implements Command<DeviceTokenRequest, Integer> {
 
     @Autowired
     private GeneralConfig generalConfig;
@@ -21,9 +21,8 @@ public class RegisterDeviceTokenCommand implements Command {
     private NotificationsRepository notificationsRepository;
 
     @Override
-    public Integer execute(Object body) throws Exception {
-        DeviceTokenRequest deviceToken = (DeviceTokenRequest) body;
-        notificationsRepository.registerDeviceToken(deviceToken);
+    public Integer execute(DeviceTokenRequest body) throws Exception {
+        notificationsRepository.registerDeviceToken(body);
         return 200;
     }
 

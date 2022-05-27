@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class SendNotificationCommand implements Command {
+public class SendNotificationCommand implements Command<NotificationSendRequest, Integer> {
 
     @Autowired
     private GeneralConfig generalConfig;
@@ -21,9 +21,8 @@ public class SendNotificationCommand implements Command {
     private NotificationsRepository notificationsRepository;
 
     @Override
-    public Integer execute(Object body) throws Exception {
-        NotificationSendRequest notification = (NotificationSendRequest) body;
-        notificationsRepository.sendNotification(notification);
+    public Integer execute(NotificationSendRequest body) throws Exception {
+        notificationsRepository.sendNotification(body);
         return 200;
     }
 

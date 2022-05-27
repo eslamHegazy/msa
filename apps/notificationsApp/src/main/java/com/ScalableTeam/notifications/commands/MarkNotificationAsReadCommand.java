@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class MarkNotificationAsReadCommand implements Command {
+public class MarkNotificationAsReadCommand implements Command<NotificationReadRequest, Integer> {
 
     @Autowired
     private GeneralConfig generalConfig;
@@ -21,9 +21,8 @@ public class MarkNotificationAsReadCommand implements Command {
     private NotificationsRepository notificationsRepository;
 
     @Override
-    public Integer execute(Object body) throws Exception {
-        NotificationReadRequest notification = (NotificationReadRequest) body;
-        notificationsRepository.markNotificationAsRead(notification);
+    public Integer execute(NotificationReadRequest body) throws Exception {
+        notificationsRepository.markNotificationAsRead(body);
         return 200;
     }
 

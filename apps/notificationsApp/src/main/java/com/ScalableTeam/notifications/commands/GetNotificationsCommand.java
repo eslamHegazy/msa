@@ -14,7 +14,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class GetNotificationsCommand implements Command {
+public class GetNotificationsCommand implements Command<String, List<NotificationResponse>> {
 
     @Autowired
     private GeneralConfig generalConfig;
@@ -23,9 +23,8 @@ public class GetNotificationsCommand implements Command {
     private NotificationsRepository notificationsRepository;
 
     @Override
-    public List<NotificationResponse> execute(Object body) throws Exception {
-        String userId = String.valueOf(body);
-        return notificationsRepository.getNotifications(userId);
+    public List<NotificationResponse> execute(String body) throws Exception {
+        return notificationsRepository.getNotifications(body);
     }
 
     @RabbitListener(queues = "${mq.queues.request.notifications.getNotifications}")

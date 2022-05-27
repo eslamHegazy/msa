@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class DeleteNotificationCommand implements Command {
+public class DeleteNotificationCommand implements Command<NotificationDeleteRequest, Integer> {
 
     @Autowired
     private GeneralConfig generalConfig;
@@ -21,9 +21,8 @@ public class DeleteNotificationCommand implements Command {
     private NotificationsRepository notificationsRepository;
 
     @Override
-    public Integer execute(Object body) throws Exception {
-        NotificationDeleteRequest notification = (NotificationDeleteRequest) body;
-        notificationsRepository.deleteNotification(notification);
+    public Integer execute(NotificationDeleteRequest body) throws Exception {
+        notificationsRepository.deleteNotification(body);
         return 200;
     }
 
