@@ -21,7 +21,7 @@ public class FirestoreConfig {
     public static Firestore connectDB() {
         try {
             // Use a service account
-            InputStream serviceAccount = Files.newInputStream(Paths.get("/media/george/Academic/GUC/Semester 10/MSA/msa/apps/chatApp/src/main/java/com/ScalableTeam/chat/app/config/chat-app-db-service-key.json"));
+            InputStream serviceAccount = Files.newInputStream(Paths.get(ConfigData.firestoreURL));
             GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(credentials)
