@@ -40,7 +40,7 @@ public class PostController extends MessagePublisher {
     public void createPost(@RequestBody Post post) throws Exception {
         String indicator = generalConfig.getCommands().get("createPost");
         log.info(indicator + "Controller", post);
-        String commandName="createPost";
+        String commandName = "createPost";
         MessagePostProcessor messagePostProcessor = getMessageHeaders(
                 config.getQueues().getResponse().getReddit().get(commandName));
         rabbitMQProducer.publishAsynchronous(
@@ -54,7 +54,7 @@ public class PostController extends MessagePublisher {
     @GetMapping("{postId}")
     private String getPost(@PathVariable String postId) throws Exception {
         log.info(generalConfig.getCommands().get("getPost") + "Controller", postId);
-        String commandName="getPost";
+        String commandName = "getPost";
         return (String) rabbitMQProducer.publishSynchronous(postId,
                 config.getExchange(),
                 config.getQueues().getRequest().getReddit().get(commandName));
@@ -62,11 +62,11 @@ public class PostController extends MessagePublisher {
     }
 
     @GetMapping("{postId}/comments")
-    public Collection<Comment> getPostComments(@PathVariable String postId) throws Exception {
+    public Object getPostComments(@PathVariable String postId) throws Exception {
         String commandName = "getPostComments";
         String indicator = generalConfig.getCommands().get(commandName);
         log.info(indicator + "Controller::Post Id={}", postId);
-        return (Collection<Comment>) rabbitMQProducer.publishSynchronous(postId,
+        return rabbitMQProducer.publishSynchronous(postId,
                 config.getExchange(),
                 config.getQueues().getRequest().getReddit().get(commandName));
     }
@@ -110,10 +110,10 @@ public class PostController extends MessagePublisher {
     @RequestMapping("/popularPosts")
     private String getPopularPosts() throws Exception {
         log.info(generalConfig.getCommands().get("getPopularPost") + "Controller");
-        String commandName="getPopularPosts";
+        String commandName = "getPopularPosts";
         return (String) rabbitMQProducer.publishSynchronous("",
                 config.getExchange(),
                 config.getQueues().getRequest().getReddit().get(commandName));
-       // return getPopularPostsService.execute(null);
+        // return getPopularPostsService.execute(null);
     }
 }
