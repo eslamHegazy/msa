@@ -24,9 +24,17 @@ public class User {
 
     private HashMap<String,Boolean>followedUsers;
 
-
-
     private HashMap<String,Boolean>blockedUsers;
+
+    public HashMap<String, String> getReportedUsers() {
+        return reportedUsers;
+    }
+
+    public void setReportedUsers(HashMap<String, String> reportedUsers) {
+        this.reportedUsers = reportedUsers;
+    }
+
+    private HashMap<String,String>reportedUsers;
     private Date earliestTime;
     private Date latestTime;
 
