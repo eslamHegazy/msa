@@ -1,20 +1,18 @@
 package com.ScalableTeam.notifications.controllers;
 
-import com.ScalableTeam.notifications.commands.DeleteNotificationCommand;
-import com.ScalableTeam.notifications.commands.GetNotificationsCommand;
-import com.ScalableTeam.notifications.commands.MarkNotificationAsReadCommand;
-import com.ScalableTeam.notifications.commands.SendNotificationCommand;
+import com.ScalableTeam.amqp.Config;
+import com.ScalableTeam.amqp.RabbitMQProducer;
 import com.ScalableTeam.notifications.config.GeneralConfig;
 import com.ScalableTeam.notifications.models.requests.NotificationDeleteRequest;
 import com.ScalableTeam.notifications.models.requests.NotificationReadRequest;
 import com.ScalableTeam.notifications.models.requests.NotificationSendRequest;
-import com.ScalableTeam.notifications.models.responses.NotificationResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import static com.ScalableTeam.amqp.MessagePublisher.getMessageHeaders;
 
 @Slf4j
 @RestController
@@ -22,41 +20,67 @@ import java.util.List;
 public class NotificationsController {
 
     @Autowired
-    private SendNotificationCommand sendNotificationCommand;
-
-    @Autowired
-    private GetNotificationsCommand getNotificationsCommand;
-
-    @Autowired
-    private MarkNotificationAsReadCommand markNotificationAsReadCommand;
-
-    @Autowired
-    private DeleteNotificationCommand deleteNotificationCommand;
+    private Config config;
 
     @Autowired
     private GeneralConfig generalConfig;
 
+    @Autowired
+    private RabbitMQProducer rabbitMQProducer;
+
     @RequestMapping(method = RequestMethod.POST, value = "/sendNotification")
-    private Integer sendNotification(@RequestBody NotificationSendRequest notificationSendRequest) throws Exception {
-        log.info(generalConfig.getCommands().get("sendNotification"), notificationSendRequest);
-        return sendNotificationCommand.execute(notificationSendRequest);
+    private void sendNotification(@RequestBody NotificationSendRequest notificationSendRequest) {
+        String commandName = "sendNotification";
+
+        log.info(generalConfig.getCommands().get(commandName), notificationSendRequest);
+
+        MessagePostProcessor messagePostProcessor = getMessageHeaders(
+                config.getQueues().getResponse().getNotifications().get(commandName));
+
+        rabbitMQProducer.publishAsynchronous(notificationSendRequest,
+                config.getExchange(),
+                config.getQueues().getRequest().getNotifications().get(commandName),
+                messagePostProcessor);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getNotifications/{userId}")
-    private List<NotificationResponse> getNotifications(@PathVariable String userId) throws Exception {
-        log.info(generalConfig.getCommands().get("getNotifications"), userId);
-        return getNotificationsCommand.execute(userId);
+    private Object getNotifications(@PathVariable String userId) {
+        String commandName = "getNotifications";
+
+        log.info(generalConfig.getCommands().get(commandName), userId);
+
+        return rabbitMQProducer.publishSynchronous(userId,
+                config.getExchange(),
+                config.getQueues().getRequest().getReddit().get(commandName));
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/markNotificationAsRead")
-    private Integer markNotificationAsRead(@RequestBody NotificationReadRequest notificationReadRequest) throws Exception {
-        log.info(generalConfig.getCommands().get("markNotificationAsRead"), notificationReadRequest);
-        return markNotificationAsReadCommand.execute(notificationReadRequest);
+    private void markNotificationAsRead(@RequestBody NotificationReadRequest notificationReadRequest) {
+        String commandName = "markNotificationAsRead";
+
+        log.info(generalConfig.getCommands().get(commandName), notificationReadRequest);
+
+        MessagePostProcessor messagePostProcessor = getMessageHeaders(
+                config.getQueues().getResponse().getNotifications().get(commandName));
+
+        rabbitMQProducer.publishAsynchronous(notificationReadRequest,
+                config.getExchange(),
+                config.getQueues().getRequest().getNotifications().get(commandName),
+                messagePostProcessor);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/deleteNotification")
-    private Integer deleteNotification(@RequestBody NotificationDeleteRequest notificationDeleteRequest) throws Exception {
-        log.info(generalConfig.getCommands().get("deleteNotification"), notificationDeleteRequest);
-        return deleteNotificationCommand.execute(notificationDeleteRequest);
+    private void deleteNotification(@RequestBody NotificationDeleteRequest notificationDeleteRequest) {
+        String commandName = "deleteNotification";
+
+        log.info(generalConfig.getCommands().get(commandName), notificationDeleteRequest);
+
+        MessagePostProcessor messagePostProcessor = getMessageHeaders(
+                config.getQueues().getResponse().getNotifications().get(commandName));
+
+        rabbitMQProducer.publishAsynchronous(notificationDeleteRequest,
+                config.getExchange(),
+                config.getQueues().getRequest().getNotifications().get(commandName),
+                messagePostProcessor);
     }
 }
