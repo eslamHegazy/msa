@@ -1,10 +1,7 @@
 package com.ScalableTeam.amqp;
 
 import lombok.AllArgsConstructor;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +23,7 @@ public class RabbitMQBinders {
     private String getMethodName(String microservice) {
         return "get" + microservice.substring(0, 1).toUpperCase() + microservice.substring(1);
     }
+
     @Bean
     Map<String, Queue> queues() throws InvocationTargetException, IllegalAccessException {
         Map<String, Queue> queues = new HashMap<>();
@@ -61,9 +59,9 @@ public class RabbitMQBinders {
                 commands = (Map<String, String>) m.invoke(responses);
                 if (null != commands)
                     for (String key : commands.keySet()) {
-                    String queueName = commands.get(key);
-                    queues.put(queueName, createQueue(queueName));
-                }
+                        String queueName = commands.get(key);
+                        queues.put(queueName, createQueue(queueName));
+                    }
             } catch (NoSuchMethodException | SecurityException ignored) {
 
             }
@@ -72,7 +70,9 @@ public class RabbitMQBinders {
     }
 
     private Queue createQueue(String queueName) {
-        Queue q = new Queue(queueName, true);
+        Queue q = QueueBuilder.durable(queueName)
+                .withArgument("x-dead-letter-exchange", config.getExceptions().getExchange())
+                .build();
         this.beanFactory.initializeBean(q, queueName);
         this.beanFactory.autowireBean(q);
         this.beanFactory.registerSingleton(queueName, q);

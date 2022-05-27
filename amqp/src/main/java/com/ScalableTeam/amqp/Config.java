@@ -10,8 +10,16 @@ import java.util.Map;
 public class Config {
     private Queues queues;
     private String exchange;
+    private Exceptions exceptions;
 
-    @ConfigurationProperties(prefix = "queue")
+    @ConfigurationProperties(prefix = "exceptions")
+    @Data
+    public static class Exceptions {
+        private String exchange;
+        private String queue;
+    }
+
+    @ConfigurationProperties(prefix = "queues")
     @Data
     public static class Queues {
         private Request request;
