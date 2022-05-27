@@ -1,5 +1,5 @@
 package com.ScalableTeam.notifications.utils;
 
-public interface Command {
-    Object execute(Object body) throws Exception;
+public interface Command<Request, Response> {
+    Response execute(Request body) throws Exception;
 }
