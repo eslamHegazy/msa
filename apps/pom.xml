@@ -18,6 +18,7 @@
     <modules>
         <module>notificationsApp</module>
         <module>redditApp</module>
+        <module>controllerApp</module>
     </modules>
 
     <properties>
