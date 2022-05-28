@@ -39,8 +39,8 @@ public class MessageConfig {
     @Bean
     public ConnectionFactory connectionFactory(){
         CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
-        cachingConnectionFactory.setUsername("rabbit");
-        cachingConnectionFactory.setPassword("password");
+        cachingConnectionFactory.setUsername("guest");
+        cachingConnectionFactory.setPassword("guest");
         return cachingConnectionFactory;
     }
 
