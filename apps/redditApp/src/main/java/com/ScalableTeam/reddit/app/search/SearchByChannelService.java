@@ -22,7 +22,7 @@ public class SearchByChannelService implements MyCommand {
     @Autowired
     private GeneralConfig generalConfig;
 
-    @RabbitListener(queues = "${mq.queues.request.reddit.searchByChannel}")
+    @RabbitListener(queues = "${mq.queues.request.reddit.searchByChannel}", returnExceptions = "true")
     public String listenToRequestQueue(String id, Message message) throws Exception {
         String correlationId = message.getMessageProperties().getCorrelationId();
         String indicator = generalConfig.getCommands().get("searchByChannel");

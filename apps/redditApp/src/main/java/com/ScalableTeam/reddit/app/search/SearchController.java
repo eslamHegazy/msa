@@ -2,7 +2,6 @@ package com.ScalableTeam.reddit.app.search;
 
 import com.ScalableTeam.amqp.Config;
 import com.ScalableTeam.amqp.RabbitMQProducer;
-import com.ScalableTeam.reddit.app.MessagePublisher;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @RequestMapping("/search")
-public class SearchController extends MessagePublisher {
+public class SearchController {
     @Autowired
     private GeneralConfig generalConfig;
     @Autowired

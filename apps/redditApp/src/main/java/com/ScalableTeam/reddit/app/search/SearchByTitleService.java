@@ -23,7 +23,7 @@ public class SearchByTitleService implements MyCommand {
     @Autowired
     private GeneralConfig generalConfig;
 
-    @RabbitListener(queues = "${mq.queues.request.reddit.searchByTitle}")
+    @RabbitListener(queues = "${mq.queues.request.reddit.searchByTitle}", returnExceptions = "true")
     public String listenToRequestQueue(String title, Message message) throws Exception {
         String correlationId = message.getMessageProperties().getCorrelationId();
         String indicator = generalConfig.getCommands().get("searchByTitle");
