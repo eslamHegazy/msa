@@ -1,4 +1,4 @@
-package com.ScalableTeam.reddit.app.requestForms;
+package models.reddit;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class VoteCommentForm {
-    private String commentId;
+@NoArgsConstructor
+public class VotePostForm {
+    private String postId;
     private String userNameId;
 }

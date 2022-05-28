@@ -1,10 +1,9 @@
-package com.ScalableTeam.reddit.app.requestForms;
+package models.reddit;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import java.util.HashMap;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor

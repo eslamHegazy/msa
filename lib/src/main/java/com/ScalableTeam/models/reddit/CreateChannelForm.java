@@ -1,4 +1,4 @@
-package com.ScalableTeam.reddit.app.requestForms;
+package models.reddit;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,10 +7,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class AssignModeratorsForm {
+public class CreateChannelForm {
     private String adminId;
     private String channelNameId;
-    private String moderatorId;
+
+//    public CreateChannelForm(String adminId, String channelNameId) {
+//        this.adminId = adminId;
+//        this.channelNameId = channelNameId;
+//    }
 
     public String getAdminId() {
         return adminId;
@@ -28,11 +32,8 @@ public class AssignModeratorsForm {
         this.channelNameId = channelNameId;
     }
 
-    public String getModeratorId() {
-        return moderatorId;
-    }
-
-    public void setModeratorId(String moderatorId) {
-        this.moderatorId = moderatorId;
+    @Override
+    public String toString(){
+        return "Create Channel Form"+"Channel Name: "+ channelNameId +" adminId: "+ adminId;
     }
 }

@@ -1,4 +1,4 @@
-package com.ScalableTeam.reddit.app.requestForms;
+package models.reddit;
 
 import com.ScalableTeam.reddit.app.entity.Comment;
 import lombok.AllArgsConstructor;
