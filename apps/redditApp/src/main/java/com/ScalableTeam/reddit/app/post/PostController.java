@@ -45,7 +45,7 @@ public class PostController {
     }
 
     @GetMapping("{postId}")
-    private String getPost(@PathVariable String postId) throws Exception {
+    private Object getPost(@PathVariable String postId) throws Exception {
         log.info(generalConfig.getCommands().get("getPost") + "Controller", postId);
         String commandName = "getPost";
         return (String) rabbitMQProducer.publishSynchronous(postId,
@@ -100,8 +100,8 @@ public class PostController {
                 messagePostProcessor);
     }
 
-    @RequestMapping("/popularPosts")
-    private String getPopularPosts() throws Exception {
+    @GetMapping("/popularPosts")
+    private Object getPopularPosts() throws Exception {
         log.info(generalConfig.getCommands().get("getPopularPost") + "Controller");
         String commandName = "getPopularPosts";
         return (String) rabbitMQProducer.publishSynchronous("",

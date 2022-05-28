@@ -35,7 +35,7 @@ public class ReadWallService implements MyCommand {
     @Autowired
     private GeneralConfig generalConfig;
 
-    @RabbitListener(queues = "${mq.queues.request.reddit.readWall}")
+    @RabbitListener(queues = "${mq.queues.request.reddit.readWall}", returnExceptions = "true")
     public String listenToRequestQueue(String userNameIdString, Message message) throws Exception {
         String correlationId = message.getMessageProperties().getCorrelationId();
         String indicator = generalConfig.getCommands().get("readWall");
