@@ -6,7 +6,7 @@ import com.arangodb.springframework.config.ArangoConfiguration;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableArangoRepositories(basePackages = {"com.ScalableTeam.arango", "com.ScalableTeam.user.repository", "com.ScalableTeam.reddit.repository"})
+@EnableArangoRepositories(basePackages = {"com.ScalableTeam.arango", "com.ScalableTeam.user.repository", "com.ScalableTeam.reddit.app.repository"})
 public class DemoConfiguration implements ArangoConfiguration {
 
     @Override
