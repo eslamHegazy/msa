@@ -2,7 +2,7 @@ package com.ScalableTeam.reddit.app.comment;
 
 import com.ScalableTeam.amqp.Config;
 import com.ScalableTeam.amqp.RabbitMQProducer;
-import com.ScalableTeam.reddit.app.entity.Comment;
+import com.ScalableTeam.arango.Comment;
 import com.ScalableTeam.models.reddit.VoteCommentForm;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ public class CommentController {
     @PostMapping
     private void comment(@RequestBody Comment comment) throws Exception {
         log.info(generalConfig.getCommands().get("comment") + "Controller", comment);
-        String commandName="comment";
+        String commandName = "comment";
         MessagePostProcessor messagePostProcessor = getMessageHeaders(
                 config.getQueues().getResponse().getReddit().get(commandName));
         rabbitMQProducer.publishAsynchronous(

@@ -1,30 +1,19 @@
 package com.ScalableTeam.reddit.app.post;
 
 import com.ScalableTeam.reddit.MyCommand;
-import com.ScalableTeam.reddit.app.entity.Comment;
-import com.ScalableTeam.reddit.app.entity.Post;
-import com.ScalableTeam.reddit.app.entity.User;
-import com.ScalableTeam.reddit.app.repository.PostRepository;
-import com.ScalableTeam.reddit.app.repository.UserRepository;
+import com.ScalableTeam.arango.Post;
 import com.ScalableTeam.reddit.config.GeneralConfig;
-import com.arangodb.springframework.core.ArangoOperations;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import java.time.Instant;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @ComponentScan("com.ScalableTeam.reddit")
 @Service

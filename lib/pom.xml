@@ -10,16 +10,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>lib</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <name>lib</name>
     <description>Semester 10 Scalable Reddit Microservices Libs</description>
-  
-    <dependencies>
-        <dependency>
-            <groupId>com.ScalableTeam-0-0-1</groupId>
-            <artifactId>amqp</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
+    <modules>
+        <module>arango</module>
+        <module>services</module>
+        <module>models</module>
+        <module>amqp</module>
+    </modules>
 </project>

@@ -1,7 +1,7 @@
 package com.ScalableTeam.reddit.app.comment;
 
+import com.ScalableTeam.arango.Comment;
 import com.ScalableTeam.reddit.ICommand;
-import com.ScalableTeam.reddit.app.entity.Comment;
 import com.ScalableTeam.reddit.app.entity.vote.CommentVote;
 import com.ScalableTeam.reddit.app.repository.CommentRepository;
 import com.ScalableTeam.reddit.app.repository.vote.CommentVoteRepository;

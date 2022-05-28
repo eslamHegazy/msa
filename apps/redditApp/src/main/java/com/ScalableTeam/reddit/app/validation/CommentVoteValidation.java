@@ -1,7 +1,7 @@
 package com.ScalableTeam.reddit.app.validation;
 
+import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.reddit.app.repository.CommentRepository;
-import com.ScalableTeam.reddit.app.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

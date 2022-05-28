@@ -1,14 +1,11 @@
 package com.ScalableTeam.reddit.app.repository;
 
-import com.ScalableTeam.reddit.app.entity.Post;
-import com.ScalableTeam.reddit.app.entity.User;
+import com.ScalableTeam.arango.Post;
 import com.arangodb.springframework.annotation.Query;
 import com.arangodb.springframework.repository.ArangoRepository;
 import org.springframework.data.repository.query.Param;
 
-import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 
 
 public interface PostRepository extends ArangoRepository<Post, String> {

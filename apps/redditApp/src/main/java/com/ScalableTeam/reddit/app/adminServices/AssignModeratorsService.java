@@ -1,10 +1,10 @@
 package com.ScalableTeam.reddit.app.adminServices;
 
+import com.ScalableTeam.arango.User;
+import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.reddit.MyCommand;
-import com.ScalableTeam.reddit.app.entity.Channel;
-import com.ScalableTeam.reddit.app.entity.User;
+import com.ScalableTeam.arango.Channel;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
-import com.ScalableTeam.reddit.app.repository.UserRepository;
 import com.ScalableTeam.models.reddit.AssignModeratorsForm;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;

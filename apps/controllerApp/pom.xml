@@ -11,5 +11,5 @@
     <artifactId>controllerApp</artifactId>
     <name>controllerApp</name>
     <description>Semester 10 Scalable Reddit Microservice - Controller App</description>
-
+    <packaging>jar</packaging>
 </project>

@@ -2,7 +2,7 @@ package com.ScalableTeam.reddit.app.post;
 
 import com.ScalableTeam.reddit.ICommand;
 import com.ScalableTeam.reddit.app.caching.CachingService;
-import com.ScalableTeam.reddit.app.entity.Post;
+import com.ScalableTeam.arango.Post;
 import com.ScalableTeam.reddit.app.entity.vote.PostVote;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
 import com.ScalableTeam.reddit.app.repository.vote.PostVoteRepository;

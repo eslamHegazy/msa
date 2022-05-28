@@ -1,12 +1,11 @@
 package com.ScalableTeam.reddit.app.seeders;
 
-import com.ScalableTeam.reddit.app.entity.User;
-import com.ScalableTeam.reddit.app.repository.UserRepository;
+import com.ScalableTeam.arango.User;
+import com.ScalableTeam.arango.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 

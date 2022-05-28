@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.ScalableTeam.amqp.MessagePublisher.getMessageHeaders;
 
+
 @RestController
 @Slf4j
 public class AdminController {

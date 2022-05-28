@@ -10,16 +10,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>mediaApp</artifactId>
+    <name>mediaApp</name>
+    <description>Semester 10 Scalable Reddit Microservice - Media App</description>
+    <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
             <version>8.2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.ScalableTeam-0-0-1</groupId>
-            <artifactId>lib</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -34,9 +32,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
         </dependency>
-
-
-
     </dependencies>
 
     <properties>

@@ -1,11 +1,9 @@
 package com.ScalableTeam.reddit.app.comment;
 
+import com.ScalableTeam.arango.*;
 import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.caching.CachingService;
-import com.ScalableTeam.reddit.app.entity.*;
-
 import com.ScalableTeam.reddit.app.repository.*;
-
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;

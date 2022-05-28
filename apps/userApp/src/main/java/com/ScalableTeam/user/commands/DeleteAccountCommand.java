@@ -1,10 +1,10 @@
 package com.ScalableTeam.user.commands;
 
+import com.ScalableTeam.arango.UserRepository;
+import com.ScalableTeam.models.user.DeleteAccountBody;
+import com.ScalableTeam.models.user.DeleteAccountResponse;
 import com.ScalableTeam.user.repositories.UserProfileRepository;
-import com.ScalableTeam.user.repositories.UserRepository;
 import lombok.AllArgsConstructor;
-import com.ScalableTeam.models.DeleteAccountBody;
-import com.ScalableTeam.models.DeleteAccountResponse;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

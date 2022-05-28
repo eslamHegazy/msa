@@ -2,9 +2,9 @@ package com.ScalableTeam.reddit.app.recommendations;
 
 
 import com.ScalableTeam.amqp.Config;
+import com.ScalableTeam.arango.User;
+import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.reddit.MyCommand;
-import com.ScalableTeam.reddit.app.entity.User;
-import com.ScalableTeam.reddit.app.repository.UserRepository;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
