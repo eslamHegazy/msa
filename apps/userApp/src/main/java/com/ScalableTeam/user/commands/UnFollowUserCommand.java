@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Optional;
 
-//@ComponentScan("com.ScalableTeam.user")
+
 @Service
 @AllArgsConstructor
 public class UnFollowUserCommand implements ICommand<UnFollowUserBody, UnFollowUserResponse> {
@@ -34,10 +34,10 @@ public class UnFollowUserCommand implements ICommand<UnFollowUserBody, UnFollowU
             return new UnFollowUserResponse(false,"User not found in DB!");
         }
 
-
-        HashMap<String, Boolean> follow = new HashMap<String, Boolean>();
-        follow.put(unFollowUserId, false);
-        userRepository.updateFollowedUsersWithID(userId, follow);
+        HashMap<String, Boolean> follow = user.get().getFollowedUsers();
+        follow.remove(unFollowUserId);
+        user.get().setFollowedUsers(follow);
+        userRepository.save(user.get());
 
         return new UnFollowUserResponse(false,"User unfollowed successfully");
 

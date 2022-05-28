@@ -39,9 +39,13 @@ public class FollowUserCommand implements ICommand<FollowUserBody, FollowUserRes
 
         HashMap<String, Boolean> blocked=userRepository.findById(userId).get().getBlockedUsers();
         if(blocked.containsKey(requestedFollowUserID)){
-            return new FollowUserResponse(false,"This followed userUser not found in DB!");
+            return new FollowUserResponse(false,"you have blocked this user!");
         }
 
+        HashMap<String, Boolean> MeBlocked=userRepository.findById(requestedFollowUserID).get().getBlockedUsers();
+        if(MeBlocked.containsKey(userId)){
+            return new FollowUserResponse(false,"This followed user has blocked you!");
+        }
 
         HashMap<String, Boolean> follow = new HashMap<String, Boolean>();
         follow.put(requestedFollowUserID, true);
