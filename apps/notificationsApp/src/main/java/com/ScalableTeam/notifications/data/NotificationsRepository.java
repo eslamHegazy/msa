@@ -89,7 +89,8 @@ public class NotificationsRepository {
         }
 
         // Send the notification.
-        notifyUser(notification);
+        // TODO: This code is commented out because the tokens logic cannot be tested without a real mobile device.
+        // notifyUser(notification);
     }
 
     protected void notifyUser(NotificationSendRequest notification) throws FirebaseCredentialsException, FirebaseNotificationException, ExecutionException, InterruptedException {

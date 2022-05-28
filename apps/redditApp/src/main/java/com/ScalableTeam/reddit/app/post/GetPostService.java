@@ -1,9 +1,8 @@
 package com.ScalableTeam.reddit.app.post;
 
+import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.reddit.MyCommand;
-import com.ScalableTeam.reddit.app.entity.Post;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
-import com.ScalableTeam.reddit.app.repository.UserRepository;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import com.arangodb.springframework.core.ArangoOperations;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +27,7 @@ public class GetPostService implements MyCommand {
     private GeneralConfig generalConfig;
     //    @Resource(name="redisTemplate")
 //    private HashOperations<String, String, Post> hashOperations;
-    @RabbitListener(queues = "${mq.queues.request.reddit.getPost}")
+    @RabbitListener(queues = "${mq.queues.request.reddit.getPost}", returnExceptions = "true")
     public String listenToRequestQueue(String postId, Message message) throws Exception {
         String correlationId = message.getMessageProperties().getCorrelationId();
         String indicator = generalConfig.getCommands().get("getPost");

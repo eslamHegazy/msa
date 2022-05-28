@@ -2,20 +2,20 @@ package com.ScalableTeam.reddit.app.comment;
 
 import com.ScalableTeam.amqp.Config;
 import com.ScalableTeam.amqp.RabbitMQProducer;
-import com.ScalableTeam.reddit.app.MessagePublisher;
-import com.ScalableTeam.reddit.app.entity.Comment;
-import com.ScalableTeam.reddit.app.entity.Post;
-import com.ScalableTeam.reddit.app.requestForms.VoteCommentForm;
+import com.ScalableTeam.arango.Comment;
+import com.ScalableTeam.models.reddit.VoteCommentForm;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import static com.ScalableTeam.amqp.MessagePublisher.getMessageHeaders;
+
 @RestController
 @Slf4j
 @RequestMapping("/comments")
-public class CommentController extends MessagePublisher {
+public class CommentController {
     @Autowired
     private CommentService commentService;
     @Autowired
@@ -28,7 +28,7 @@ public class CommentController extends MessagePublisher {
     @PostMapping
     private void comment(@RequestBody Comment comment) throws Exception {
         log.info(generalConfig.getCommands().get("comment") + "Controller", comment);
-        String commandName="comment";
+        String commandName = "comment";
         MessagePostProcessor messagePostProcessor = getMessageHeaders(
                 config.getQueues().getResponse().getReddit().get(commandName));
         rabbitMQProducer.publishAsynchronous(

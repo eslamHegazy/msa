@@ -131,9 +131,10 @@
 
     <modules>
         <module>apps</module>
-        <module>amqp</module>
+<!--        <module>amqp</module>-->
         <module>service-discovery</module>
         <module>swagger-docs</module>
+        <module>lib</module>
         <module>httpServer</module>
     </modules>
 

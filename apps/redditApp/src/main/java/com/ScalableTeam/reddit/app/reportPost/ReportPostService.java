@@ -1,12 +1,11 @@
 package com.ScalableTeam.reddit.app.reportPost;
 
 import com.ScalableTeam.reddit.MyCommand;
-import com.ScalableTeam.reddit.app.entity.Channel;
-import com.ScalableTeam.reddit.app.entity.Post;
+import com.ScalableTeam.arango.Channel;
+import com.ScalableTeam.arango.Post;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
-import com.ScalableTeam.reddit.app.requestForms.AssignModeratorsForm;
-import com.ScalableTeam.reddit.app.requestForms.ReportPostForm;
+import com.ScalableTeam.models.reddit.ReportPostForm;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
@@ -16,7 +15,6 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 

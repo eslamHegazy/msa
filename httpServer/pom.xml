@@ -11,13 +11,16 @@
 
     <artifactId>httpServer</artifactId>
     <packaging>jar</packaging>
-
-    <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-    </properties>
+    <name>httpServer</name>
+    <description>Semester 10 Scalable Reddit Microservice - HTTP Server</description>
 
     <dependencies>
+        <dependency>
+            <groupId>com.ScalableTeam-0-0-1</groupId>
+            <artifactId>models</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>com.ScalableTeam-0-0-1</groupId>
             <artifactId>amqp</artifactId>
