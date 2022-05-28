@@ -1,4 +1,4 @@
-package models;
+package com.ScalableTeam.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

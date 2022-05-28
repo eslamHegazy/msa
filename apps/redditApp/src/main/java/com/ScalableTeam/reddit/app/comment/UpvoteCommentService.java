@@ -6,7 +6,7 @@ import com.ScalableTeam.reddit.app.entity.vote.CommentVote;
 import com.ScalableTeam.reddit.app.repository.CommentRepository;
 import com.ScalableTeam.reddit.app.repository.vote.CommentVoteRepository;
 import com.ScalableTeam.reddit.app.repository.vote.UserVoteCommentRepository;
-import com.ScalableTeam.reddit.app.requestForms.VoteCommentForm;
+import com.ScalableTeam.models.reddit.VoteCommentForm;
 import com.ScalableTeam.reddit.app.validation.CommentVoteValidation;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.AllArgsConstructor;

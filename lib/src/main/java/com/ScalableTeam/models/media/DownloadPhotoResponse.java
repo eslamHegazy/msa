@@ -1,4 +1,4 @@
-package models.media;
+package com.ScalableTeam.models.media;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

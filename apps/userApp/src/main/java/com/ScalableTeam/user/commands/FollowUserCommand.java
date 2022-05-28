@@ -4,10 +4,9 @@ import com.ScalableTeam.user.entity.User;
 import com.ScalableTeam.user.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import models.FollowUserBody;
-import models.FollowUserResponse;
+import com.ScalableTeam.models.FollowUserBody;
+import com.ScalableTeam.models.FollowUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;

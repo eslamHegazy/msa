@@ -5,7 +5,6 @@ import com.ScalableTeam.amqp.Config;
 import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.entity.User;
 import com.ScalableTeam.reddit.app.repository.UserRepository;
-import com.ScalableTeam.reddit.app.requestForms.ViewReportsForm;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;

@@ -3,7 +3,7 @@ package com.ScalableTeam.reddit.app.comment;
 import com.ScalableTeam.amqp.Config;
 import com.ScalableTeam.amqp.RabbitMQProducer;
 import com.ScalableTeam.reddit.app.entity.Comment;
-import com.ScalableTeam.reddit.app.requestForms.VoteCommentForm;
+import com.ScalableTeam.models.reddit.VoteCommentForm;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.MessagePostProcessor;

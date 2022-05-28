@@ -3,8 +3,8 @@ package com.ScalableTeam.user.commands;
 import com.ScalableTeam.user.entity.User;
 import com.ScalableTeam.user.repositories.UserRepository;
 import lombok.AllArgsConstructor;
-import models.BlockedUserBody;
-import models.BlockedUserResponse;
+import com.ScalableTeam.models.BlockedUserBody;
+import com.ScalableTeam.models.BlockedUserResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;

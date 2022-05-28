@@ -1,13 +1,12 @@
 package com.ScalableTeam.reddit.app.post;
 
 import com.ScalableTeam.reddit.ICommand;
-import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.entity.Post;
 import com.ScalableTeam.reddit.app.entity.vote.PostVote;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
 import com.ScalableTeam.reddit.app.repository.vote.PostVoteRepository;
 import com.ScalableTeam.reddit.app.repository.vote.UserVotePostRepository;
-import com.ScalableTeam.reddit.app.requestForms.VotePostForm;
+import com.ScalableTeam.models.reddit.VotePostForm;
 import com.ScalableTeam.reddit.app.validation.PostVoteValidation;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.AllArgsConstructor;
@@ -20,9 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ScalableTeam.reddit.app.caching.CachingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @ComponentScan("com.ScalableTeam.reddit")
 @Service

@@ -1,25 +1,11 @@
-import com.ScalableTeam.reddit.app.entity.Channel;
 import com.ScalableTeam.reddit.app.entity.User;
-import com.ScalableTeam.reddit.app.entity.vote.RedditFollowers;
 import com.ScalableTeam.reddit.app.followReddit.FollowRedditService;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import com.ScalableTeam.reddit.app.repository.UserRepository;
 import com.ScalableTeam.reddit.app.repository.vote.RedditFollowRepository;
-import com.ScalableTeam.reddit.app.requestForms.FollowRedditForm;
-import com.ScalableTeam.reddit.config.*;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.lang.Math;
-
-import java.util.Optional;
 
 import static com.google.common.truth.Truth.assertThat;
 //@RunWith(SpringJUnit4ClassRunner.class)

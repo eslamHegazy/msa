@@ -3,10 +3,9 @@ package com.ScalableTeam.user.commands;
 import com.ScalableTeam.user.entity.User;
 import com.ScalableTeam.user.repositories.UserRepository;
 import lombok.AllArgsConstructor;
-import models.UnFollowUserBody;
-import models.UnFollowUserResponse;
+import com.ScalableTeam.models.UnFollowUserBody;
+import com.ScalableTeam.models.UnFollowUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;

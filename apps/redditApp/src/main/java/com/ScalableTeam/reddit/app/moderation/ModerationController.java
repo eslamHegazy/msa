@@ -2,8 +2,8 @@ package com.ScalableTeam.reddit.app.moderation;
 
 import com.ScalableTeam.amqp.Config;
 import com.ScalableTeam.amqp.RabbitMQProducer;
-import com.ScalableTeam.reddit.app.requestForms.BanUserForm;
-import com.ScalableTeam.reddit.app.requestForms.ViewReportsForm;
+import com.ScalableTeam.models.reddit.BanUserForm;
+import com.ScalableTeam.models.reddit.ViewReportsForm;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.MessagePostProcessor;

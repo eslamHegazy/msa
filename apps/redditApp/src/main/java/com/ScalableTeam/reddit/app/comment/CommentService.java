@@ -6,19 +6,14 @@ import com.ScalableTeam.reddit.app.entity.*;
 
 import com.ScalableTeam.reddit.app.repository.*;
 
-import com.ScalableTeam.reddit.app.requestForms.CreateChannelForm;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
 
 import java.util.Optional;
 

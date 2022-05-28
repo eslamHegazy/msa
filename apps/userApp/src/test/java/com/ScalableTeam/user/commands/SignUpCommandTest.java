@@ -2,8 +2,8 @@ package com.ScalableTeam.user.commands;
 
 import com.ScalableTeam.user.entity.UserProfile;
 import com.ScalableTeam.user.repositories.UserProfileRepository;
-import models.SignUpBody;
-import models.SignUpResponse;
+import com.ScalableTeam.models.SignUpBody;
+import com.ScalableTeam.models.SignUpResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

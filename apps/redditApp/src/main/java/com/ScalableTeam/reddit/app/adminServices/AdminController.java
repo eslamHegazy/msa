@@ -2,8 +2,8 @@ package com.ScalableTeam.reddit.app.adminServices;
 
 import com.ScalableTeam.amqp.Config;
 import com.ScalableTeam.amqp.RabbitMQProducer;
-import com.ScalableTeam.reddit.app.requestForms.AssignModeratorsForm;
-import com.ScalableTeam.reddit.app.requestForms.CreateChannelForm;
+import com.ScalableTeam.models.reddit.AssignModeratorsForm;
+import com.ScalableTeam.models.reddit.CreateChannelForm;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.MessagePostProcessor;

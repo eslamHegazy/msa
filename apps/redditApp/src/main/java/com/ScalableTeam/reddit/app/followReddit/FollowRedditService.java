@@ -2,13 +2,11 @@ package com.ScalableTeam.reddit.app.followReddit;
 
 import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.entity.Channel;
-import com.ScalableTeam.reddit.app.entity.Post;
 import com.ScalableTeam.reddit.app.entity.User;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import com.ScalableTeam.reddit.app.repository.UserRepository;
 import com.ScalableTeam.reddit.app.repository.vote.RedditFollowRepository;
-import com.ScalableTeam.reddit.app.requestForms.BanUserForm;
-import com.ScalableTeam.reddit.app.requestForms.FollowRedditForm;
+import com.ScalableTeam.models.reddit.FollowRedditForm;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
@@ -17,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.NoSuchFileException;
 import java.util.HashMap;
 import java.util.Optional;
 

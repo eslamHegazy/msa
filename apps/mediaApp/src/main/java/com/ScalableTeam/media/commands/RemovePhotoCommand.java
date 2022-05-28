@@ -3,8 +3,8 @@ package com.ScalableTeam.media.commands;
 
 import io.minio.MinioClient;
 import io.minio.RemoveObjectArgs;
-import models.media.RemovePhotoBody;
-import models.media.RemovePhotoResponse;
+import com.ScalableTeam.models.media.RemovePhotoBody;
+import com.ScalableTeam.models.media.RemovePhotoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

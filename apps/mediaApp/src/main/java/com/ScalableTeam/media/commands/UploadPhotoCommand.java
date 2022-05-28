@@ -3,8 +3,8 @@ package com.ScalableTeam.media.commands;
 
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
-import models.media.UploadPhotoBody;
-import models.media.UploadPhotoResponse;
+import com.ScalableTeam.models.media.UploadPhotoBody;
+import com.ScalableTeam.models.media.UploadPhotoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

@@ -3,7 +3,7 @@ package com.ScalableTeam.reddit.app.reportPost;
 import com.ScalableTeam.amqp.Config;
 import com.ScalableTeam.amqp.MessagePublisher;
 import com.ScalableTeam.amqp.RabbitMQProducer;
-import com.ScalableTeam.reddit.app.requestForms.ReportPostForm;
+import com.ScalableTeam.models.reddit.ReportPostForm;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.MessagePostProcessor;

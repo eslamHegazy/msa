@@ -2,8 +2,8 @@ package com.ScalableTeam.user.commands;
 
 import com.ScalableTeam.user.repositories.UserProfileRepository;
 import lombok.AllArgsConstructor;
-import models.UpdatePhotoBody;
-import models.UpdatePhotoResponse;
+import com.ScalableTeam.models.UpdatePhotoBody;
+import com.ScalableTeam.models.UpdatePhotoResponse;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,5 +1,4 @@
 package com.ScalableTeam.reddit.app.entity;
-import com.ScalableTeam.reddit.app.requestForms.ReportPostForm;
 import com.arangodb.springframework.annotation.ArangoId;
 import com.arangodb.springframework.annotation.Document;
 import lombok.AllArgsConstructor;
@@ -7,7 +6,6 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 @Document("channels")

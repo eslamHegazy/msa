@@ -2,8 +2,8 @@ package com.ScalableTeam.media.commands;
 
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
-import models.media.DownloadPhotoBody;
-import models.media.DownloadPhotoResponse;
+import com.ScalableTeam.models.media.DownloadPhotoBody;
+import com.ScalableTeam.models.media.DownloadPhotoResponse;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

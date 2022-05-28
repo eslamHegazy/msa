@@ -5,8 +5,8 @@ import com.ScalableTeam.user.jwt.JwtUtil;
 import com.ScalableTeam.user.repositories.UserProfileRepository;
 import com.password4j.Password;
 import lombok.AllArgsConstructor;
-import models.LoginBody;
-import models.LoginResponse;
+import com.ScalableTeam.models.LoginBody;
+import com.ScalableTeam.models.LoginResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

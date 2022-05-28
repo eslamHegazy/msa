@@ -5,8 +5,8 @@ import com.password4j.Hash;
 import com.password4j.Password;
 import com.ScalableTeam.user.entity.UserProfile;
 import lombok.AllArgsConstructor;
-import models.SignUpBody;
-import models.SignUpResponse;
+import com.ScalableTeam.models.SignUpBody;
+import com.ScalableTeam.models.SignUpResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Matcher;
