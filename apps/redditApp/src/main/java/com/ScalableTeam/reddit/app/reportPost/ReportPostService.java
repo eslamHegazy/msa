@@ -1,8 +1,8 @@
 package com.ScalableTeam.reddit.app.reportPost;
 
 import com.ScalableTeam.reddit.MyCommand;
-import com.ScalableTeam.reddit.app.entity.Channel;
-import com.ScalableTeam.reddit.app.entity.Post;
+import com.ScalableTeam.arango.Channel;
+import com.ScalableTeam.arango.Post;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
 import com.ScalableTeam.models.reddit.ReportPostForm;

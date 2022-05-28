@@ -1,9 +1,9 @@
 package com.ScalableTeam.reddit.app.caching;
 
-import com.ScalableTeam.reddit.app.entity.Post;
-import com.ScalableTeam.reddit.app.entity.User;
+import com.ScalableTeam.arango.Post;
+import com.ScalableTeam.arango.User;
+import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
-import com.ScalableTeam.reddit.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;

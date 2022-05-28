@@ -1,12 +1,12 @@
 package com.ScalableTeam.user.commands;
 
+import com.ScalableTeam.models.user.LoginBody;
+import com.ScalableTeam.models.user.LoginResponse;
 import com.ScalableTeam.user.entity.UserProfile;
 import com.ScalableTeam.user.jwt.JwtUtil;
 import com.ScalableTeam.user.repositories.UserProfileRepository;
 import com.password4j.Password;
 import lombok.AllArgsConstructor;
-import com.ScalableTeam.models.LoginBody;
-import com.ScalableTeam.models.LoginResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

@@ -1,10 +1,10 @@
 package com.ScalableTeam.user.commands;
 
-import com.ScalableTeam.user.entity.User;
-import com.ScalableTeam.user.repositories.UserRepository;
+import com.ScalableTeam.arango.User;
+import com.ScalableTeam.arango.UserRepository;
+import com.ScalableTeam.models.user.UnFollowUserBody;
+import com.ScalableTeam.models.user.UnFollowUserResponse;
 import lombok.AllArgsConstructor;
-import com.ScalableTeam.models.UnFollowUserBody;
-import com.ScalableTeam.models.UnFollowUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

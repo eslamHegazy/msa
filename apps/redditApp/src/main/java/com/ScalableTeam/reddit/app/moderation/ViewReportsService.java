@@ -1,10 +1,10 @@
 package com.ScalableTeam.reddit.app.moderation;
 
-import com.ScalableTeam.reddit.MyCommand;
-import com.ScalableTeam.reddit.app.entity.Channel;
-import com.ScalableTeam.reddit.app.repository.ChannelRepository;
-import com.ScalableTeam.reddit.app.repository.UserRepository;
+import com.ScalableTeam.arango.Channel;
+import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.models.reddit.ViewReportsForm;
+import com.ScalableTeam.reddit.MyCommand;
+import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
@@ -29,7 +29,7 @@ public class ViewReportsService implements MyCommand {
 
     private final String serviceName = "viewReports";
 
-    @RabbitListener(queues = "${mq.queues.request.reddit."+serviceName+"}",returnExceptions = "true")
+    @RabbitListener(queues = "${mq.queues.request.reddit." + serviceName + "}", returnExceptions = "true")
     public String listenToRequestQueue(ViewReportsForm viewReportsForm, Message message) throws Exception {
         String correlationId = message.getMessageProperties().getCorrelationId();
         String indicator = generalConfig.getCommands().get(serviceName);
@@ -42,25 +42,25 @@ public class ViewReportsService implements MyCommand {
     public String execute(Object body) throws Exception {
 
         try {
-            ViewReportsForm request  = (ViewReportsForm) body;
+            ViewReportsForm request = (ViewReportsForm) body;
             Optional<Channel> reddit = channelRepository.findById(request.getRedditId());
-            if(!reddit.isPresent()){
-                throw new IllegalStateException("reddit "+ request.getRedditId()+" not found in DB");
+            if (!reddit.isPresent()) {
+                throw new IllegalStateException("reddit " + request.getRedditId() + " not found in DB");
             }
 
             Channel channel = reddit.get();
             System.out.println(channel.getReports());
-            if(channel.getModerators().containsKey(request.getModId())){
-                if (channel.getReports()!=null){
+            if (channel.getModerators().containsKey(request.getModId())) {
+                if (channel.getReports() != null) {
                     return channel.getReports().toString();
-                }else{
+                } else {
                     return "no reports for this channel";
                 }
-            }else{
-                return "user "+ request.getModId()+" is not a mod of channel "+request.getRedditId();
+            } else {
+                return "user " + request.getModId() + " is not a mod of channel " + request.getRedditId();
             }
-        }catch(Exception e){
-throw  e;
+        } catch (Exception e) {
+            throw e;
         }
 
     }

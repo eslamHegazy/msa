@@ -1,8 +1,8 @@
 package com.ScalableTeam.reddit.app.post;
 
+import com.ScalableTeam.arango.Comment;
 import com.ScalableTeam.reddit.ICommand;
-import com.ScalableTeam.reddit.app.entity.Comment;
-import com.ScalableTeam.reddit.app.entity.Post;
+import com.ScalableTeam.arango.Post;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.AllArgsConstructor;

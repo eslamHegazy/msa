@@ -1,6 +1,6 @@
 package com.ScalableTeam.reddit.app.seeders;
 
-import com.ScalableTeam.reddit.app.entity.Post;
+import com.ScalableTeam.arango.Post;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,12 +1,12 @@
 package com.ScalableTeam.user.commands;
 
+import com.ScalableTeam.models.user.SignUpBody;
+import com.ScalableTeam.models.user.SignUpResponse;
+import com.ScalableTeam.user.entity.UserProfile;
 import com.ScalableTeam.user.repositories.UserProfileRepository;
 import com.password4j.Hash;
 import com.password4j.Password;
-import com.ScalableTeam.user.entity.UserProfile;
 import lombok.AllArgsConstructor;
-import com.ScalableTeam.models.SignUpBody;
-import com.ScalableTeam.models.SignUpResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Matcher;

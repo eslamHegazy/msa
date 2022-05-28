@@ -1,10 +1,9 @@
 package com.ScalableTeam.user.commands;
 
+import com.ScalableTeam.models.user.EditProfileBody;
+import com.ScalableTeam.models.user.EditProfileResponse;
 import com.ScalableTeam.user.repositories.UserProfileRepository;
 import lombok.AllArgsConstructor;
-import com.ScalableTeam.models.EditProfileBody;
-import com.ScalableTeam.models.EditProfileResponse;
-
 import org.springframework.stereotype.Service;
 
 @Service

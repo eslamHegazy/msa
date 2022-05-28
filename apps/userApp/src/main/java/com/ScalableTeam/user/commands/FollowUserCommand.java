@@ -1,11 +1,11 @@
 package com.ScalableTeam.user.commands;
 
-import com.ScalableTeam.user.entity.User;
-import com.ScalableTeam.user.repositories.UserRepository;
+import com.ScalableTeam.arango.User;
+import com.ScalableTeam.arango.UserRepository;
+import com.ScalableTeam.models.user.FollowUserBody;
+import com.ScalableTeam.models.user.FollowUserResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import com.ScalableTeam.models.FollowUserBody;
-import com.ScalableTeam.models.FollowUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

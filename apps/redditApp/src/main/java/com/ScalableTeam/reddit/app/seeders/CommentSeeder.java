@@ -1,6 +1,8 @@
 package com.ScalableTeam.reddit.app.seeders;
 
-import com.ScalableTeam.reddit.app.entity.*;
+import com.ScalableTeam.arango.Comment;
+import com.ScalableTeam.arango.CommentToComment;
+import com.ScalableTeam.arango.PostToComment;
 import com.ScalableTeam.reddit.app.repository.CommentChildrenHierarchyRepository;
 import com.ScalableTeam.reddit.app.repository.CommentRepository;
 import com.ScalableTeam.reddit.app.repository.PostCommentHierarchyRepository;
