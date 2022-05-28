@@ -1,6 +1,7 @@
 package mocks;
 
-import com.ScalableTeam.reddit.app.entity.User;
+
+import com.ScalableTeam.arango.User;
 
 public class UserMock {
     private static final String id = "MockUser";

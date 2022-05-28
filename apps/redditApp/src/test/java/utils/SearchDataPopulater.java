@@ -1,7 +1,7 @@
 package utils;
 
+import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
-import com.ScalableTeam.reddit.app.repository.UserRepository;
 import mocks.PostMock;
 import mocks.UserMock;
 

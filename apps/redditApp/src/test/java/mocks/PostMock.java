@@ -1,6 +1,6 @@
 package mocks;
 
-import com.ScalableTeam.reddit.app.entity.Post;
+import com.ScalableTeam.arango.Post;
 import com.sun.istack.NotNull;
 
 import java.time.Instant;

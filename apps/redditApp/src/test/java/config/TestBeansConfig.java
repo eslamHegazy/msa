@@ -1,7 +1,7 @@
 package config;
 
+import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
-import com.ScalableTeam.reddit.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -14,12 +14,12 @@ public class TestBeansConfig {
     PostRepository postRepository;
 
     @Bean
-    public UserRepository getUserRepository(){
+    public UserRepository getUserRepository() {
         return userRepository;
     }
 
     @Bean
-    public PostRepository getPostRepository(){
+    public PostRepository getPostRepository() {
         return postRepository;
     }
 }

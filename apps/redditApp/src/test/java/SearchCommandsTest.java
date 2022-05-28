@@ -1,6 +1,6 @@
+import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.reddit.RedditApplication;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
-import com.ScalableTeam.reddit.app.repository.UserRepository;
 import com.ScalableTeam.reddit.app.search.SearchByChannelService;
 import com.ScalableTeam.reddit.app.search.SearchByTitleService;
 import config.TestBeansConfig;

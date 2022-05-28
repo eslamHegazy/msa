@@ -1,8 +1,7 @@
-package com.ScalableTeam.reddit.app.search;
+package com.ScalableTeam.httpServer.controllers;
 
 import com.ScalableTeam.amqp.Config;
 import com.ScalableTeam.amqp.RabbitMQProducer;
-import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/search")
 public class SearchController {
     @Autowired
-    private GeneralConfig generalConfig;
-    @Autowired
     private Config config;
     @Autowired
     private RabbitMQProducer rabbitMQProducer;
@@ -24,9 +21,7 @@ public class SearchController {
     @GetMapping("by_title/{title}")
     public String searchByTitle(@PathVariable String title) {
         final String COMMAND_NAME = "searchByTitle";
-
-        String indicator = generalConfig.getCommands().get(COMMAND_NAME);
-        log.info(indicator + "Controller::Post title={}", title);
+        log.info(COMMAND_NAME + "Controller::Post title={}", title);
 
         return (String) rabbitMQProducer.publishSynchronous(
                 title,
@@ -37,9 +32,7 @@ public class SearchController {
     @GetMapping("by_channel/{id}")
     public String searchByChannel(@PathVariable String id) {
         final String COMMAND_NAME = "searchByChannel";
-
-        String indicator = generalConfig.getCommands().get(COMMAND_NAME);
-        log.info(indicator + "Controller::Channel Id={}", id);
+        log.info(COMMAND_NAME + "Controller::Channel Id={}", id);
 
         return (String) rabbitMQProducer.publishSynchronous(id,
                 config.getExchange(),
