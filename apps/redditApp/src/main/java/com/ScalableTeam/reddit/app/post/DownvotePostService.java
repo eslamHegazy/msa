@@ -1,5 +1,6 @@
 package com.ScalableTeam.reddit.app.post;
 
+import com.ScalableTeam.reddit.ICommand;
 import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.entity.Post;
 import com.ScalableTeam.reddit.app.entity.vote.PostVote;
@@ -27,7 +28,7 @@ import java.util.Map;
 @Service
 @Slf4j
 @AllArgsConstructor
-public class DownvotePostService implements MyCommand {
+public class DownvotePostService implements ICommand<VotePostForm, String> {
     private final PostRepository postRepository;
     private final UserVotePostRepository userVotePostRepository;
     private final PostVoteRepository postVoteRepository;
@@ -42,25 +43,20 @@ public class DownvotePostService implements MyCommand {
 
     @RabbitListener(queues = "${mq.queues.request.reddit.downvotePost}")
     public String execute(VotePostForm votePostForm, Message message) throws Exception {
-        Map<String, Object> attributes = new HashMap<>();
-        attributes.put("form", votePostForm);
-        attributes.put("message", message);
-        return (String) execute(attributes);
+        String indicator = generalConfig.getCommands().get("downvotePost");
+        String correlationId = message.getMessageProperties().getCorrelationId();
+        log.info(indicator + "Queue Listener::Vote Post Form={}, CorrelationId={}", votePostForm, correlationId);
+        return execute(votePostForm);
     }
 
     @Transactional(rollbackFor = {Exception.class})
     @Override
-    public Object execute(Object obj) throws Exception {
+    public String execute(VotePostForm votePostForm) throws Exception {
         int popularPostsUpvoteThreshold = 1;
-        Map<String, Object> attributes = (Map<String, Object>) obj;
-        VotePostForm votePostForm = (VotePostForm) attributes.get("form");
-        Message message = (Message) attributes.get("message");
-
         String userNameId = votePostForm.getUserNameId();
         String postId = votePostForm.getPostId();
-        String correlationId = message.getMessageProperties().getCorrelationId();
         String indicator = generalConfig.getCommands().get("downvotePost");
-        log.info(indicator + "Service::Post Id={}, User Id={}, correlationId={}", postId, userNameId, correlationId);
+        log.info(indicator + "Service::Post Id={}, User Id={}", postId, userNameId);
 
         postVoteValidation.validatePostVote(userNameId, postId);
         String responseMessage = userVotePostRepository.downvotePost(userNameId, postId);

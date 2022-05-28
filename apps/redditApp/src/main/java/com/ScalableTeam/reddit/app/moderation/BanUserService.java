@@ -6,8 +6,12 @@ import com.ScalableTeam.reddit.app.entity.Channel;
 import com.ScalableTeam.reddit.app.entity.User;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import com.ScalableTeam.reddit.app.repository.UserRepository;
+import com.ScalableTeam.reddit.app.requestForms.AssignModeratorsForm;
 import com.ScalableTeam.reddit.app.requestForms.BanUserForm;
+import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
@@ -20,16 +24,19 @@ import java.util.Optional;
 @Slf4j
 public class BanUserService implements MyCommand {
     @Autowired
-private final ChannelRepository channelRepository;
+private ChannelRepository channelRepository;
 @Autowired
-private final UserRepository userRepository;
-
+private UserRepository userRepository;
 @Autowired
-BanUserService(ChannelRepository channelRepository, UserRepository userRepository){
-    this.channelRepository = channelRepository;
-    this.userRepository=userRepository;
-}
-
+private GeneralConfig generalConfig;
+private final String serviceName = "banUser";
+    @RabbitListener(queues = "${mq.queues.request.reddit."+serviceName+"}")
+    public String listenToRequestQueue(BanUserForm banUserForm, Message message) throws Exception {
+        String correlationId = message.getMessageProperties().getCorrelationId();
+        String indicator = generalConfig.getCommands().get(serviceName);
+        log.info(indicator + "Service::"+serviceName+", CorrelationId={}", correlationId);
+        return execute(banUserForm);
+    }
 
     @Override
     public String execute(Object body) throws Exception {
@@ -69,5 +76,12 @@ try {
 catch(Exception e){
     return e.getMessage();
 }
+    }
+
+    @RabbitListener(queues = "${mq.queues.response.reddit."+serviceName+"}")
+    public void receive(String response, Message message) {
+        String indicator = generalConfig.getCommands().get(serviceName);
+        String correlationId = message.getMessageProperties().getCorrelationId();
+        log.info(indicator + "Service::CorrelationId: {}, message: {}", correlationId, response);
     }
 }

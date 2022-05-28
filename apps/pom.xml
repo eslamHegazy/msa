@@ -20,6 +20,7 @@
         <module>redditApp</module>
         <module>userApp</module>
         <module>mediaApp</module>
+        <module>controllerApp</module>
     </modules>
 
     <properties>
@@ -89,5 +90,6 @@
         </dependency>
 
     </dependencies>
+
 
 </project>

@@ -2,7 +2,6 @@ package com.ScalableTeam.reddit.app.adminServices;
 
 import com.ScalableTeam.amqp.Config;
 import com.ScalableTeam.amqp.RabbitMQProducer;
-import com.ScalableTeam.reddit.app.MessagePublisher;
 import com.ScalableTeam.reddit.app.requestForms.AssignModeratorsForm;
 import com.ScalableTeam.reddit.app.requestForms.CreateChannelForm;
 import com.ScalableTeam.reddit.config.GeneralConfig;
@@ -14,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.ScalableTeam.amqp.MessagePublisher.getMessageHeaders;
+
 @RestController
 @Slf4j
-public class AdminController extends MessagePublisher {
+public class AdminController {
     @Autowired
     private CreateChannelService createChannelService;
     @Autowired

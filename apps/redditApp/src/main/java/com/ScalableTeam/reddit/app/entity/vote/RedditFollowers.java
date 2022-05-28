@@ -14,14 +14,14 @@ import javax.persistence.*;
 @Entity
 @Table(name = "reddit_followers")
 @NamedStoredProcedureQueries({
-        @NamedStoredProcedureQuery(name = "RedditFollowers.followReddit",
+        @NamedStoredProcedureQuery(name = "reddit_followers.followReddit",
                 procedureName = "follow_reddit", parameters = {
                 @StoredProcedureParameter(mode = ParameterMode.IN, name = "in_redditId", type = String.class),
-                @StoredProcedureParameter(mode = ParameterMode.OUT, name = "message", type = String.class)}),
-        @NamedStoredProcedureQuery(name = "RedditFollowers.unfollowReddit",
-                procedureName = "unfollow_reddit", parameters = {
-                @StoredProcedureParameter(mode = ParameterMode.IN, name = "in_redditId", type = String.class),
                 @StoredProcedureParameter(mode = ParameterMode.OUT, name = "message", type = String.class)})
+//        @NamedStoredProcedureQuery(name = "reddit_followers.unfollowReddit",
+//                procedureName = "unfollow_reddit", parameters = {
+//                @StoredProcedureParameter(mode = ParameterMode.IN, name = "in_redditId", type = String.class),
+//                @StoredProcedureParameter(mode = ParameterMode.OUT, name = "message", type = String.class)})
 })
 @SequenceGenerator(
         name = "reddit_followers_sequence",
@@ -30,10 +30,6 @@ import javax.persistence.*;
 )
 public class RedditFollowers {
     @Id
-//    @GeneratedValue(
-//            strategy = GenerationType.SEQUENCE,
-//            generator = "reddit_followers_sequence"
-//    )
     @Column(name = "redditId")
     private String channelNameId;
     private int followerCount;

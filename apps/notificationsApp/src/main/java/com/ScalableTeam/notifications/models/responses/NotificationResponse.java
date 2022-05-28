@@ -1,7 +1,10 @@
 package com.ScalableTeam.notifications.models.responses;
 
+import lombok.Data;
+
 import java.util.Date;
 
+@Data
 public class NotificationResponse {
 
     private final String id;

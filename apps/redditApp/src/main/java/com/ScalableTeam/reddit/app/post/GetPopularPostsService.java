@@ -40,7 +40,7 @@ public class GetPopularPostsService implements MyCommand {
     private Post getValue(String cacheName, String key) {
         return (Post) cacheManager.getCache(cacheName).get(key);
     }
-    @RabbitListener(queues = "${mq.queues.request.reddit.getPopularPosts}")
+    @RabbitListener(queues = "${mq.queues.request.reddit.getPopularPosts}", returnExceptions = "true")
     public String listenToRequestQueue(Object body, Message message) throws Exception {
         String correlationId = message.getMessageProperties().getCorrelationId();
         String indicator = generalConfig.getCommands().get("getPopularPosts");

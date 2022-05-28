@@ -1,5 +1,8 @@
 package com.ScalableTeam.notifications.models.requests;
 
+import lombok.Data;
+
+@Data
 public class DeviceTokenRequest {
 
     private final String userId;

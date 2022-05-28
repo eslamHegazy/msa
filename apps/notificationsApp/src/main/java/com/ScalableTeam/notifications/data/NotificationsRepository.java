@@ -9,6 +9,7 @@ import com.ScalableTeam.notifications.models.requests.NotificationDeleteRequest;
 import com.ScalableTeam.notifications.models.requests.NotificationReadRequest;
 import com.ScalableTeam.notifications.models.requests.NotificationSendRequest;
 import com.ScalableTeam.notifications.models.responses.NotificationResponse;
+import com.ScalableTeam.notifications.utils.FirebaseInitializer;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
@@ -26,14 +27,25 @@ import java.util.concurrent.ExecutionException;
 @Repository
 public class NotificationsRepository {
 
-    private final Firestore firestore = FirestoreClient.getFirestore();
+    private final Firestore firestore;
+
+    public NotificationsRepository() {
+        FirebaseInitializer.initialize();
+        firestore = FirestoreClient.getFirestore();
+    }
 
     public void registerDeviceToken(DeviceTokenRequest deviceToken) throws InterruptedException, ExecutionException {
-        firestore.collection(Collections.USERS).document(deviceToken.getUserId()).update(Fields.TOKENS, FieldValue.arrayUnion(deviceToken.getDeviceToken())).get();
+        firestore.collection(Collections.USERS)
+                .document(deviceToken.getUserId())
+                .update(Fields.TOKENS, FieldValue.arrayUnion(deviceToken.getDeviceToken()))
+                .get();
     }
 
     public void unregisterDeviceToken(DeviceTokenRequest deviceToken) throws InterruptedException, ExecutionException {
-        firestore.collection(Collections.USERS).document(deviceToken.getUserId()).update(Fields.TOKENS, FieldValue.arrayRemove(deviceToken.getDeviceToken())).get();
+        firestore.collection(Collections.USERS)
+                .document(deviceToken.getUserId())
+                .update(Fields.TOKENS, FieldValue.arrayRemove(deviceToken.getDeviceToken()))
+                .get();
     }
 
     public List<String> getDeviceTokens(List<String> users) throws InterruptedException, ExecutionException {
@@ -59,6 +71,7 @@ public class NotificationsRepository {
     }
 
     public void sendNotification(NotificationSendRequest notification) throws FirebaseCredentialsException, FirebaseNotificationException, InterruptedException, ExecutionException {
+        // Store the notification.
         HashMap<String, Object> document = new HashMap<>();
 
         document.put(Fields.SENDER, notification.getSender());
@@ -67,12 +80,20 @@ public class NotificationsRepository {
         document.put(Fields.TIMESTAMP, FieldValue.serverTimestamp());
         document.put(Fields.IS_READ, false);
 
-        // Store the notification.
         for (String receiver : notification.getReceivers()) {
-            firestore.collection(Collections.USERS).document(receiver).collection(Collections.NOTIFICATIONS).add(document).get();
+            firestore.collection(Collections.USERS)
+                    .document(receiver)
+                    .collection(Collections.NOTIFICATIONS)
+                    .add(document)
+                    .get();
         }
 
         // Send the notification.
+        // TODO: This code is commented out because the tokens logic cannot be tested without a real mobile device.
+        // notifyUser(notification);
+    }
+
+    protected void notifyUser(NotificationSendRequest notification) throws FirebaseCredentialsException, FirebaseNotificationException, ExecutionException, InterruptedException {
         NotificationEventHandler handler = NotificationEventHandler.getInstance();
         handler.notify(getDeviceTokens(notification.getReceivers()), notification.getTitle(), notification.getBody());
     }
@@ -80,7 +101,11 @@ public class NotificationsRepository {
     public List<NotificationResponse> getNotifications(String userId) throws InterruptedException, ExecutionException {
         List<NotificationResponse> notifications = new ArrayList<>();
 
-        QuerySnapshot query = firestore.collection(Collections.USERS).document(userId).collection(Collections.NOTIFICATIONS).get().get();
+        QuerySnapshot query = firestore.collection(Collections.USERS)
+                .document(userId)
+                .collection(Collections.NOTIFICATIONS)
+                .get()
+                .get();
 
         for (DocumentSnapshot document : query.getDocuments()) {
             String id = document.getId();
@@ -97,10 +122,20 @@ public class NotificationsRepository {
     }
 
     public void markNotificationAsRead(NotificationReadRequest notification) throws InterruptedException, ExecutionException {
-        firestore.collection(Collections.USERS).document(notification.getUserId()).collection(Collections.NOTIFICATIONS).document(notification.getNotificationId()).update(Fields.IS_READ, true).get();
+        firestore.collection(Collections.USERS)
+                .document(notification.getUserId())
+                .collection(Collections.NOTIFICATIONS)
+                .document(notification.getNotificationId())
+                .update(Fields.IS_READ, true)
+                .get();
     }
 
     public void deleteNotification(NotificationDeleteRequest notification) throws InterruptedException, ExecutionException {
-        firestore.collection(Collections.USERS).document(notification.getUserId()).collection(Collections.NOTIFICATIONS).document(notification.getNotificationId()).delete().get();
+        firestore.collection(Collections.USERS)
+                .document(notification.getUserId())
+                .collection(Collections.NOTIFICATIONS)
+                .document(notification.getNotificationId())
+                .delete()
+                .get();
     }
 }
