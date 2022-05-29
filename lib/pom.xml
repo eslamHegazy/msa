@@ -19,5 +19,6 @@
         <module>services</module>
         <module>models</module>
         <module>amqp</module>
+        <module>utils</module>
     </modules>
 </project>

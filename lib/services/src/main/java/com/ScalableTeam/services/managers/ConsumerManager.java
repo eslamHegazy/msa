@@ -1,4 +1,4 @@
-package com.ScalableTeam.services.controller;
+package com.ScalableTeam.services.managers;
 
 import lombok.AllArgsConstructor;
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistry;
@@ -8,13 +8,15 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 public class ConsumerManager {
-    private RabbitListenerEndpointRegistry rabbitListenerEndpointRegistry;
+    private final RabbitListenerEndpointRegistry rabbitListenerEndpointRegistry;
 
     public void changeMaxThreadCount(int maxThreadCount) {
+        System.out.println(maxThreadCount);
         rabbitListenerEndpointRegistry.getListenerContainers()
                 .stream().filter(container -> container instanceof SimpleMessageListenerContainer)
                 .map(container -> (SimpleMessageListenerContainer) container)
                 .forEach(container -> container.setMaxConcurrentConsumers(maxThreadCount));
+        rabbitListenerEndpointRegistry.getListenerContainers().stream().forEach(messageListenerContainer -> System.out.println(messageListenerContainer));
     }
 
     public void changeMinThreadCount(int minThreadCount) {

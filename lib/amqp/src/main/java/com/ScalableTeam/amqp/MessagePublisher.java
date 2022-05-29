@@ -28,4 +28,15 @@ public class MessagePublisher {
             return message;
         };
     }
+
+    public static MessagePostProcessor processMessage(String commandName, String responseQueue) {
+        UUID correlationId = UUID.randomUUID();
+        return message -> {
+            MessageProperties messageProperties = message.getMessageProperties();
+            messageProperties.setCorrelationId(correlationId.toString());
+            messageProperties.getHeaders().put(HEADER_COMMAND, commandName);
+            messageProperties.setReplyTo(responseQueue);
+            return message;
+        };
+    }
 }

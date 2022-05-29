@@ -1,5 +1,6 @@
 package com.ScalableTeam.chat;
 
+import com.ScalableTeam.services.BaseService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
@@ -15,7 +16,7 @@ import org.springframework.context.annotation.PropertySource;
 @ConfigurationPropertiesScan
 //@EnableEurekaClient
 @PropertySource("classpath:message-queues.properties")
-public class ChatApplication {
+public class ChatApplication extends BaseService {
 
     public static void main(String[] args) {
         SpringApplication.run(ChatApplication.class, args);

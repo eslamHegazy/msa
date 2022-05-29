@@ -1,4 +1,4 @@
-package com.ScalableTeam.services.controller;
+package com.ScalableTeam.services.managers;
 
 import org.springframework.stereotype.Component;
 

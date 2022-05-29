@@ -1,5 +1,6 @@
 package com.ScalableTeam.media;
 
+import com.ScalableTeam.services.BaseService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
@@ -12,7 +13,7 @@ import org.springframework.context.annotation.PropertySource;
 })
 //@EnableEurekaClient
 @PropertySource("classpath:message-queues.properties")
-public class MediaAppApplication {
+public class MediaAppApplication extends BaseService {
 
     public static void main(String[] args) {
         SpringApplication.run(MediaAppApplication.class, args);
