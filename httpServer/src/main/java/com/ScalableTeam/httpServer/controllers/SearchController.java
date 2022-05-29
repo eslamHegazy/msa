@@ -1,7 +1,7 @@
 package com.ScalableTeam.httpServer.controllers;
 
 import com.ScalableTeam.amqp.Config;
-import com.ScalableTeam.amqp.RabbitMQProducer;
+import com.ScalableTeam.amqp.LegacyRabbitMQProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequestMapping("/search")
 public class SearchController {
+
     @Autowired
     private Config config;
+
     @Autowired
-    private RabbitMQProducer rabbitMQProducer;
+    private LegacyRabbitMQProducer rabbitMQProducer;
 
     @GetMapping("by_title/{title}")
     public String searchByTitle(@PathVariable String title) {

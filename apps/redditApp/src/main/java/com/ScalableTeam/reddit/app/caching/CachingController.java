@@ -1,7 +1,7 @@
 package com.ScalableTeam.reddit.app.caching;
 
 import com.ScalableTeam.amqp.Config;
-import com.ScalableTeam.amqp.RabbitMQProducer;
+import com.ScalableTeam.amqp.LegacyRabbitMQProducer;
 import com.ScalableTeam.reddit.app.post.GetPostService;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ public class CachingController {
     @Autowired
     private Config config;
     @Autowired
-    private RabbitMQProducer rabbitMQProducer;
+    private LegacyRabbitMQProducer rabbitMQProducer;
     @Autowired
     private GetPostService getPostService;
     @Autowired

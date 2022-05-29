@@ -3,9 +3,10 @@ package com.ScalableTeam.amqp;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
+
+import static com.ScalableTeam.amqp.MessagePublisher.processMessage;
 
 @Component
 @Slf4j
@@ -13,20 +14,17 @@ import org.springframework.stereotype.Component;
 public class RabbitMQProducer {
 
     private final AmqpTemplate amqpTemplate;
-    public void publish(Object payload, String exchange, String routingKey) {
-        log.info("Publishing to {} using routingKey {}. Payload: {}", exchange, routingKey, payload);
-        amqpTemplate.convertAndSend(exchange, routingKey, payload);
-        log.info("Published to {} using routingKey {}. Payload: {}", exchange, routingKey, payload);
+
+    public void publishAsynchronous(String commandName, Object payload, String exchange, String routingKey) {
+        log.info("Publishing to {} using routingKey {}. Command: {}, Payload: {}", exchange, routingKey, commandName, payload);
+        amqpTemplate.convertAndSend(exchange, routingKey, payload, processMessage(commandName));
+        log.info("Published to {} using routingKey {}. Command: {}, Payload: {}", exchange, routingKey, commandName, payload);
     }
 
-    public void publishAsynchronous(Object payload, String exchange, String routingKey, MessagePostProcessor messagePostProcessor) {
-        log.info("Publishing to {} using routingKey {}. Payload: {}", exchange, routingKey, payload);
-        amqpTemplate.convertAndSend(exchange, routingKey, payload, messagePostProcessor);
-        log.info("Published to {} using routingKey {}. Payload: {}", exchange, routingKey, payload);
-    }
-
-    public Object publishSynchronous(Object payload, String exchange, String routingKey) {
-        log.info("Publishing to {} using routingKey {}. Payload: {}", exchange, routingKey, payload);
-        return amqpTemplate.convertSendAndReceiveAsType(exchange, routingKey, payload, new ParameterizedTypeReference<>() {});
+    public Object publishSynchronous(String commandName, Object payload, String exchange, String routingKey) {
+        log.info("Publishing to {} using routingKey {}. Command: {}, Payload: {}", exchange, routingKey, commandName, payload);
+        return amqpTemplate.convertSendAndReceiveAsType(exchange, routingKey, payload, processMessage(commandName),
+                new ParameterizedTypeReference<>() {
+                });
     }
 }

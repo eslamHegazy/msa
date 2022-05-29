@@ -1,7 +1,7 @@
 package com.ScalableTeam.reddit.app.comment;
 
 import com.ScalableTeam.amqp.Config;
-import com.ScalableTeam.amqp.RabbitMQProducer;
+import com.ScalableTeam.amqp.LegacyRabbitMQProducer;
 import com.ScalableTeam.arango.Comment;
 import com.ScalableTeam.models.reddit.VoteCommentForm;
 import com.ScalableTeam.reddit.config.GeneralConfig;
@@ -19,7 +19,7 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
     @Autowired
-    private RabbitMQProducer rabbitMQProducer;
+    private LegacyRabbitMQProducer rabbitMQProducer;
     @Autowired
     private GeneralConfig generalConfig;
     @Autowired

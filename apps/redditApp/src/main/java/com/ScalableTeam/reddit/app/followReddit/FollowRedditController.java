@@ -1,7 +1,7 @@
 package com.ScalableTeam.reddit.app.followReddit;
 
 import com.ScalableTeam.amqp.Config;
-import com.ScalableTeam.amqp.RabbitMQProducer;
+import com.ScalableTeam.amqp.LegacyRabbitMQProducer;
 import com.ScalableTeam.models.reddit.FollowRedditForm;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ public class FollowRedditController {
     private GeneralConfig generalConfig;
 
     @Autowired
-    private RabbitMQProducer rabbitMQProducer;
+    private LegacyRabbitMQProducer rabbitMQProducer;
     @Autowired
     private Config config;
 

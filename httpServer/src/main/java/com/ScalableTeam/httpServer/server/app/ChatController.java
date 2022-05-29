@@ -1,6 +1,6 @@
 package com.ScalableTeam.httpServer.server.app;
 
-import com.ScalableTeam.amqp.RabbitMQProducer;
+import com.ScalableTeam.amqp.LegacyRabbitMQProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,10 +12,10 @@ import java.util.Map;
 @RequestMapping("/chat")
 public class ChatController {
 
-    public RabbitMQProducer rabbitMQProducer;
+    public LegacyRabbitMQProducer rabbitMQProducer;
 
     @Autowired
-    public ChatController(RabbitMQProducer rabbitMQProducer) {
+    public ChatController(LegacyRabbitMQProducer rabbitMQProducer) {
         this.rabbitMQProducer = rabbitMQProducer;
     }
 

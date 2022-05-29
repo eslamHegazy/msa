@@ -1,7 +1,7 @@
 package com.ScalableTeam.reddit.app.adminServices;
 
 import com.ScalableTeam.amqp.Config;
-import com.ScalableTeam.amqp.RabbitMQProducer;
+import com.ScalableTeam.amqp.LegacyRabbitMQProducer;
 import com.ScalableTeam.models.reddit.AssignModeratorsForm;
 import com.ScalableTeam.models.reddit.CreateChannelForm;
 import com.ScalableTeam.reddit.config.GeneralConfig;
@@ -15,24 +15,29 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.ScalableTeam.amqp.MessagePublisher.getMessageHeaders;
 
-
 @RestController
 @Slf4j
 public class AdminController {
+
     @Autowired
     private CreateChannelService createChannelService;
+
     @Autowired
     private AssignModeratorsService assignModeratorsService;
+
     @Autowired
     private GeneralConfig generalConfig;
+
     @Autowired
     private Config config;
+
     @Autowired
-    private RabbitMQProducer rabbitMQProducer;
-    @RequestMapping(method = RequestMethod.POST,value = "/channels")
+    private LegacyRabbitMQProducer rabbitMQProducer;
+
+    @RequestMapping(method = RequestMethod.POST, value = "/channels")
     private void createChannel(@RequestBody CreateChannelForm createChannelForm) throws Exception {
         log.info(generalConfig.getCommands().get("createChannel") + "Controller", createChannelForm);
-        String commandName="createChannel";
+        String commandName = "createChannel";
         MessagePostProcessor messagePostProcessor = getMessageHeaders(
                 config.getQueues().getResponse().getReddit().get(commandName));
 
@@ -43,10 +48,11 @@ public class AdminController {
                 messagePostProcessor);
         //return createChannelService.execute(createChannelForm);
     }
-    @RequestMapping(method = RequestMethod.PUT,value="/channels")
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/channels")
     private void assignModerators(@RequestBody AssignModeratorsForm assignModeratorsForm) throws Exception {
         log.info(generalConfig.getCommands().get("assignModerators") + "Controller", assignModeratorsForm);
-        String commandName="assignModerators";
+        String commandName = "assignModerators";
         MessagePostProcessor messagePostProcessor = getMessageHeaders(
                 config.getQueues().getResponse().getReddit().get(commandName));
 
@@ -57,6 +63,4 @@ public class AdminController {
                 messagePostProcessor);
         //return assignModeratorsService.execute(assignModeratorsForm);
     }
-
-
 }

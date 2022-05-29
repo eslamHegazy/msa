@@ -1,8 +1,8 @@
 package com.ScalableTeam.httpServer.controllers;
 
 import com.ScalableTeam.amqp.Config;
+import com.ScalableTeam.amqp.LegacyRabbitMQProducer;
 import com.ScalableTeam.amqp.MessagePublisher;
-import com.ScalableTeam.amqp.RabbitMQProducer;
 import com.ScalableTeam.arango.Post;
 import com.ScalableTeam.models.reddit.VotePostForm;
 import lombok.extern.slf4j.Slf4j;
@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequestMapping("/posts")
 public class PostController {
+
     @Autowired
     private Config config;
+
     @Autowired
-    private RabbitMQProducer rabbitMQProducer;
+    private LegacyRabbitMQProducer rabbitMQProducer;
 
     @PostMapping
     public void createPost(@RequestBody Post post) throws Exception {

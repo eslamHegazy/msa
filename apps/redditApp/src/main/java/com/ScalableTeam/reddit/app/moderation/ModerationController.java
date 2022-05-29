@@ -1,7 +1,7 @@
 package com.ScalableTeam.reddit.app.moderation;
 
 import com.ScalableTeam.amqp.Config;
-import com.ScalableTeam.amqp.RabbitMQProducer;
+import com.ScalableTeam.amqp.LegacyRabbitMQProducer;
 import com.ScalableTeam.models.reddit.BanUserForm;
 import com.ScalableTeam.models.reddit.ViewReportsForm;
 import com.ScalableTeam.reddit.config.GeneralConfig;
@@ -24,11 +24,14 @@ public class ModerationController {
 
     @Autowired
     private GeneralConfig generalConfig;
+
     @Autowired
     private Config config;
+
     @Autowired
-    private RabbitMQProducer rabbitMQProducer;
-    @RequestMapping(method = RequestMethod.GET,value="/viewReports/{modId}")
+    private LegacyRabbitMQProducer rabbitMQProducer;
+
+    @RequestMapping(method = RequestMethod.GET, value = "/viewReports/{modId}")
     private Object viewReports(@PathVariable String modId, @RequestParam String redditId) throws Exception {
         ViewReportsForm viewReportsForm = new ViewReportsForm();
         viewReportsForm.setModId(modId);
@@ -39,9 +42,9 @@ public class ModerationController {
                 config.getExchange(),
                 config.getQueues().getRequest().getReddit().get(commandName));
 //        return viewReportsService.execute(viewReportsForm);
-
     }
-    @RequestMapping(method = RequestMethod.PUT,value = "/banUser")
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/banUser")
     private void banUser(@RequestBody BanUserForm banUserForm) throws Exception {
         log.info(generalConfig.getCommands().get("banUser") + " Controller ", banUserForm);
         String commandName = "banUser";
@@ -55,6 +58,4 @@ public class ModerationController {
                 messagePostProcessor);
 //        return banUserService.execute(banUserForm);
     }
-
-
 }

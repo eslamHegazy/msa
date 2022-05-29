@@ -1,8 +1,8 @@
 package com.ScalableTeam.httpServer.controllers;
 
 import com.ScalableTeam.amqp.Config;
+import com.ScalableTeam.amqp.LegacyRabbitMQProducer;
 import com.ScalableTeam.amqp.MessagePublisher;
-import com.ScalableTeam.amqp.RabbitMQProducer;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.MessagePostProcessor;
@@ -23,7 +23,7 @@ public class ChatController {
     private Config config;
 
     @Autowired
-    private RabbitMQProducer rabbitMQProducer;
+    private LegacyRabbitMQProducer rabbitMQProducer;
 
     @Autowired
     private RabbitTemplate rabbitTemplate;

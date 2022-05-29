@@ -1,8 +1,8 @@
 package com.ScalableTeam.reddit.app.reportPost;
 
 import com.ScalableTeam.amqp.Config;
+import com.ScalableTeam.amqp.LegacyRabbitMQProducer;
 import com.ScalableTeam.amqp.MessagePublisher;
-import com.ScalableTeam.amqp.RabbitMQProducer;
 import com.ScalableTeam.models.reddit.ReportPostForm;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class ReportPostController extends  MessagePublisher{
     @Autowired
     private Config config;
     @Autowired
-    private RabbitMQProducer rabbitMQProducer;
+    private LegacyRabbitMQProducer rabbitMQProducer;
     @RequestMapping(method = RequestMethod.POST,value = "/reportPost")
     private void reportPost(@RequestBody ReportPostForm reportPostForm) throws Exception {
         log.info(generalConfig.getCommands().get("reportPost") + "Controller", reportPostForm);
