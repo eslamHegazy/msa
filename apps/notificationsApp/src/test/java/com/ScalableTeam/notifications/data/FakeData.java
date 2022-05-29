@@ -1,10 +1,10 @@
 package com.ScalableTeam.notifications.data;
 
-import com.ScalableTeam.notifications.models.requests.DeviceTokenRequest;
-import com.ScalableTeam.notifications.models.requests.NotificationDeleteRequest;
-import com.ScalableTeam.notifications.models.requests.NotificationReadRequest;
-import com.ScalableTeam.notifications.models.requests.NotificationSendRequest;
-import com.ScalableTeam.notifications.models.responses.NotificationResponse;
+import com.ScalableTeam.models.notifications.requests.DeviceTokenRequest;
+import com.ScalableTeam.models.notifications.requests.NotificationDeleteRequest;
+import com.ScalableTeam.models.notifications.requests.NotificationReadRequest;
+import com.ScalableTeam.models.notifications.requests.NotificationSendRequest;
+import com.ScalableTeam.models.notifications.responses.NotificationResponse;
 
 import java.util.Date;
 import java.util.List;

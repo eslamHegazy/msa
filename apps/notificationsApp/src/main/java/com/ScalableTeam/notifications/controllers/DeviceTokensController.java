@@ -2,8 +2,8 @@ package com.ScalableTeam.notifications.controllers;
 
 import com.ScalableTeam.amqp.Config;
 import com.ScalableTeam.amqp.RabbitMQProducer;
+import com.ScalableTeam.models.notifications.requests.DeviceTokenRequest;
 import com.ScalableTeam.notifications.config.GeneralConfig;
-import com.ScalableTeam.notifications.models.requests.DeviceTokenRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.beans.factory.annotation.Autowired;

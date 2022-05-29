@@ -1,4 +1,4 @@
-package com.ScalableTeam.notifications.models.requests;
+package com.ScalableTeam.models.notifications.requests;
 
 import lombok.Data;
 

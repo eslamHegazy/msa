@@ -1,6 +1,6 @@
 package com.ScalableTeam.notifications.data;
 
-import com.ScalableTeam.notifications.models.requests.NotificationSendRequest;
+import com.ScalableTeam.models.notifications.requests.NotificationSendRequest;
 import org.springframework.stereotype.Repository;
 
 @Repository

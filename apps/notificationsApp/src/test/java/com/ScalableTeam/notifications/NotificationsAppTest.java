@@ -1,15 +1,15 @@
 package com.ScalableTeam.notifications;
 
+import com.ScalableTeam.models.notifications.requests.DeviceTokenRequest;
+import com.ScalableTeam.models.notifications.requests.NotificationDeleteRequest;
+import com.ScalableTeam.models.notifications.requests.NotificationReadRequest;
+import com.ScalableTeam.models.notifications.requests.NotificationSendRequest;
+import com.ScalableTeam.models.notifications.responses.NotificationResponse;
 import com.ScalableTeam.notifications.commands.*;
 import com.ScalableTeam.notifications.constants.Collections;
 import com.ScalableTeam.notifications.constants.Fields;
 import com.ScalableTeam.notifications.data.FakeData;
 import com.ScalableTeam.notifications.di.TestBeansConfig;
-import com.ScalableTeam.notifications.models.requests.DeviceTokenRequest;
-import com.ScalableTeam.notifications.models.requests.NotificationDeleteRequest;
-import com.ScalableTeam.notifications.models.requests.NotificationReadRequest;
-import com.ScalableTeam.notifications.models.requests.NotificationSendRequest;
-import com.ScalableTeam.notifications.models.responses.NotificationResponse;
 import com.ScalableTeam.notifications.utils.FirebaseTestDataInitializer;
 import com.google.firebase.cloud.FirestoreClient;
 import org.junit.jupiter.api.AfterEach;
