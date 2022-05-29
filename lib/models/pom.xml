@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>models</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <name>models</name>
     <description>Semester 10 Scalable Reddit Microservice - Models</description>
     <packaging>jar</packaging>

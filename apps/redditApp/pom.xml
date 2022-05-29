@@ -8,6 +8,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>redditApp</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 	<name>redditApp</name>
 	<description>Semester 10 Scalable Reddit Microservice - Reddit or Core</description>
 	<packaging>jar</packaging>

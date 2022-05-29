@@ -12,6 +12,7 @@
     </parent>
 
     <artifactId>notificationsApp</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <name>notificationsApp</name>
     <description>Semester 10 Scalable Reddit Microservice - Notifications</description>
     <packaging>jar</packaging>

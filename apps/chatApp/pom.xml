@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>chatApp</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <name>chatApp</name>
     <description>Semester 10 Scalable Reddit Microservice - Chat Application</description>
     <packaging>jar</packaging>
