@@ -3,7 +3,6 @@ package com.ScalableTeam.amqp;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 
 import static com.ScalableTeam.amqp.MessagePublisher.processMessage;
@@ -27,10 +26,10 @@ public class RabbitMQProducer {
         log.info("Published to {} using routingKey {}. Command: {}, Payload: {}", exchange, routingKey, commandName, payload);
     }
 
-    public Object publishSynchronous(String commandName, Object payload, String exchange, String routingKey) {
-        log.info("Publishing to {} using routingKey {}. Command: {}, Payload: {}", exchange, routingKey, commandName, payload);
-        return amqpTemplate.convertSendAndReceiveAsType(exchange, routingKey, payload, processMessage(commandName),
-                new ParameterizedTypeReference<>() {
-                });
+    public Object publishSynchronous(String commandName, Object payload) {
+        log.info("Publishing. Command: {}, Payload: {}", commandName, payload);
+        Object result = amqpTemplate.convertSendAndReceive(commandName, payload, processMessage(commandName));
+        log.info("Published. Command: {}, Payload: {}", commandName, payload);
+        return result;
     }
 }
