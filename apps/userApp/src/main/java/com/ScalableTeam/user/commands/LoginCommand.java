@@ -18,7 +18,7 @@ public class LoginCommand implements ICommand<LoginBody, LoginResponse> {
     private final UserProfileRepository userProfileRepository;
     private final JwtUtil jwtUtil;
 
-    private final RedisUtility redisUtility;
+    private final RedisUtility  redisUtility;
     @Override
     public LoginResponse execute(LoginBody body){
         String userId = body.getUserId();
@@ -35,8 +35,7 @@ public class LoginCommand implements ICommand<LoginBody, LoginResponse> {
             return new LoginResponse(false, "Wrong username or password");
 
         String authToken = jwtUtil.generateToken(userId);
-        System.out.println(authToken);
-        //TODO: save the token to redis cache
+
         redisUtility.setValue(userId, authToken);
         return new LoginResponse(true,  "Logged in Successfully", authToken);
     }

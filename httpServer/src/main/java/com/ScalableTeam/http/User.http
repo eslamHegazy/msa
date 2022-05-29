@@ -1,9 +1,26 @@
+POST http://localhost:3000/auth/signUp
+Content-Type: application/json
+
+{
+  "userId": "mo",
+  "email": "mo@gmail.com",
+  "password": "pass"
+}
+
+###
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "userId": "mo",
+  "password": "pass"
+}
+
+###
 DELETE http://localhost:3000/user/deleteAccount
 Content-Type: application/json
+Authorization: abcd
 
 {
   "userId": "mo"
 }
-
-
-

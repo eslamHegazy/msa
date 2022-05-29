@@ -1,4 +1,4 @@
-package com.ScalableTeam.user.caching;
+package com.ScalableTeam.user;
 
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +14,7 @@ import java.time.Duration;
 @Configuration
 public class RedisConfig {
 
-    static final String CACHE_NAME = "tokensCache";
+    public static final String CACHE_NAME = "tokensCache";
 
     @Bean
     public RedisCacheManagerBuilderCustomizer redisCacheManagerBuilderCustomizer() {
