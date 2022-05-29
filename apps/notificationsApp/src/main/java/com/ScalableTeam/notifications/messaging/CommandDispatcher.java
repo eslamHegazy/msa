@@ -11,16 +11,17 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+@SuppressWarnings("all")
 @Slf4j
 @Component
 @AllArgsConstructor
 public class CommandDispatcher {
 
-    private final Map<String, Command<Object, Object>> commandsMap;
+    private final Map<String, Command> commandsMap;
 
     @RabbitListener(queues = MessageQueues.NOTIFICATIONS, returnExceptions = "true")
     public Object onMessageReceived(Message<?> message, @Header("command") String commandName) throws Exception {
-        Command<Object, Object> command = commandsMap.get(commandName);
+        Command command = commandsMap.get(commandName);
         log.info("Service: Notifications, Message: {}, Payload: {}",
                 command.getClass().getCanonicalName(),
                 message.getPayload());
