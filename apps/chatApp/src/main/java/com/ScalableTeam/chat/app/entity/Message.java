@@ -71,4 +71,13 @@ public class Message {
         this.timestamp = timestamp;
     }
 
+    @Override
+    public String toString() {
+        return "Message{" +
+                "messageId='" + messageId + '\'' +
+                ", authorId='" + authorId + '\'' +
+                ", content='" + content + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
+    }
 }

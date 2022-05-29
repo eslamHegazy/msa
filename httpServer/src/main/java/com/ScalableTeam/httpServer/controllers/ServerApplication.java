@@ -8,6 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 @SpringBootApplication(scanBasePackages = {
         "com.ScalableTeam.amqp",
         "com.ScalableTeam.models",
+        "com.ScalableTeam.httpServer.controllers"
 })
 @ConfigurationPropertiesScan
 @PropertySource("classpath:message-queues.properties")
