@@ -15,7 +15,7 @@ import java.util.Map;
 public class CommandDispatcher {
     private final Map<String, ICommand> commandMap;
 
-    @RabbitListener(queues = MessageConfig.QUEUE)
+    @RabbitListener(queues = MessageConfig.QUEUE, returnExceptions = "true")
     public Object receiveMessage(Message message, @Header("command") String command) {
         ICommand iCommand = commandMap.get(command);
         return iCommand.execute(message.getPayload());

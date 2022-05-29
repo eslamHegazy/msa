@@ -22,7 +22,7 @@ public class DeleteAccountCommand implements ICommand<DeleteAccountBody, DeleteA
         if(!userProfileRepository.existsById(userId))
             return new DeleteAccountResponse(false, "User does not exist");
         userProfileRepository.deleteById(userId);
-        userRepository.deleteById(userId);
+        userRepository.deleteByUserNameId(userId);
 
         //TODO: delete the profile picture
         return new DeleteAccountResponse(true, "Deleted successfully");

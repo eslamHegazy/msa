@@ -17,11 +17,11 @@ import javax.persistence.*;
         @NamedStoredProcedureQuery(name = "reddit_followers.followReddit",
                 procedureName = "follow_reddit", parameters = {
                 @StoredProcedureParameter(mode = ParameterMode.IN, name = "in_redditId", type = String.class),
-                @StoredProcedureParameter(mode = ParameterMode.OUT, name = "message", type = String.class)})
-//        @NamedStoredProcedureQuery(name = "reddit_followers.unfollowReddit",
-//                procedureName = "unfollow_reddit", parameters = {
-//                @StoredProcedureParameter(mode = ParameterMode.IN, name = "in_redditId", type = String.class),
-//                @StoredProcedureParameter(mode = ParameterMode.OUT, name = "message", type = String.class)})
+                @StoredProcedureParameter(mode = ParameterMode.OUT, name = "numfollowers", type = Integer.class)}),
+        @NamedStoredProcedureQuery(name = "reddit_followers.unfollowReddit",
+                procedureName = "unfollow_reddit", parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.IN, name = "in_redditId", type = String.class),
+                @StoredProcedureParameter(mode = ParameterMode.OUT, name = "numfollowers", type = Integer.class)})
 })
 @SequenceGenerator(
         name = "reddit_followers_sequence",

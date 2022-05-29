@@ -47,7 +47,7 @@ BEGIN
 END;
 ';
 
-alter procedure upvote_post(varchar, varchar, out varchar) owner to maria;
+alter procedure upvote_post(varchar, varchar, out varchar) owner to postgres;
 
 create or replace procedure downvote_post(IN in_userId character varying, IN in_postId character varying, OUT message character varying)
     language plpgsql
@@ -98,7 +98,7 @@ as
     END;
 ';
 
-alter procedure downvote_post(varchar, varchar, out varchar) owner to maria;
+alter procedure downvote_post(varchar, varchar, out varchar) owner to postgres;
 
 create or replace procedure upvote_comment(IN in_userId character varying, IN in_commentId character varying, OUT message character varying)
     language plpgsql
@@ -149,7 +149,7 @@ as
     END;
 ';
 
-alter procedure upvote_comment(varchar, varchar, out varchar) owner to maria;
+alter procedure upvote_comment(varchar, varchar, out varchar) owner to postgres;
 
 create or replace procedure downvote_comment(IN in_userId character varying, IN in_commentId character varying, OUT message character varying)
     language plpgsql
@@ -200,9 +200,9 @@ as
     END;
 ';
 
-alter procedure downvote_comment(varchar, varchar, out varchar) owner to maria;
+alter procedure downvote_comment(varchar, varchar, out varchar) owner to postgres;
 
-create or replace procedure follow_reddit(IN in_redditId character varying, OUT message character varying)
+create or replace procedure follow_reddit(IN in_redditId character varying, OUT numfollowers INT)
     language plpgsql
 as
 '
@@ -218,15 +218,44 @@ as
         IF NOT FOUND THEN
             INSERT INTO reddit_followers (redditid, followercount)
             VALUES (in_redditId, 1);
-            message := ''adding reddit'';
+            numfollowers := 1;
 
         ELSE
            UPDATE reddit_followers
             SET followercount   = followercount + 1
             WHERE redditid = in_redditId;
-            message :=''reddit followed!'';
+            numfollowers := (SELECT followercount FROM reddit_followers WHERE redditid = in_redditId );
         END IF;
+
     END;
 ';
 
-alter procedure follow_reddit(varchar, out varchar) owner to maria;
+alter procedure follow_reddit(varchar, out int) owner to postgres;
+
+create or replace procedure unfollow_reddit(IN in_redditId character varying, OUT numfollowers INT)
+    language plpgsql
+as
+'
+    DECLARE
+        follow reddit_followers%rowtype;
+    BEGIN
+        SELECT *
+        FROM reddit_followers
+        WHERE redditid = in_redditId
+        LIMIT 1
+        INTO follow;
+
+        IF NOT FOUND THEN
+            numfollowers := 0;
+
+        ELSE
+           UPDATE reddit_followers
+            SET followercount   = followercount - 1
+            WHERE redditid = in_redditId;
+            numfollowers := (SELECT followercount FROM reddit_followers WHERE redditid = in_redditId );
+        END IF;
+
+    END;
+';
+
+alter procedure unfollow_reddit(varchar, out int) owner to postgres;

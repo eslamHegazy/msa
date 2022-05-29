@@ -10,20 +10,12 @@ import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import com.ScalableTeam.reddit.app.repository.vote.RedditFollowRepository;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import com.ScalableTeam.reddit.config.PopularityConfig;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Optional;
 
-@ComponentScan("com.ScalableTeam.reddit")
-@Service
-@Slf4j
-public class FollowRedditService implements MyCommand {
+public class UnfollowRedditService implements MyCommand {
     @Autowired
     private ChannelRepository channelRepository;
     @Autowired
@@ -38,15 +30,7 @@ public class FollowRedditService implements MyCommand {
     @Autowired
     private CachingService cachingService;
 
-    private final String serviceName = "followReddit";
-
-    @RabbitListener(queues = "${mq.queues.request.reddit." + serviceName + "}")
-    public String listenToRequestQueue(FollowRedditForm followRedditForm, Message message) throws Exception {
-        String correlationId = message.getMessageProperties().getCorrelationId();
-        String indicator = generalConfig.getCommands().get(serviceName);
-        log.info(indicator + "Service::" + serviceName + ", CorrelationId={}", correlationId);
-        return execute(followRedditForm);
-    }
+    private final String serviceName = "unfollowReddit";
 
     public String execute(Object body) {
 
@@ -87,28 +71,20 @@ public class FollowRedditService implements MyCommand {
                 }
                 userRepository.updateFollowedChannelsWithID(userId, follow);
             }
-
             int numfollowers = redditFollowRepository.followReddit(redditId);
             System.err.println("currentFollowers "+numfollowers);
-            if(numfollowers>=popularityConfig.getChannelFollowersThreshold()){
-                System.err.println("updatingChannelsCache");
+            if (numfollowers == popularityConfig.getPostsUpvoteThreshold()-1) {
+                cachingService.removePreviouslyPopularChannel(redditId);
+            } else {
                 cachingService.updatePopularChannelsCache(redditId, reddit.get());
             }
-            return "followed reddit " + numfollowers;
+
+            return "unfollowed reddit " + numfollowers;
         } catch (Exception e) {
             throw e;
         }
 
     }
 
-    @RabbitListener(queues = "${mq.queues.response.reddit." + serviceName + "}")
-    public void receive(String response, Message message) {
-        String indicator = generalConfig.getCommands().get(serviceName);
-        String correlationId = message.getMessageProperties().getCorrelationId();
-        log.info(indicator + "Service::CorrelationId: {}, message: {}", correlationId, response);
-    }
-
 
 }
-
-

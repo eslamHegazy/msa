@@ -2,6 +2,7 @@ package com.ScalableTeam.user.commands;
 
 import com.ScalableTeam.arango.User;
 import com.ScalableTeam.arango.UserRepository;
+import com.ScalableTeam.models.user.FollowUserResponse;
 import com.ScalableTeam.models.user.UnFollowUserBody;
 import com.ScalableTeam.models.user.UnFollowUserResponse;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,10 @@ public class UnFollowUserCommand implements ICommand<UnFollowUserBody, UnFollowU
         String  userId = body.getUserID();
         String unFollowUserId= body.getRequestedUnFollowUserID();
 
+        if(userId.equals(unFollowUserId)){
+            return new UnFollowUserResponse(false,"Can't unfollow yourself");
+        }
+
         Optional<User> unfollowUser = userRepository.findById(unFollowUserId);
         if(!unfollowUser.isPresent()){
             return new UnFollowUserResponse(false,"The unfollowed user not found in DB!");
@@ -34,6 +39,9 @@ public class UnFollowUserCommand implements ICommand<UnFollowUserBody, UnFollowU
         }
 
         HashMap<String, Boolean> follow = user.get().getFollowedUsers();
+        if(follow==null){
+            return new UnFollowUserResponse(false,"There is no followed users");
+        }
         follow.remove(unFollowUserId);
         user.get().setFollowedUsers(follow);
         userRepository.save(user.get());

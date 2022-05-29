@@ -43,11 +43,11 @@ public class GetPopularChannelsService implements MyCommand {
         String cacheName = "popularChannelsCache";
         Set<String> keys = redisTemplate.keys(cacheName+"*");
         ArrayList<String> popularChannels = new ArrayList<>();
-        System.err.println("hello1");
+//        System.err.println("hello1");
         if(keys!=null) {
-            System.err.println("hello "+keys.size());
+//            System.err.println("hello "+keys.size());
             for (String s : keys) {
-                System.err.println(s + "hi hi");
+//                System.err.println(s + "hi hi");
                 Cache.ValueWrapper v = cacheManager.getCache(cacheName).get(s.substring((cacheName+"::").length()));
                 if (v != null)
                     popularChannels.add((String) v.get());

@@ -60,6 +60,9 @@ public class CachingService {
     public String updatePopularChannelsCache(String redditId, Channel channel){
         return channel.toString();
     }
+    @CacheEvict(cacheNames = "popularChannelsCache", key = "#redditId")
+    public void removePreviouslyPopularChannel(String redditId) {
+    }
     @CacheEvict(cacheNames = "popularPostsCache", key = "#postId")
     public void removePreviouslyPopularPost(String postId) {
     }
