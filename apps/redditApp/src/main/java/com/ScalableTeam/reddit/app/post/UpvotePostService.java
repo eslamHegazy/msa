@@ -10,6 +10,7 @@ import com.ScalableTeam.reddit.app.repository.vote.UserVotePostRepository;
 import com.ScalableTeam.models.reddit.VotePostForm;
 import com.ScalableTeam.reddit.app.validation.PostVoteValidation;
 import com.ScalableTeam.reddit.config.GeneralConfig;
+import com.ScalableTeam.reddit.config.PopularityConfig;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
@@ -40,6 +41,8 @@ public class UpvotePostService implements ICommand<VotePostForm, String> {
     CacheManager cacheManager;
     @Autowired
     CachingService cachingService;
+    @Autowired
+    private PopularityConfig popularityConfig;
 
     @RabbitListener(queues = "${mq.queues.request.reddit.upvotePost}")
     public String execute(VotePostForm votePostForm, Message message) throws Exception {
@@ -71,7 +74,7 @@ public class UpvotePostService implements ICommand<VotePostForm, String> {
             post.setDownvoteCount(downvotesCount);
             postRepository.save(post);
 
-            if (upvotesCount >= popularPostsUpvoteThreshold) {
+            if (upvotesCount >= popularityConfig.getPostsUpvoteThreshold()) {
                 System.err.println("here post");
                 cachingService.updatePopularPostsCache(postId, post);
             }
