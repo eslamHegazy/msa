@@ -1,5 +1,6 @@
 package com.ScalableTeam.httpServer.controllers;
 
+import com.ScalableTeam.amqp.MessageQueues;
 import com.ScalableTeam.amqp.RabbitMQProducer;
 import com.ScalableTeam.httpServer.utils.CommandsMapper;
 import com.ScalableTeam.models.notifications.requests.DeviceTokenRequest;
@@ -23,14 +24,14 @@ public class DeviceTokensController {
     @RequestMapping(method = RequestMethod.PUT, value = "/registerDeviceToken")
     private void registerDeviceToken(@RequestBody DeviceTokenRequest deviceTokenRequest) {
         String commandName = commandsMapper.getNotifications().get("registerDeviceToken");
-        log.info("Controller - Command: {}, Payload: {}", commandName, deviceTokenRequest);
-        rabbitMQProducer.publishAsynchronous(commandName, deviceTokenRequest);
+        log.info("Controller - Queue: {}, Command: {}, Payload: {}", MessageQueues.NOTIFICATIONS, commandName, deviceTokenRequest);
+        rabbitMQProducer.publishAsynchronous(MessageQueues.NOTIFICATIONS, commandName, deviceTokenRequest);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/unregisterDeviceToken")
     private void unregisterDeviceToken(@RequestBody DeviceTokenRequest deviceTokenRequest) {
         String commandName = commandsMapper.getNotifications().get("unregisterDeviceToken");
-        log.info("Controller - Command: {}, Payload: {}", commandName, deviceTokenRequest);
-        rabbitMQProducer.publishAsynchronous(commandName, deviceTokenRequest);
+        log.info("Controller - Queue: {}, Command: {}, Payload: {}", MessageQueues.NOTIFICATIONS, commandName, deviceTokenRequest);
+        rabbitMQProducer.publishAsynchronous(MessageQueues.NOTIFICATIONS, commandName, deviceTokenRequest);
     }
 }

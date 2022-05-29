@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public class MessagePublisher {
 
-    private static final String HEADER_COMMAND = "command";
+    private static final String HEADER_COMMAND = "Command";
 
     public static MessagePostProcessor getMessageHeaders(String responseQueue) {
         UUID correlationId = UUID.randomUUID();

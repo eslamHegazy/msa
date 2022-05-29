@@ -58,4 +58,21 @@ public class UserController {
         });
     }
 
+    @PostMapping("/editProfile")
+    public EditProfileResponse editProfile(@RequestBody EditProfileBody body){
+        return rabbitTemplate.convertSendAndReceiveAsType(QUEUE, body, message -> {
+            message.getMessageProperties().setHeader("command", "editProfileCommand");
+            return message;
+        }, new ParameterizedTypeReference<>() {
+        });
+    }
+    @PostMapping("/updatePhoto")
+    public UpdatePhotoResponse updatePhoto(@RequestBody UpdatePhotoBody body){
+        return rabbitTemplate.convertSendAndReceiveAsType(QUEUE, body, message -> {
+            message.getMessageProperties().setHeader("command", "updatePhotoCommand");
+            return message;
+        }, new ParameterizedTypeReference<>() {
+        });
+    }
+
 }
