@@ -14,22 +14,22 @@ public class RabbitMQProducer {
 
     private final AmqpTemplate amqpTemplate;
 
-    public void publishAsynchronous(String commandName, Object payload) {
-        log.info("Publishing. Command: {}, Payload: {}", commandName, payload);
-        amqpTemplate.convertAndSend(commandName, payload, processMessage(commandName));
-        log.info("Published. Command: {}, Payload: {}", commandName, payload);
+    public void publishAsynchronous(String queueName, String commandName, Object payload) {
+        log.info("Publishing. Queue: {}, Command: {}, Payload: {}", queueName, commandName, payload);
+        amqpTemplate.convertAndSend(queueName, payload, processMessage(commandName));
+        log.info("Published. Queue: {}, Command: {}, Payload: {}", queueName, commandName, payload);
     }
 
-    public void publishAsynchronousToQueue(String commandName, String responseQueue, Object payload, String exchange, String routingKey) {
-        log.info("Publishing to {} using routingKey {}. Command: {}, Payload: {}", exchange, routingKey, commandName, payload);
-        amqpTemplate.convertAndSend(exchange, routingKey, payload, processMessage(commandName, responseQueue));
-        log.info("Published to {} using routingKey {}. Command: {}, Payload: {}", exchange, routingKey, commandName, payload);
+    public void publishAsynchronousToQueue(String queueName, String commandName, Object payload, String responseQueue) {
+        log.info("Publishing. Queue: {}, Command: {}, Payload: {}, ResponseQueue: {}", queueName, commandName, payload, responseQueue);
+        amqpTemplate.convertAndSend(queueName, payload, processMessage(commandName, responseQueue));
+        log.info("Published. Queue: {}, Command: {}, Payload: {}, ResponseQueue: {}", queueName, commandName, payload, responseQueue);
     }
 
-    public Object publishSynchronous(String commandName, Object payload) {
-        log.info("Publishing. Command: {}, Payload: {}", commandName, payload);
-        Object result = amqpTemplate.convertSendAndReceive(commandName, payload, processMessage(commandName));
-        log.info("Published. Command: {}, Payload: {}", commandName, payload);
+    public Object publishSynchronous(String queueName, String commandName, Object payload) {
+        log.info("Publishing. Queue: {}, Command: {}, Payload: {}", queueName, commandName, payload);
+        Object result = amqpTemplate.convertSendAndReceive(queueName, payload, processMessage(commandName));
+        log.info("Published. Queue: {}, Command: {}, Payload: {}", queueName, commandName, payload);
         return result;
     }
 }
