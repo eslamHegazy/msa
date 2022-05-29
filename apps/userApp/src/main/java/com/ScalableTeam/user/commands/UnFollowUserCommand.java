@@ -39,14 +39,14 @@ public class UnFollowUserCommand implements ICommand<UnFollowUserBody, UnFollowU
         }
 
         HashMap<String, Boolean> follow = user.get().getFollowedUsers();
-        if(follow==null){
-            return new UnFollowUserResponse(false,"There is no followed users");
+        if(follow==null||!follow.containsKey(unFollowUserId)){
+            return new UnFollowUserResponse(false,"There is no followed user");
         }
         follow.remove(unFollowUserId);
         user.get().setFollowedUsers(follow);
         userRepository.save(user.get());
 
-        return new UnFollowUserResponse(false,"User unfollowed successfully");
+        return new UnFollowUserResponse(true,"User unfollowed successfully");
 
     }
 }

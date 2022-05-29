@@ -51,7 +51,7 @@ public class FollowUserCommand implements ICommand<FollowUserBody, FollowUserRes
 
         HashMap<String, Boolean> follow = new HashMap<String, Boolean>();
         follow.put(requestedFollowUserID, true);
-//        userRepository.updateFollowedUsersWithID(userId, follow);
+        userRepository.updateFollowedUsersWithID(userId, follow);
         return new FollowUserResponse(true, "User followed successfully");
 
     }

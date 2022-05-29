@@ -39,4 +39,23 @@ public class UserController {
         }, new ParameterizedTypeReference<>() {
         });
     }
+
+    @PostMapping("/followUser")
+    public FollowUserResponse FollowUser(@RequestBody FollowUserBody body){
+        return rabbitTemplate.convertSendAndReceiveAsType(QUEUE, body, message -> {
+            message.getMessageProperties().setHeader("command", "followUserCommand");
+            return message;
+        }, new ParameterizedTypeReference<>() {
+        });
+    }
+
+    @PostMapping("/unfollowUser")
+    public UnFollowUserResponse UnfollowUser(@RequestBody UnFollowUserBody body){
+        return rabbitTemplate.convertSendAndReceiveAsType(QUEUE, body, message -> {
+            message.getMessageProperties().setHeader("command", "unFollowUserCommand");
+            return message;
+        }, new ParameterizedTypeReference<>() {
+        });
+    }
+
 }
