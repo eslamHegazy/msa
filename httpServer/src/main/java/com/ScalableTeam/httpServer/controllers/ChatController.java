@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.ScalableTeam.amqp.MessagePublisher.getMessageHeaders;
-
 @RestController
 @RequestMapping("/chat")
 @AllArgsConstructor
@@ -23,6 +21,7 @@ public class ChatController {
 
     @Autowired
     private Config config;
+
     @Autowired
     private RabbitMQProducer rabbitMQProducer;
 

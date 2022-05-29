@@ -1,4 +1,4 @@
-package com.ScalableTeam.httpServer.controllers;
+package com.ScalableTeam.httpServer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,6 +13,7 @@ import org.springframework.context.annotation.PropertySource;
 })
 @ConfigurationPropertiesScan
 @PropertySource("classpath:message-queues.properties")
+@PropertySource("classpath:commands.properties")
 public class ServerApplication {
 
     public static void main(String[] args) {
