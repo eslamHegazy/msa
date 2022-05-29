@@ -70,7 +70,9 @@ public class BanUserService implements MyCommand {
             HashMap<String, Boolean> ban = new HashMap<String, Boolean>();
             ban.put(requestedBanUserId, true);
             channelRepository.updateBannedUsersWithID(redditId, ban);
-
+//            userRepository.removeFollowedChannelsWithID(redditId);
+            toban.getFollowedChannels().remove(redditId);
+            userRepository.save(toban);
             return "user " + requestedBanUserId + " banned successfully from channel " + redditId;
         } catch (Exception e) {
             return e.getMessage();
