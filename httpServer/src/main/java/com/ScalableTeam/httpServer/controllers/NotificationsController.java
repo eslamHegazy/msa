@@ -1,5 +1,6 @@
 package com.ScalableTeam.httpServer.controllers;
 
+import com.ScalableTeam.amqp.MessageQueues;
 import com.ScalableTeam.amqp.RabbitMQProducer;
 import com.ScalableTeam.httpServer.utils.CommandsMapper;
 import com.ScalableTeam.models.notifications.requests.NotificationDeleteRequest;
@@ -22,28 +23,28 @@ public class NotificationsController {
     @RequestMapping(method = RequestMethod.POST, value = "/sendNotification")
     private void sendNotification(@RequestBody NotificationSendRequest notificationSendRequest) {
         String commandName = commandsMapper.getNotifications().get("sendNotification");
-        log.info("Controller - Command: {}, Payload: {}", commandName, notificationSendRequest);
-        rabbitMQProducer.publishAsynchronous(commandName, notificationSendRequest);
+        log.info("Controller - Queue: {}, Command: {}, Payload: {}", MessageQueues.NOTIFICATIONS, commandName, notificationSendRequest);
+        rabbitMQProducer.publishAsynchronous(MessageQueues.NOTIFICATIONS, commandName, notificationSendRequest);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getNotifications/{userId}")
     private Object getNotifications(@PathVariable String userId) {
         String commandName = commandsMapper.getNotifications().get("getNotifications");
-        log.info("Controller - Command: {}, Payload: {}", commandName, userId);
-        return rabbitMQProducer.publishSynchronous(commandName, userId);
+        log.info("Controller - Queue: {}, Command: {}, Payload: {}", MessageQueues.NOTIFICATIONS, commandName, userId);
+        return rabbitMQProducer.publishSynchronous(MessageQueues.NOTIFICATIONS, commandName, userId);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/markNotificationAsRead")
     private void markNotificationAsRead(@RequestBody NotificationReadRequest notificationReadRequest) {
         String commandName = commandsMapper.getNotifications().get("markNotificationAsRead");
-        log.info("Controller - Command: {}, Payload: {}", commandName, notificationReadRequest);
-        rabbitMQProducer.publishAsynchronous(commandName, notificationReadRequest);
+        log.info("Controller - Queue: {}, Command: {}, Payload: {}", MessageQueues.NOTIFICATIONS, commandName, notificationReadRequest);
+        rabbitMQProducer.publishAsynchronous(MessageQueues.NOTIFICATIONS, commandName, notificationReadRequest);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/deleteNotification")
     private void deleteNotification(@RequestBody NotificationDeleteRequest notificationDeleteRequest) {
         String commandName = commandsMapper.getNotifications().get("deleteNotification");
-        log.info("Controller - Command: {}, Payload: {}", commandName, notificationDeleteRequest);
-        rabbitMQProducer.publishAsynchronous(commandName, notificationDeleteRequest);
+        log.info("Controller - Queue: {}, Command: {}, Payload: {}", MessageQueues.NOTIFICATIONS, commandName, notificationDeleteRequest);
+        rabbitMQProducer.publishAsynchronous(MessageQueues.NOTIFICATIONS, commandName, notificationDeleteRequest);
     }
 }

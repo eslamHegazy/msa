@@ -1,5 +1,6 @@
 package com.ScalableTeam.notifications.messaging;
 
+import com.ScalableTeam.amqp.MessageQueues;
 import com.ScalableTeam.notifications.utils.Command;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,7 @@ public class CommandDispatcher {
 
     private final Map<String, Command<Object, Object>> commandsMap;
 
-    @RabbitListener(queues = MessagingConfig.QUEUE_NAME, returnExceptions = "true")
+    @RabbitListener(queues = MessageQueues.NOTIFICATIONS, returnExceptions = "true")
     public Object onMessageReceived(Message<?> message, @Header("command") String commandName) throws Exception {
         Command<Object, Object> command = commandsMap.get(commandName);
         log.info("Service: Notifications, Message: {}, Payload: {}",
