@@ -1,14 +1,10 @@
 package com.ScalableTeam.httpServer.controllers;
 
-import com.ScalableTeam.models.user.DeleteAccountBody;
-import com.ScalableTeam.models.user.DeleteAccountResponse;
+import com.ScalableTeam.models.user.*;
 import lombok.AllArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("user")
@@ -21,6 +17,24 @@ public class UserController {
     public DeleteAccountResponse deleteUser(@RequestBody DeleteAccountBody body){
         return rabbitTemplate.convertSendAndReceiveAsType(QUEUE, body, message -> {
             message.getMessageProperties().setHeader("command", "deleteAccountCommand");
+            return message;
+        }, new ParameterizedTypeReference<>() {
+        });
+    }
+
+    @PostMapping("/blockUser")
+    public BlockedUserResponse blockUser(@RequestBody BlockedUserBody body){
+        return rabbitTemplate.convertSendAndReceiveAsType(QUEUE, body, message -> {
+            message.getMessageProperties().setHeader("command", "blockUserCommand");
+            return message;
+        }, new ParameterizedTypeReference<>() {
+        });
+    }
+
+    @PostMapping("/reportUser")
+    public ReportedUserResponse reportUser(@RequestBody ReportUserBody body){
+        return rabbitTemplate.convertSendAndReceiveAsType(QUEUE, body, message -> {
+            message.getMessageProperties().setHeader("command", "reportUserCommand");
             return message;
         }, new ParameterizedTypeReference<>() {
         });
