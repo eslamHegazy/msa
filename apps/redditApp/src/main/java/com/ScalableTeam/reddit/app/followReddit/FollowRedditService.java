@@ -34,62 +34,64 @@ public class FollowRedditService implements MyCommand {
 
     private final String serviceName = "followReddit";
 
-    @RabbitListener(queues = "${mq.queues.request.reddit."+serviceName+"}")
+    @RabbitListener(queues = "${mq.queues.request.reddit." + serviceName + "}")
     public String listenToRequestQueue(FollowRedditForm followRedditForm, Message message) throws Exception {
         String correlationId = message.getMessageProperties().getCorrelationId();
         String indicator = generalConfig.getCommands().get(serviceName);
-        log.info(indicator + "Service::"+serviceName+", CorrelationId={}", correlationId);
+        log.info(indicator + "Service::" + serviceName + ", CorrelationId={}", correlationId);
         return execute(followRedditForm);
     }
 
-    public String execute(Object body){
+    public String execute(Object body) {
 
 
         FollowRedditForm request = (FollowRedditForm) body;
 
-        String  userId = request.getUserId();
-        String redditId= request.getRedditId();
+        String userId = request.getUserId();
+        String redditId = request.getRedditId();
 
-        try{
-        Optional<Channel> reddit  = channelRepository.findById(redditId);
-        if (!reddit.isPresent()){
-            throw new IllegalStateException("Reddit not found in DB!");
-        }
-
-        Optional<User> user = userRepository.findById(userId);
-        if(!user.isPresent()){
-            throw new IllegalStateException("User not found in DB!");
-
-        }
-
-
-        if(reddit.get().getBannedUsers()!=null&&reddit.get().getBannedUsers().containsKey(userId)){
-            return "User "+userId + " banned from this channel " + redditId;
-        }
-
-        User actualUser = user.get();
-
-
-        HashMap<String, Boolean> follow = new HashMap<String, Boolean>();
-        follow.put(redditId, true);
-        if (actualUser.getFollowedChannels()==null){
-            actualUser.setFollowedChannels(follow);
-            userRepository.save(actualUser);
-        }else {
-            if( actualUser.getFollowedChannels().containsKey(redditId)){
-                return "user already following channel";
+        try {
+            Optional<Channel> reddit = channelRepository.findById(redditId);
+            if (!reddit.isPresent()) {
+                throw new IllegalStateException("Reddit not found in DB!");
             }
-            userRepository.updateFollowedChannelsWithID(userId, follow);
-        }
+
+            Optional<User> user = userRepository.findById(userId);
+            if (!user.isPresent()) {
+                throw new IllegalStateException("User not found in DB!");
+
+            }
+
+
+            if (reddit.get().getBannedUsers() != null && reddit.get().getBannedUsers().containsKey(userId)) {
+                return "User " + userId + " banned from this channel " + redditId;
+            }
+
+            User actualUser = user.get();
+
+
+            HashMap<String, Boolean> follow = new HashMap<String, Boolean>();
+            follow.put(redditId, true);
+            if (actualUser.getFollowedChannels() == null) {
+                actualUser.setFollowedChannels(follow);
+                userRepository.save(actualUser);
+            } else {
+                if (actualUser.getFollowedChannels().containsKey(redditId)) {
+                    return "user already following channel";
+                }
+                userRepository.updateFollowedChannelsWithID(userId, follow);
+            }
             String msg = redditFollowRepository.followReddit(redditId);
 
+
             return msg;
-        }catch(Exception e){
+        } catch (Exception e) {
             throw e;
         }
 
     }
-    @RabbitListener(queues = "${mq.queues.response.reddit."+serviceName+"}")
+
+    @RabbitListener(queues = "${mq.queues.response.reddit." + serviceName + "}")
     public void receive(String response, Message message) {
         String indicator = generalConfig.getCommands().get(serviceName);
         String correlationId = message.getMessageProperties().getCorrelationId();

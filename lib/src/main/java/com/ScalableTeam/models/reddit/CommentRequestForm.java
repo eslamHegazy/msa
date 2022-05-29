@@ -1,5 +1,6 @@
 package com.ScalableTeam.models.reddit;
 
+
 import com.ScalableTeam.reddit.app.entity.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
