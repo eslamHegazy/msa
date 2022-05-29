@@ -28,7 +28,7 @@ public class RemovePhotoCommand implements ICommand<RemovePhotoBody, RemovePhoto
             return new RemovePhotoResponse("Successful Deletion", true);
         } catch (Exception e) {
 //            throw new RuntimeException(e.getMessage());
-            return new RemovePhotoResponse(e.getMessage(), true);
+            return new RemovePhotoResponse(e.getMessage(), false);
         }
     }
 }

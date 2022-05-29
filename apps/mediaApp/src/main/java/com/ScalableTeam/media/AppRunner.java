@@ -26,9 +26,7 @@ public class AppRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
 //        successfulDownload("s5f914728-5879-4ce9-9f89-a6231052e162.jpeg");
 //        successfulUpload("/test_image.jpg");
-        UDRD("test_image.jpg");
-
-
+//        UDRD("test_image.jpg");
     }
 
     final DownloadPhotoCommand downloadPhotoCommand;
