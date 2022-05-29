@@ -7,7 +7,7 @@ import java.util.Map;
 
 @ConfigurationProperties(prefix = "general")
 @Data
-public class GeneralConfig {
+public class LoggingConfig {
     private Map<String, String> commands;
     private String environment;
 }
