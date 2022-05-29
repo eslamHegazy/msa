@@ -3,6 +3,7 @@ package com.ScalableTeam.user;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication(scanBasePackages = {
@@ -13,7 +14,7 @@ import org.springframework.context.annotation.PropertySource;
         "com.ScalableTeam.services"
 })
 @ConfigurationPropertiesScan
-//@EnableEurekaClient
+@EnableCaching
 @PropertySource("classpath:message-queues.properties")
 public class RedditUserApplication {
 

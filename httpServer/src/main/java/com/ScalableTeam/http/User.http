@@ -1,0 +1,7 @@
+DELETE http://localhost:3000/user/deleteAccount
+Content-Type: application/json
+
+{
+  "userId": "mo"
+}
+

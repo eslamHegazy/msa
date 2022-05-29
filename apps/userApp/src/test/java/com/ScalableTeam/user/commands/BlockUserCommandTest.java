@@ -4,6 +4,7 @@ import com.ScalableTeam.arango.User;
 import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.models.user.BlockedUserBody;
 import com.ScalableTeam.models.user.BlockedUserResponse;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,4 +68,8 @@ public class BlockUserCommandTest {
         assertEquals(response.getMessage(), "User blocked successfully");
     }
 
+    @AfterEach
+    void tearDown() {
+        userRepository.deleteAll();
+    }
 }

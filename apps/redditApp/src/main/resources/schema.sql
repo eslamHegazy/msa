@@ -47,7 +47,7 @@ BEGIN
 END;
 ';
 
-alter procedure upvote_post(varchar, varchar, out varchar) owner to maria;
+alter procedure upvote_post(varchar, varchar, out varchar) owner to postgres;
 
 create or replace procedure downvote_post(IN in_userId character varying, IN in_postId character varying, OUT message character varying)
     language plpgsql
@@ -98,7 +98,7 @@ as
     END;
 ';
 
-alter procedure downvote_post(varchar, varchar, out varchar) owner to maria;
+alter procedure downvote_post(varchar, varchar, out varchar) owner to postgres;
 
 create or replace procedure upvote_comment(IN in_userId character varying, IN in_commentId character varying, OUT message character varying)
     language plpgsql
@@ -149,7 +149,7 @@ as
     END;
 ';
 
-alter procedure upvote_comment(varchar, varchar, out varchar) owner to maria;
+alter procedure upvote_comment(varchar, varchar, out varchar) owner to postgres;
 
 create or replace procedure downvote_comment(IN in_userId character varying, IN in_commentId character varying, OUT message character varying)
     language plpgsql
@@ -200,7 +200,7 @@ as
     END;
 ';
 
-alter procedure downvote_comment(varchar, varchar, out varchar) owner to maria;
+alter procedure downvote_comment(varchar, varchar, out varchar) owner to postgres;
 
 create or replace procedure follow_reddit(IN in_redditId character varying, OUT message character varying)
     language plpgsql
@@ -229,4 +229,4 @@ as
     END;
 ';
 
-alter procedure follow_reddit(varchar, out varchar) owner to maria;
+alter procedure follow_reddit(varchar, out varchar) owner to postgres;
