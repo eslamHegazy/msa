@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication(scanBasePackages = {
+        "com.ScalableTeam.httpServer",
         "com.ScalableTeam.amqp",
         "com.ScalableTeam.models",
 })

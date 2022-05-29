@@ -15,6 +15,7 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import com.ScalableTeam.reddit.app.caching.CachingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ public class DownvotePostService implements ICommand<VotePostForm, String> {
         return execute(votePostForm);
     }
 
-    @Transactional(rollbackFor = {Exception.class})
+    @Transactional(rollbackFor = {Exception.class}, isolation = Isolation.REPEATABLE_READ)
     @Override
     public String execute(VotePostForm votePostForm) throws Exception {
         int popularPostsUpvoteThreshold = 1;

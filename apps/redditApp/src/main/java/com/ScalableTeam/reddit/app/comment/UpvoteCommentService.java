@@ -15,6 +15,7 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @ComponentScan("com.ScalableTeam.reddit")
@@ -36,7 +37,7 @@ public class UpvoteCommentService implements ICommand<VoteCommentForm, String> {
         return execute(voteCommentForm);
     }
 
-    @Transactional(rollbackFor = {Exception.class})
+    @Transactional(rollbackFor = {Exception.class}, isolation = Isolation.REPEATABLE_READ)
     @Override
     public String execute(VoteCommentForm voteCommentForm) throws Exception {
         String userNameId = voteCommentForm.getUserNameId();

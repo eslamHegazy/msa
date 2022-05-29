@@ -13,7 +13,7 @@ BEGIN
     INTO v_vote;
 
     IF NOT FOUND THEN
-        message := ''upvoted your post'';
+        message := ''upvoted your post with id'';
         INSERT INTO user_vote_post (id, userId, postId, type)
         VALUES (nextval(''user_vote_post_sequence''), in_userId, in_postId, 1);
         INSERT INTO post_votes (postId, upvotes, downvotes)
@@ -24,7 +24,7 @@ BEGIN
             WHERE post_votes.postId = in_postId;
     ELSE
         IF v_vote.type = 1 THEN
-            message := ''removed your upvote on the post'';
+            message := ''removed their upvote on your post with id'';
             DELETE
             FROM user_vote_post
             WHERE userId = in_userId
@@ -33,7 +33,7 @@ BEGIN
             SET upvotes = upvotes - 1
             WHERE postId = in_postId;
         ELSE
-            message := ''removed your downvote on the post, and upvoted it instead'';
+            message := ''removed their downvote and upvoted instead your post with id'';
             UPDATE user_vote_post
             SET type = 1
             WHERE userId = in_userId
@@ -64,7 +64,7 @@ as
         INTO v_vote;
 
         IF NOT FOUND THEN
-            message := ''downvoted your post'';
+            message := ''downvoted your post with id'';
             INSERT INTO user_vote_post (id, userId, postId, type)
             VALUES (nextval(''user_vote_post_sequence''), in_userId, in_postId, -1);
             INSERT INTO post_votes (postId, upvotes, downvotes)
@@ -75,7 +75,7 @@ as
             WHERE post_votes.postId = in_postId;
         ELSE
             IF v_vote.type = -1 THEN
-                message := ''removed your downvote on the post'';
+                message := ''removed their downvote on your post with id'';
                 DELETE
                 FROM user_vote_post
                 WHERE userId = in_userId
@@ -84,7 +84,7 @@ as
                 SET downvotes = post_votes.downvotes - 1
                 WHERE postId = in_postId;
             ELSE
-                message := ''removed your upvote on the post, and downvoted it instead'';
+                message := ''removed their upvote and downvoted instead your post with id'';
                 UPDATE user_vote_post
                 SET type = -1
                 WHERE userId = in_userId
@@ -115,7 +115,7 @@ as
         INTO v_vote;
 
         IF NOT FOUND THEN
-            message := ''upvoted your comment'';
+            message := ''upvoted your comment with id'';
             INSERT INTO user_vote_comment (id, userId, commentId, type)
             VALUES (nextval(''user_vote_comment_sequence''), in_userId, in_commentId, 1);
             INSERT INTO comment_votes (commentId, upvotes, downvotes)
@@ -126,7 +126,7 @@ as
             WHERE comment_votes.commentId = in_commentId;
         ELSE
             IF v_vote.type = 1 THEN
-                message := ''removed your upvote on the comment'';
+                message := ''removed their upvote on your comment with id'';
                 DELETE
                 FROM user_vote_comment
                 WHERE userId = in_userId
@@ -135,7 +135,7 @@ as
                 SET upvotes = upvotes - 1
                 WHERE commentId = in_commentId;
             ELSE
-                message := ''removed your downvote on the comment, and upvoted it instead'';
+                message := ''removed their downvote and upvoted instead your comment with id'';
                 UPDATE user_vote_comment
                 SET type = 1
                 WHERE userId = in_userId
@@ -166,7 +166,7 @@ as
         INTO v_vote;
 
         IF NOT FOUND THEN
-            message := ''downvoted your comment'';
+            message := ''downvoted your comment with id'';
             INSERT INTO user_vote_comment (id, userId, commentId, type)
             VALUES (nextval(''user_vote_comment_sequence''), in_userId, in_commentId, -1);
             INSERT INTO comment_votes (commentId, upvotes, downvotes)
@@ -177,7 +177,7 @@ as
             WHERE comment_votes.commentId = in_commentId;
         ELSE
             IF v_vote.type = -1 THEN
-                message := ''removed your downvote on the comment'';
+                message := ''removed their downvote on your comment with id'';
                 DELETE
                 FROM user_vote_comment
                 WHERE userId = in_userId
@@ -186,7 +186,7 @@ as
                 SET downvotes = comment_votes.downvotes - 1
                 WHERE commentId = in_commentId;
             ELSE
-                message := ''removed your upvote on the comment, and downvoted it instead'';
+                message := ''removed their upvote and downvoted instead your comment with id'';
                 UPDATE user_vote_comment
                 SET type = -1
                 WHERE userId = in_userId

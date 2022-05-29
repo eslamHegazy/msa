@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @ComponentScan("com.ScalableTeam.reddit")
@@ -48,7 +49,7 @@ public class UpvotePostService implements ICommand<VotePostForm, String> {
         return execute(votePostForm);
     }
 
-    @Transactional(rollbackFor = {Exception.class})
+    @Transactional(rollbackFor = {Exception.class}, isolation = Isolation.REPEATABLE_READ)
     @Override
     public String execute(VotePostForm votePostForm) throws Exception {
         int popularPostsUpvoteThreshold = 1;
@@ -58,23 +59,33 @@ public class UpvotePostService implements ICommand<VotePostForm, String> {
         log.info(indicator + "Service::Post Id={}, User Id={}", postId, userNameId);
 
         postVoteValidation.validatePostVote(userNameId, postId);
-        String responseMessage = userVotePostRepository.upvotePost(userNameId, postId);
-
-        PostVote postVote = postVoteRepository.findById(postId).get();
-        Long upvotesCount = postVote.getUpvotes(), downvotesCount = postVote.getDownvotes();
         Post post = postRepository.findById(postId).get();
-        post.setUpvoteCount(upvotesCount);
-        post.setDownvoteCount(downvotesCount);
-        postRepository.save(post);
-        if (upvotesCount >= popularPostsUpvoteThreshold) {
-            System.err.println("here post");
-            cachingService.updatePopularPostsCache(postId, post);
+        Long oldUpvotesCount = post.getUpvoteCount(), oldDownvotesCount = post.getDownvoteCount();
+
+        try {
+            String responseMessage = userVotePostRepository.upvotePost(userNameId, postId);
+
+            PostVote postVote = postVoteRepository.findById(postId).get();
+            Long upvotesCount = postVote.getUpvotes(), downvotesCount = postVote.getDownvotes();
+            post.setUpvoteCount(upvotesCount);
+            post.setDownvoteCount(downvotesCount);
+            postRepository.save(post);
+
+            if (upvotesCount >= popularPostsUpvoteThreshold) {
+                System.err.println("here post");
+                cachingService.updatePopularPostsCache(postId, post);
+            }
+            if (cacheManager.getCache("postsCache").get(postId) != null) {
+                cachingService.updatePostsCache(postId, post);
+            }
+            // todo: integrate notifications
+            return String.format("User %s %s %s", userNameId, responseMessage, postId);
+        } catch (Exception e) {
+            post.setUpvoteCount(oldUpvotesCount);
+            post.setDownvoteCount(oldDownvotesCount);
+            postRepository.save(post);
+            throw e;
         }
-        if (cacheManager.getCache("postsCache").get(postId) != null) {
-            cachingService.updatePostsCache(postId, post);
-        }
-        // todo: integrate notifications
-        return String.format("User %s %s %s", userNameId, responseMessage, postId);
     }
 
     @RabbitListener(queues = "${mq.queues.response.reddit.upvotePost}")

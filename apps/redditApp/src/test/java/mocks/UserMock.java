@@ -21,4 +21,10 @@ public class UserMock {
     public static String getId() {
         return id;
     }
+
+    public static User getUserWithId(String id) {
+        User user = getUser();
+        user.setUserNameId(id);
+        return user;
+    }
 }
