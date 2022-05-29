@@ -21,35 +21,38 @@ public class FollowUserCommand implements ICommand<FollowUserBody, FollowUserRes
     private final UserRepository userRepository;
 
 
-    public FollowUserResponse execute(FollowUserBody body){
+    public FollowUserResponse execute(FollowUserBody body) {
 
-        String  userId = body.getUserID();
-        String requestedFollowUserID= body.getRequestedFollowUserID();
+        String userId = body.getUserID();
+        String requestedFollowUserID = body.getRequestedFollowUserID();
 
+        if(userId.equals(requestedFollowUserID)){
+            return new FollowUserResponse(false,"Can't follow yourself");
+        }
         Optional<User> followUser = userRepository.findById(requestedFollowUserID);
-        if(!followUser.isPresent()){
-            return new FollowUserResponse(false,"The followed user not found in DB!");
+        if (!followUser.isPresent()) {
+            return new FollowUserResponse(false, "The followed user not found in DB!");
         }
 
         Optional<User> user = userRepository.findById(userId);
-        if(!user.isPresent()){
-            return new FollowUserResponse(false,"User not found in DB!");
+        if (!user.isPresent()) {
+            return new FollowUserResponse(false, "User not found in DB!");
         }
 
-        HashMap<String, Boolean> blocked=userRepository.findById(userId).get().getBlockedUsers();
-        if(blocked.containsKey(requestedFollowUserID)){
-            return new FollowUserResponse(false,"you have blocked this user!");
+        HashMap<String, Boolean> blocked = userRepository.findById(userId).get().getBlockedUsers();
+        if (blocked != null && blocked.containsKey(requestedFollowUserID)) {
+            return new FollowUserResponse(false, "you have blocked this user!");
         }
 
-        HashMap<String, Boolean> MeBlocked=userRepository.findById(requestedFollowUserID).get().getBlockedUsers();
-        if(MeBlocked.containsKey(userId)){
-            return new FollowUserResponse(false,"This followed user has blocked you!");
+        HashMap<String, Boolean> MeBlocked = userRepository.findById(requestedFollowUserID).get().getBlockedUsers();
+        if (MeBlocked != null && MeBlocked.containsKey(userId)) {
+            return new FollowUserResponse(false, "This followed user has blocked you!");
         }
 
         HashMap<String, Boolean> follow = new HashMap<String, Boolean>();
         follow.put(requestedFollowUserID, true);
-        userRepository.updateFollowedUsersWithID(userId, follow);
-        return new FollowUserResponse(true,"User followed successfully");
+//        userRepository.updateFollowedUsersWithID(userId, follow);
+        return new FollowUserResponse(true, "User followed successfully");
 
     }
 }
