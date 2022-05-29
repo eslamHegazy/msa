@@ -5,9 +5,11 @@ import com.ScalableTeam.arango.User;
 import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.models.reddit.FollowRedditForm;
 import com.ScalableTeam.reddit.MyCommand;
+import com.ScalableTeam.reddit.app.caching.CachingService;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import com.ScalableTeam.reddit.app.repository.vote.RedditFollowRepository;
 import com.ScalableTeam.reddit.config.GeneralConfig;
+import com.ScalableTeam.reddit.config.PopularityConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -31,6 +33,10 @@ public class FollowRedditService implements MyCommand {
     private GeneralConfig generalConfig;
     @Autowired
     private RedditFollowRepository redditFollowRepository;
+    @Autowired
+    private PopularityConfig popularityConfig;
+    @Autowired
+    private CachingService cachingService;
 
     private final String serviceName = "followReddit";
 
@@ -83,6 +89,11 @@ public class FollowRedditService implements MyCommand {
             }
 
             int numfollowers = redditFollowRepository.followReddit(redditId);
+            System.err.println("currentFollowers "+numfollowers);
+            if(numfollowers>=popularityConfig.getChannelFollowersThreshold()){
+                System.err.println("updatingChannelsCache");
+                cachingService.updatePopularChannelsCache(redditId, reddit.get());
+            }
             return "followed reddit " + numfollowers;
         } catch (Exception e) {
             throw e;

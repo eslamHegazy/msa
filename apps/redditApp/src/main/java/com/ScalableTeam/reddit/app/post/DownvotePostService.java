@@ -9,6 +9,7 @@ import com.ScalableTeam.reddit.app.repository.vote.UserVotePostRepository;
 import com.ScalableTeam.models.reddit.VotePostForm;
 import com.ScalableTeam.reddit.app.validation.PostVoteValidation;
 import com.ScalableTeam.reddit.config.GeneralConfig;
+import com.ScalableTeam.reddit.config.PopularityConfig;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
@@ -37,6 +38,8 @@ public class DownvotePostService implements ICommand<VotePostForm, String> {
     private CacheManager cacheManager;
     @Autowired
     private CachingService cachingService;
+    @Autowired
+    private PopularityConfig popularityConfig;
 
     @RabbitListener(queues = "${mq.queues.request.reddit.downvotePost}")
     public String execute(VotePostForm votePostForm, Message message) throws Exception {
@@ -65,7 +68,7 @@ public class DownvotePostService implements ICommand<VotePostForm, String> {
         post.setUpvoteCount(upvotesCount);
         post.setDownvoteCount(downvotesCount);
         postRepository.save(post);
-        if (previousUpvotes == popularPostsUpvoteThreshold && upvotesCount == popularPostsUpvoteThreshold - 1) {
+        if (previousUpvotes == popularityConfig.getPostsUpvoteThreshold() && upvotesCount == popularityConfig.getPostsUpvoteThreshold()-1) {
             cachingService.removePreviouslyPopularPost(postId);
         } else {
             cachingService.updatePopularPostsCache(postId, post);

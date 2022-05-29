@@ -5,9 +5,11 @@ import com.ScalableTeam.arango.User;
 import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.models.reddit.FollowRedditForm;
 import com.ScalableTeam.reddit.MyCommand;
+import com.ScalableTeam.reddit.app.caching.CachingService;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import com.ScalableTeam.reddit.app.repository.vote.RedditFollowRepository;
 import com.ScalableTeam.reddit.config.GeneralConfig;
+import com.ScalableTeam.reddit.config.PopularityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
@@ -23,6 +25,10 @@ public class UnfollowRedditService implements MyCommand {
     private GeneralConfig generalConfig;
     @Autowired
     private RedditFollowRepository redditFollowRepository;
+    @Autowired
+    private PopularityConfig popularityConfig;
+    @Autowired
+    private CachingService cachingService;
 
     private final String serviceName = "unfollowReddit";
 
@@ -66,6 +72,12 @@ public class UnfollowRedditService implements MyCommand {
                 userRepository.updateFollowedChannelsWithID(userId, follow);
             }
             int numfollowers = redditFollowRepository.followReddit(redditId);
+            System.err.println("currentFollowers "+numfollowers);
+            if (numfollowers == popularityConfig.getPostsUpvoteThreshold()-1) {
+                cachingService.removePreviouslyPopularChannel(redditId);
+            } else {
+                cachingService.updatePopularChannelsCache(redditId, reddit.get());
+            }
 
             return "unfollowed reddit " + numfollowers;
         } catch (Exception e) {

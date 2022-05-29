@@ -42,4 +42,18 @@ public class FollowRedditController {
                 messagePostProcessor);
 //        return followRedditService.execute(followRedditForm);
     }
+    @RequestMapping(method = RequestMethod.POST, value = "/unFollowReddit")
+    private void unFollowReddit(@RequestBody FollowRedditForm followRedditForm){
+        log.info(generalConfig.getCommands().get("unFollowReddit") + "Controller", followRedditForm);
+        String commandName = "unFollowReddit";
+        MessagePostProcessor messagePostProcessor = getMessageHeaders(
+                config.getQueues().getResponse().getReddit().get(commandName));
+
+        rabbitMQProducer.publishAsynchronous(
+                followRedditForm,
+                config.getExchange(),
+                config.getQueues().getRequest().getReddit().get(commandName),
+                messagePostProcessor);
+//        return followRedditService.execute(followRedditForm);
+    }
 }
