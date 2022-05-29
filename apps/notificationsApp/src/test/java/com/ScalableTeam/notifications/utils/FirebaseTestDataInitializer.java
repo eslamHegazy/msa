@@ -1,9 +1,9 @@
 package com.ScalableTeam.notifications.utils;
 
+import com.ScalableTeam.models.notifications.requests.NotificationSendRequest;
 import com.ScalableTeam.notifications.constants.Collections;
 import com.ScalableTeam.notifications.constants.Fields;
 import com.ScalableTeam.notifications.data.FakeData;
-import com.ScalableTeam.notifications.models.requests.NotificationSendRequest;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.cloud.firestore.*;

@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>service-discovery</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <name>service-discovery</name>
     <description>Semester 10 Scalable Reddit Application - Service Discovery for remote connections</description>
     <dependencies>

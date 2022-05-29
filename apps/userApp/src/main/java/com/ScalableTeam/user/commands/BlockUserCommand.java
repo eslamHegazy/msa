@@ -20,22 +20,22 @@ public class BlockUserCommand implements ICommand<BlockedUserBody, BlockedUserRe
         String userId = body.getUserId();
         String blockedUserId = body.getBlockedUserId();
 
-        if (userId == blockedUserId) {
+        if (userId.equals(blockedUserId)) {
             return new BlockedUserResponse(false, "The user can not block himself/herself!");
         }
 
         Optional<User> blockedUser = userRepository.findById(blockedUserId);
-        if (!blockedUser.isPresent()) {
+        if (blockedUser.isEmpty()) {
             return new BlockedUserResponse(false, "The blocked user not found in DB!");
         }
 
         Optional<User> user = userRepository.findById(userId);
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             return new BlockedUserResponse(false, "User not found in DB!");
         }
 
 
-        HashMap<String, Boolean> block = new HashMap<String, Boolean>();
+        HashMap<String, Boolean> block = new HashMap<>();
         block.put(blockedUserId, true);
         userRepository.updateBlockedUsersWithID(userId, block);
 

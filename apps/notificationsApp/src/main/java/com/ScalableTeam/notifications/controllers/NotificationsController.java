@@ -2,10 +2,10 @@ package com.ScalableTeam.notifications.controllers;
 
 import com.ScalableTeam.amqp.Config;
 import com.ScalableTeam.amqp.RabbitMQProducer;
+import com.ScalableTeam.models.notifications.requests.NotificationDeleteRequest;
+import com.ScalableTeam.models.notifications.requests.NotificationReadRequest;
+import com.ScalableTeam.models.notifications.requests.NotificationSendRequest;
 import com.ScalableTeam.notifications.config.GeneralConfig;
-import com.ScalableTeam.notifications.models.requests.NotificationDeleteRequest;
-import com.ScalableTeam.notifications.models.requests.NotificationReadRequest;
-import com.ScalableTeam.notifications.models.requests.NotificationSendRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.beans.factory.annotation.Autowired;

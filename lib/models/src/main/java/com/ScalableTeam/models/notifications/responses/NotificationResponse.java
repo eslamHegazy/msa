@@ -1,4 +1,4 @@
-package com.ScalableTeam.notifications.models.responses;
+package com.ScalableTeam.models.notifications.responses;
 
 import lombok.Data;
 

@@ -22,20 +22,20 @@ public class ReportUserCommand implements ICommand<ReportUserBody, ReportedUserR
         String reportedUserId = body.getReportedUserId();
         String reason = body.getReason();
 
-        if (userId == reportedUserId) {
-            return new ReportedUserResponse(false, "The user can not report himself/herself");
+        if (userId.equals(reportedUserId)) {
+            return new ReportedUserResponse(false, "The user can not report himself/herself!");
         }
         Optional<User> reportedUser = userRepository.findById(reportedUserId);
-        if (!reportedUser.isPresent()) {
+        if (reportedUser.isEmpty()) {
             return new ReportedUserResponse(false, "The reported user not found in DB!");
         }
 
         Optional<User> user = userRepository.findById(userId);
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             return new ReportedUserResponse(false, "User not found in DB!");
         }
 
-        HashMap<String, String> report = new HashMap<String, String>();
+        HashMap<String, String> report = new HashMap<>();
         report.put(reportedUserId, reason);
         userRepository.updateReportedUsersWithID(userId, report);
 
