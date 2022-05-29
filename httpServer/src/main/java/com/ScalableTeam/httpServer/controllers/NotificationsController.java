@@ -1,11 +1,10 @@
-package com.ScalableTeam.notifications.controllers;
+package com.ScalableTeam.httpServer.controllers;
 
 import com.ScalableTeam.amqp.Config;
 import com.ScalableTeam.amqp.RabbitMQProducer;
 import com.ScalableTeam.models.notifications.requests.NotificationDeleteRequest;
 import com.ScalableTeam.models.notifications.requests.NotificationReadRequest;
 import com.ScalableTeam.models.notifications.requests.NotificationSendRequest;
-import com.ScalableTeam.notifications.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +22,13 @@ public class NotificationsController {
     private Config config;
 
     @Autowired
-    private GeneralConfig generalConfig;
-
-    @Autowired
     private RabbitMQProducer rabbitMQProducer;
 
     @RequestMapping(method = RequestMethod.POST, value = "/sendNotification")
     private void sendNotification(@RequestBody NotificationSendRequest notificationSendRequest) {
         String commandName = "sendNotification";
-        String indicator = generalConfig.getCommands().get(commandName);
 
-        log.info(indicator + "Controller, Body: {}", notificationSendRequest);
+        log.info(commandName + "::Controller, Body: {}", notificationSendRequest);
 
         MessagePostProcessor messagePostProcessor = getMessageHeaders(
                 config.getQueues().getResponse().getNotifications().get(commandName));
@@ -47,9 +42,8 @@ public class NotificationsController {
     @RequestMapping(method = RequestMethod.GET, value = "/getNotifications/{userId}")
     private Object getNotifications(@PathVariable String userId) {
         String commandName = "getNotifications";
-        String indicator = generalConfig.getCommands().get(commandName);
 
-        log.info(indicator + "Controller, Body: {}", userId);
+        log.info(commandName + "::Controller, Body: {}", userId);
 
         return rabbitMQProducer.publishSynchronous(userId,
                 config.getExchange(),
@@ -59,9 +53,8 @@ public class NotificationsController {
     @RequestMapping(method = RequestMethod.PUT, value = "/markNotificationAsRead")
     private void markNotificationAsRead(@RequestBody NotificationReadRequest notificationReadRequest) {
         String commandName = "markNotificationAsRead";
-        String indicator = generalConfig.getCommands().get(commandName);
 
-        log.info(indicator + "Controller, Body: {}", notificationReadRequest);
+        log.info(commandName + "::Controller, Body: {}", notificationReadRequest);
 
         MessagePostProcessor messagePostProcessor = getMessageHeaders(
                 config.getQueues().getResponse().getNotifications().get(commandName));
@@ -75,9 +68,8 @@ public class NotificationsController {
     @RequestMapping(method = RequestMethod.DELETE, value = "/deleteNotification")
     private void deleteNotification(@RequestBody NotificationDeleteRequest notificationDeleteRequest) {
         String commandName = "deleteNotification";
-        String indicator = generalConfig.getCommands().get(commandName);
 
-        log.info(indicator + "Controller, Body: {}", notificationDeleteRequest);
+        log.info(commandName + "::Controller, Body: {}", notificationDeleteRequest);
 
         MessagePostProcessor messagePostProcessor = getMessageHeaders(
                 config.getQueues().getResponse().getNotifications().get(commandName));
