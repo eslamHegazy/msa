@@ -24,3 +24,12 @@ Authorization: abcd
 {
   "userId": "mo"
 }
+###
+POST http://localhost:3000/user/updatePhoto
+Content-Type: application/json
+Authorization: abcd
+
+{
+  "userId": "mo",
+  "photoUrl": "http://127.0.0.1:9000/profile-photos/128391246_2764299190449968_4793434281869584914_o.jpg"
+}

@@ -4,6 +4,7 @@ import com.ScalableTeam.arango.User;
 import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.models.user.DeleteAccountBody;
 import com.ScalableTeam.models.user.DeleteAccountResponse;
+import com.ScalableTeam.user.MediaUtility;
 import com.ScalableTeam.user.entity.UserProfile;
 import com.ScalableTeam.user.repositories.UserProfileRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -34,11 +35,13 @@ class DeleteAccountCommandTest {
     UserProfileRepository userProfileRepository;
 
     DeleteAccountCommand deleteAccountCommand;
+    @Autowired
+    MediaUtility mediaUtility;
     @BeforeEach
     void setUp() {
         userProfileRepository.save(new UserProfile(userId, email, password, null));
         userRepository.save(User.builder().userNameId(userId).email(email).build());
-        deleteAccountCommand = new DeleteAccountCommand(userProfileRepository, userRepository);
+        deleteAccountCommand = new DeleteAccountCommand(userProfileRepository, userRepository, mediaUtility);
     }
 
     @Test

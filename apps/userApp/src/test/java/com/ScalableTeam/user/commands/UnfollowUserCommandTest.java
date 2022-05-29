@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("test")
 @SpringBootTest
-class unfollowUserCommandTest {
+class UnfollowUserCommandTest {
 
     @Autowired
     UserRepository userRepository;

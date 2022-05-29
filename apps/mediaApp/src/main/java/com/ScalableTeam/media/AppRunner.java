@@ -60,9 +60,10 @@ public class AppRunner implements CommandLineRunner {
     final RemovePhotoCommand removePhotoCommand;
     public void testDelete(String url){
         RemovePhotoBody body = new RemovePhotoBody(url);
-        RemovePhotoResponse r = removePhotoCommand.execute(body);
-        System.out.print("Delete isSuccessful = "+r.isSuccessful());
-        System.out.print("Delete Message = "+r.getMessage());
+//        RemovePhotoResponse r = removePhotoCommand.execute(body);
+        removePhotoCommand.execute(body);
+//        System.out.print("Delete isSuccessful = "+r.isSuccessful());
+//        System.out.print("Delete Message = "+r.getMessage());
     }
     public void UDRD(String fileName) throws Exception{
         String uploadedUrl = testUpload(fileName);
