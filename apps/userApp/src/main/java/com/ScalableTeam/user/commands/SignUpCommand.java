@@ -1,5 +1,7 @@
 package com.ScalableTeam.user.commands;
 
+import com.ScalableTeam.arango.User;
+import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.models.user.SignUpBody;
 import com.ScalableTeam.models.user.SignUpResponse;
 import com.ScalableTeam.user.entity.UserProfile;
@@ -17,13 +19,17 @@ import java.util.regex.Pattern;
 public class SignUpCommand implements ICommand<SignUpBody, SignUpResponse> {
 
     private final UserProfileRepository userProfileRepository;
+    private final UserRepository userRepository;
     @Override
     public SignUpResponse execute(SignUpBody body) {
-        boolean userNameExists = userProfileRepository.existsById(body.getUserId());
+        String userId = body.getUserId();
+        String email = body.getEmail();
+
+        boolean userNameExists = userProfileRepository.existsById(userId);
         if(userNameExists)
             return new SignUpResponse("Username already exists", false);
 
-        String email = body.getEmail();
+
         String regex = "^(.+)@(.+)$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(email);
@@ -37,8 +43,10 @@ public class SignUpCommand implements ICommand<SignUpBody, SignUpResponse> {
         String password = body.getPassword();
         Hash hash = Password.hash(password).withBCrypt();
 
-        UserProfile userProfile = new UserProfile(body.getUserId(), body.getEmail(), hash.getResult(), null);
+        UserProfile userProfile = new UserProfile(userId, email, hash.getResult(), null);
         userProfileRepository.saveAndFlush(userProfile);
+        User user = User.builder().userNameId(userId).email(email).build();
+        userRepository.save(user);
 
         return new SignUpResponse("Registration done successfully", true);
     }

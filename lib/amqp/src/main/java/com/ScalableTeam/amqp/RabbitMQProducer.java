@@ -15,10 +15,10 @@ public class RabbitMQProducer {
 
     private final AmqpTemplate amqpTemplate;
 
-    public void publishAsynchronous(String commandName, Object payload, String exchange, String routingKey) {
-        log.info("Publishing to {} using routingKey {}. Command: {}, Payload: {}", exchange, routingKey, commandName, payload);
-        amqpTemplate.convertAndSend(exchange, routingKey, payload, processMessage(commandName));
-        log.info("Published to {} using routingKey {}. Command: {}, Payload: {}", exchange, routingKey, commandName, payload);
+    public void publishAsynchronous(String commandName, Object payload) {
+        log.info("Publishing. Command: {}, Payload: {}", commandName, payload);
+        amqpTemplate.convertAndSend(commandName, payload, processMessage(commandName));
+        log.info("Published. Command: {}, Payload: {}", commandName, payload);
     }
 
     public void publishAsynchronousToQueue(String commandName, String responseQueue, Object payload, String exchange, String routingKey) {

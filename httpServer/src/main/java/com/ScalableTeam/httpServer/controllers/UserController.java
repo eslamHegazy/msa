@@ -1,0 +1,42 @@
+package com.ScalableTeam.httpServer.controllers;
+
+import com.ScalableTeam.models.user.*;
+import lombok.AllArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("user")
+@AllArgsConstructor
+public class UserController {
+    public static final String QUEUE = "user-app";
+    private final RabbitTemplate rabbitTemplate;
+
+    @DeleteMapping("/deleteAccount")
+    public DeleteAccountResponse deleteUser(@RequestBody DeleteAccountBody body){
+        return rabbitTemplate.convertSendAndReceiveAsType(QUEUE, body, message -> {
+            message.getMessageProperties().setHeader("command", "deleteAccountCommand");
+            return message;
+        }, new ParameterizedTypeReference<>() {
+        });
+    }
+
+    @PostMapping("/blockUser")
+    public BlockedUserResponse blockUser(@RequestBody BlockedUserBody body){
+        return rabbitTemplate.convertSendAndReceiveAsType(QUEUE, body, message -> {
+            message.getMessageProperties().setHeader("command", "blockUserCommand");
+            return message;
+        }, new ParameterizedTypeReference<>() {
+        });
+    }
+
+    @PostMapping("/reportUser")
+    public ReportedUserResponse reportUser(@RequestBody ReportUserBody body){
+        return rabbitTemplate.convertSendAndReceiveAsType(QUEUE, body, message -> {
+            message.getMessageProperties().setHeader("command", "reportUserCommand");
+            return message;
+        }, new ParameterizedTypeReference<>() {
+        });
+    }
+}

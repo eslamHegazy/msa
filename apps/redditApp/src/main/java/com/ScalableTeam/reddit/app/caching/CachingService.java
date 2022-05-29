@@ -1,5 +1,6 @@
 package com.ScalableTeam.reddit.app.caching;
 
+import com.ScalableTeam.arango.Channel;
 import com.ScalableTeam.arango.Post;
 import com.ScalableTeam.arango.User;
 import com.ScalableTeam.arango.UserRepository;
@@ -54,6 +55,13 @@ public class CachingService {
     @CachePut(cacheNames = "postsCache",key="#postId")
     public String updatePostsCache(String postId, Post post){
         return post.toString();
+    }
+    @CachePut(cacheNames = "popularChannelsCache",key="#redditId")
+    public String updatePopularChannelsCache(String redditId, Channel channel){
+        return channel.toString();
+    }
+    @CacheEvict(cacheNames = "popularChannelsCache", key = "#redditId")
+    public void removePreviouslyPopularChannel(String redditId) {
     }
     @CacheEvict(cacheNames = "popularPostsCache", key = "#postId")
     public void removePreviouslyPopularPost(String postId) {

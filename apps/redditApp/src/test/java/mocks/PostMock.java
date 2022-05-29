@@ -38,6 +38,9 @@ public class PostMock {
                 .channelId(channelId)
                 .build();
     }
+    public static String getChannelId() {
+        return channelId;
+    }
 
     public static String getId() {
         return id;
