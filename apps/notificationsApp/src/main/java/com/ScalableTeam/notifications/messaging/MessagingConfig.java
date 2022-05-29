@@ -1,4 +1,4 @@
-package com.ScalableTeam.notifications.config;
+package com.ScalableTeam.notifications.messaging;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.context.annotation.Bean;
