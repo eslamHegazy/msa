@@ -73,12 +73,23 @@ public class Channel {
         this.reports = reports;
     }
 
+//    @Override
+//    public String toString() {
+//        return "Channel [id=" + channelNameId +", adminId=" + adminId + "]";
+//    }
+
+
     @Override
     public String toString() {
-        return "Channel [id=" + channelNameId +", adminId=" + adminId + "]";
+        return "Channel{" +
+                "channelNameId='" + channelNameId + '\'' +
+                ", arangoId='" + arangoId + '\'' +
+                ", adminId='" + adminId + '\'' +
+                ", moderators=" + moderators +
+                ", bannedUsers=" + bannedUsers +
+                ", reports=" + reports +
+                '}';
     }
-
-
 
     public Channel(String channelNameId, String adminId) {
         this.channelNameId = channelNameId;
