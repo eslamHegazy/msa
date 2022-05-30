@@ -11,6 +11,7 @@ import com.password4j.Password;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,7 +46,14 @@ public class SignUpCommand implements ICommand<SignUpBody, SignUpResponse> {
 
         UserProfile userProfile = new UserProfile(userId, email, hash.getResult(), null);
         userProfileRepository.saveAndFlush(userProfile);
-        User user = User.builder().userNameId(userId).email(email).build();
+        User user = User.builder()
+                .userNameId(userId)
+                .email(email)
+                .followedUsers(new HashMap<>())
+                .followedChannels(new HashMap<>())
+                .blockedUsers(new HashMap<>())
+                .reportedUsers(new HashMap<>())
+                .build();
         userRepository.save(user);
 
         return new SignUpResponse("Registration done successfully", true);

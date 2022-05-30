@@ -42,10 +42,10 @@ public class FollowRedditController {
                 messagePostProcessor);
 //        return followRedditService.execute(followRedditForm);
     }
-    @RequestMapping(method = RequestMethod.POST, value = "/unFollowReddit")
+    @RequestMapping(method = RequestMethod.POST, value = "/unfollowReddit")
     private void unFollowReddit(@RequestBody FollowRedditForm followRedditForm){
-        log.info(generalConfig.getCommands().get("unFollowReddit") + "Controller", followRedditForm);
-        String commandName = "unFollowReddit";
+        log.info(generalConfig.getCommands().get("unfollowReddit") + "Controller", followRedditForm);
+        String commandName = "unfollowReddit";
         MessagePostProcessor messagePostProcessor = getMessageHeaders(
                 config.getQueues().getResponse().getReddit().get(commandName));
 

@@ -59,6 +59,13 @@ public class PostMock {
         return post;
     }
 
+    public static Post getPostWithIdChannelId( String postId,String channelId) {
+        Post post = getPost();
+        post.setId(postId);
+        post.setChannelId(channelId);
+        return post;
+    }
+
     public static List<Post> getPostsWithTitle(@NotNull String... titles) {
         return Arrays.stream(titles).map(PostMock::getPostWithTitle).
                 collect(Collectors.toList());

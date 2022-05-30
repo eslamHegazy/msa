@@ -23,4 +23,10 @@ public interface UserRepository extends ArangoRepository<User, String> {
     void deleteByUserNameId(String userNameId);
 
     boolean existsByUserNameId(String userNameId);
+//    @Query("FOR u IN users REMOVE {_key:@key,followedChannels:@followedChannels} IN users")
+//    void removeFollowedChannelsWithID(@Param("key") String key, @Param("followedChannels") HashMap<String,Boolean> followedChannels);
+    @Query("FOR u IN users REMOVE {_key:@key,followedChannels:@followedChannels} IN users")
+    void removeFollowedChannelsWithID(@Param("key") String key, @Param("followedChannels") HashMap<String,Boolean> followedChannels);
+
+
 }

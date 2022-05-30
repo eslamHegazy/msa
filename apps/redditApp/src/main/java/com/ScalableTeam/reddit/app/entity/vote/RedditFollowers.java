@@ -33,4 +33,20 @@ public class RedditFollowers {
     @Column(name = "redditId")
     private String channelNameId;
     private int followerCount;
+
+    public String getChannelNameId() {
+        return channelNameId;
+    }
+
+    public void setChannelNameId(String channelNameId) {
+        this.channelNameId = channelNameId;
+    }
+
+    public int getFollowerCount() {
+        return followerCount;
+    }
+
+    public void setFollowerCount(int followerCount) {
+        this.followerCount = followerCount;
+    }
 }

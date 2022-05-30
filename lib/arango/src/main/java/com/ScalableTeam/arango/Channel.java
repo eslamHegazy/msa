@@ -75,7 +75,7 @@ public class Channel {
 
     @Override
     public String toString() {
-        return "Channel [id=" + channelNameId +", adminId=" + adminId + moderators.toString()+"]";
+        return "Channel [id=" + channelNameId +", adminId=" + adminId + "]";
     }
 
 
