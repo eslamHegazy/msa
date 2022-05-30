@@ -1,4 +1,4 @@
-package com.ScalableTeam.user.jwt;
+package com.ScalableTeam.httpServer.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

@@ -19,7 +19,7 @@ Content-Type: application/json
 ###
 DELETE http://localhost:3000/user/deleteAccount
 Content-Type: application/json
-Authorization: abcd
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtbyIsImV4cCI6MTY1Mzk1MjY4OCwiaWF0IjoxNjUzOTE2Njg4fQ.WB6ydgDZh1eY232UCIirBF_IFlaihbPzQxVPL4CWVGg
 
 {
   "userId": "mo"

@@ -5,6 +5,7 @@ import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.models.user.DeleteAccountBody;
 import com.ScalableTeam.models.user.DeleteAccountResponse;
 import com.ScalableTeam.user.MediaUtility;
+import com.ScalableTeam.user.caching.RedisUtility;
 import com.ScalableTeam.user.entity.UserProfile;
 import com.ScalableTeam.user.repositories.UserProfileRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -16,8 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doNothing;
 
 
@@ -37,11 +37,14 @@ class DeleteAccountCommandTest {
     DeleteAccountCommand deleteAccountCommand;
     @Autowired
     MediaUtility mediaUtility;
+
+    @Autowired
+    RedisUtility redisUtility;
     @BeforeEach
     void setUp() {
         userProfileRepository.save(new UserProfile(userId, email, password, null));
         userRepository.save(User.builder().userNameId(userId).email(email).build());
-        deleteAccountCommand = new DeleteAccountCommand(userProfileRepository, userRepository, mediaUtility);
+        deleteAccountCommand = new DeleteAccountCommand(userProfileRepository, userRepository, mediaUtility, redisUtility);
     }
 
     @Test
@@ -61,6 +64,7 @@ class DeleteAccountCommandTest {
         assertTrue(deleteAccountResponse.isSuccessful());
         assertTrue(userProfileRepository.findAll().isEmpty());
         assertFalse(userRepository.existsByUserNameId(userId));
+        assertNull(redisUtility.getValue(userId));
     }
 
     @AfterEach

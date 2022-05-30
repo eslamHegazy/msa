@@ -5,6 +5,7 @@ import com.ScalableTeam.models.media.RemovePhotoBody;
 import com.ScalableTeam.models.user.DeleteAccountBody;
 import com.ScalableTeam.models.user.DeleteAccountResponse;
 import com.ScalableTeam.user.MediaUtility;
+import com.ScalableTeam.user.caching.RedisUtility;
 import com.ScalableTeam.user.repositories.UserProfileRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -20,6 +21,8 @@ public class DeleteAccountCommand implements ICommand<DeleteAccountBody, DeleteA
     final private UserRepository userRepository;
 
     final private MediaUtility mediaUtility;
+
+    final private RedisUtility redisUtility;
     @Override
     public DeleteAccountResponse execute(DeleteAccountBody body) {
         String userId = body.getUserId();
@@ -31,6 +34,7 @@ public class DeleteAccountCommand implements ICommand<DeleteAccountBody, DeleteA
         }
         userProfileRepository.deleteById(userId);
         userRepository.deleteByUserNameId(userId);
+        redisUtility.deleteKeyFromRedis(userId);
         return new DeleteAccountResponse(true, "Deleted successfully");
     }
 }
