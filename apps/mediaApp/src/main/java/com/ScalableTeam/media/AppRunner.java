@@ -10,7 +10,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -50,8 +49,7 @@ public class AppRunner implements CommandLineRunner {
         byte[] b = IOUtils.toByteArray(f);
         String originalFileName = "xabc.jpg";
         String contentType = URLConnection.guessContentTypeFromName(originalFileName);
-        MockMultipartFile mockMultipartFile = new MockMultipartFile(originalFileName, originalFileName, contentType, b);
-        UploadPhotoBody body = new UploadPhotoBody(mockMultipartFile);
+        UploadPhotoBody body = new UploadPhotoBody(b, contentType);
         UploadPhotoResponse r = uploadPhotoCommand.execute(body);
         System.out.println("Upload isSuccessful = "+r.isSuccessful());
         System.out.println("Upload Message / url = "+r.getMessage());

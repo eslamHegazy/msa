@@ -9,5 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @Data
 public class UploadPhotoBody {
-    MultipartFile files;
+   byte[] file;//MultipartFile files;
+   String contentType;
 }

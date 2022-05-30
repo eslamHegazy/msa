@@ -15,10 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.util.Assert;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -39,8 +36,7 @@ public class MediaAppTests {
         byte[] b = IOUtils.toByteArray(f);
         String originalFileName = "any_dummy_name.jpg";
         String contentType = URLConnection.guessContentTypeFromName(originalFileName);
-        MockMultipartFile mockMultipartFile = new MockMultipartFile(originalFileName, originalFileName, contentType, b);
-        UploadPhotoBody body = new UploadPhotoBody(mockMultipartFile);
+        UploadPhotoBody body = new UploadPhotoBody(b, contentType);
         UploadPhotoResponse r = uploadPhotoCommand.execute(body);
         return r;
     }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.UUID;
 
@@ -26,18 +27,18 @@ public class UploadPhotoCommand implements ICommand<UploadPhotoBody, UploadPhoto
     @Override
     public UploadPhotoResponse execute(UploadPhotoBody body) {
         try{
-            MultipartFile files = body.getFiles();
-            String contentType = files.getContentType();
-            String extension = Utils.getImageExtensions(contentType);
+//            MultipartFile files = body.getFiles();
+//            String contentType = files.getContentType();
+            String extension = Utils.getImageExtensions(body.getContentType());
             String fileNewName = UUID.randomUUID().toString()+'.'+extension;
             System.out.println("extension of file received from user is: "+extension);
-            InputStream inputStream = files.getInputStream();
+            InputStream inputStream = new ByteArrayInputStream(body.getFile());
             minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(defaultBucketName)
                             .object(fileNewName)
                             .stream(inputStream, -1,10485760)
-                            .contentType(contentType)
+                            .contentType(body.getContentType())
                             .build()
             );
             String path = defaultBucketName+"/"+fileNewName;
