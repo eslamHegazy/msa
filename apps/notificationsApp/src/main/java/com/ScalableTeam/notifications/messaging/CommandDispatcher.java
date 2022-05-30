@@ -1,5 +1,6 @@
 package com.ScalableTeam.notifications.messaging;
 
+import com.ScalableTeam.amqp.MessagePublisher;
 import com.ScalableTeam.amqp.MessageQueues;
 import com.ScalableTeam.notifications.utils.Command;
 import lombok.AllArgsConstructor;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-@SuppressWarnings("all")
 @Slf4j
 @Component
 @AllArgsConstructor
@@ -20,7 +20,7 @@ public class CommandDispatcher {
     private final Map<String, Command> commandsMap;
 
     @RabbitListener(queues = MessageQueues.NOTIFICATIONS, returnExceptions = "true")
-    public Object onMessageReceived(Message<?> message, @Header("command") String commandName) throws Exception {
+    public Object receiveMessage(Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
         Command command = commandsMap.get(commandName);
         log.info("Service: Notifications, Message: {}, Payload: {}",
                 command.getClass().getCanonicalName(),
