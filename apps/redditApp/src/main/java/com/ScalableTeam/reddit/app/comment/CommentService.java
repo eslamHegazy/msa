@@ -74,12 +74,14 @@ public class CommentService implements MyCommand {
             Post post = postParentOptional.get();
             if (!comment.isCommentOnPost()) {
                 CommentToComment commentToComment = CommentToComment.builder()
+                        .id(comment.getCommentParentId()+comment.getId())
                         .parentComment(commentRepository.findById(comment.getCommentParentId()).get())
                         .childComment(comment)
                         .build();
                 commentChildrenHierarchyRepository.save(commentToComment);
             } else {
                 PostToComment postToComment = PostToComment.builder()
+                        .id(postId+comment.getId())
                         .post(post)
                         .comment(comment)
                         .build();
