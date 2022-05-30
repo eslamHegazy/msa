@@ -1,6 +1,7 @@
 package com.ScalableTeam.httpServer.controllers;
 
 import com.ScalableTeam.amqp.Config;
+import com.ScalableTeam.amqp.LegacyRabbitMQProducer;
 import com.ScalableTeam.amqp.MessagePublisher;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
-//@RestController
+@RestController
 @RequestMapping("/chat")
 @AllArgsConstructor
 @Slf4j
