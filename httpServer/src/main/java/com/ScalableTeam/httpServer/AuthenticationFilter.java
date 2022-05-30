@@ -29,14 +29,14 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("Inside Authentication Filter originated by request {}", request.getRequestURI());
 
-        final String authToken = request.getHeader("Authorization");
-        String userId = jwtUtil.extractUsername(authToken);
-        String cachedToken = redisUtility.getValue(userId);
-
-        if(authToken == null || !authToken.equals(cachedToken)) {
-            response.sendError(HttpStatus.UNAUTHORIZED.value());
-            return;
-        }
+//        final String authToken = request.getHeader("Authorization");
+//        String userId = jwtUtil.extractUsername(authToken);
+//        String cachedToken = redisUtility.getValue(userId);
+//
+//        if(authToken == null || !authToken.equals(cachedToken)) {
+//            response.sendError(HttpStatus.UNAUTHORIZED.value());
+//            return;
+//        }
 
         filterChain.doFilter(request, response);
     }

@@ -1,26 +1,27 @@
 package com.ScalableTeam.reddit.app.post;
 
-import com.ScalableTeam.reddit.ICommand;
+import com.ScalableTeam.amqp.MessagePublisher;
 import com.ScalableTeam.arango.Post;
+import com.ScalableTeam.models.reddit.VotePostForm;
+import com.ScalableTeam.reddit.ICommand;
+import com.ScalableTeam.reddit.app.caching.CachingService;
 import com.ScalableTeam.reddit.app.entity.vote.PostVote;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
 import com.ScalableTeam.reddit.app.repository.vote.PostVoteRepository;
 import com.ScalableTeam.reddit.app.repository.vote.UserVotePostRepository;
-import com.ScalableTeam.models.reddit.VotePostForm;
 import com.ScalableTeam.reddit.app.validation.PostVoteValidation;
-import com.ScalableTeam.reddit.config.GeneralConfig;
 import com.ScalableTeam.reddit.config.PopularityConfig;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-import com.ScalableTeam.reddit.app.caching.CachingService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
 
 @ComponentScan("com.ScalableTeam.reddit")
 @Service
@@ -30,7 +31,6 @@ public class DownvotePostService implements ICommand<VotePostForm, String> {
     private final PostRepository postRepository;
     private final UserVotePostRepository userVotePostRepository;
     private final PostVoteRepository postVoteRepository;
-    private final GeneralConfig generalConfig;
     private final PostVoteValidation postVoteValidation;
 //    @Value("${popularPostsUpvoteThreshold}")
 
@@ -42,21 +42,19 @@ public class DownvotePostService implements ICommand<VotePostForm, String> {
     private PopularityConfig popularityConfig;
 
     @RabbitListener(queues = "${mq.queues.request.reddit.downvotePost}")
-    public String execute(VotePostForm votePostForm, Message message) throws Exception {
-        String indicator = generalConfig.getCommands().get("downvotePost");
+    public String execute(VotePostForm votePostForm, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
         String correlationId = message.getMessageProperties().getCorrelationId();
-        log.info(indicator + "Queue Listener::Vote Post Form={}, CorrelationId={}", votePostForm, correlationId);
+        log.info("Queue Listener::Command={}, CorrelationId={}, Downvote Post Form={}", commandName, correlationId, votePostForm);
         return execute(votePostForm);
     }
 
     @Transactional(rollbackFor = {Exception.class}, isolation = Isolation.REPEATABLE_READ)
     @Override
     public String execute(VotePostForm votePostForm) throws Exception {
+        log.info("Service::Downvote Post Form={}", votePostForm);
         int popularPostsUpvoteThreshold = 1;
         String userNameId = votePostForm.getUserNameId();
         String postId = votePostForm.getPostId();
-        String indicator = generalConfig.getCommands().get("downvotePost");
-        log.info(indicator + "Service::Post Id={}, User Id={}", postId, userNameId);
 
         postVoteValidation.validatePostVote(userNameId, postId);
         String responseMessage = userVotePostRepository.downvotePost(userNameId, postId);
@@ -68,7 +66,7 @@ public class DownvotePostService implements ICommand<VotePostForm, String> {
         post.setUpvoteCount(upvotesCount);
         post.setDownvoteCount(downvotesCount);
         postRepository.save(post);
-        if (previousUpvotes == popularityConfig.getPostsUpvoteThreshold() && upvotesCount == popularityConfig.getPostsUpvoteThreshold()-1) {
+        if (previousUpvotes == popularityConfig.getPostsUpvoteThreshold() && upvotesCount == popularityConfig.getPostsUpvoteThreshold() - 1) {
             cachingService.removePreviouslyPopularPost(postId);
         } else {
             cachingService.updatePopularPostsCache(postId, post);
@@ -82,9 +80,7 @@ public class DownvotePostService implements ICommand<VotePostForm, String> {
 
     @RabbitListener(queues = "${mq.queues.response.reddit.downvotePost}")
     public void receive(String response, Message message) {
-        String indicator = generalConfig.getCommands().get("downvotePost");
         String correlationId = message.getMessageProperties().getCorrelationId();
-        log.info(indicator + "Service::CorrelationId: {}, message: {}", correlationId, response);
+        log.info("Response Queue Listener::CorrelationId={}, response={}", correlationId, response);
     }
-
 }

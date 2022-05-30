@@ -1,7 +1,6 @@
 package com.ScalableTeam.reddit.app.caching;
 
 import com.ScalableTeam.amqp.Config;
-import com.ScalableTeam.amqp.LegacyRabbitMQProducer;
 import com.ScalableTeam.reddit.app.post.GetPostService;
 import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -19,11 +18,10 @@ public class CachingController {
     @Autowired
     private Config config;
     @Autowired
-    private LegacyRabbitMQProducer rabbitMQProducer;
-    @Autowired
     private GetPostService getPostService;
     @Autowired
     private GeneralConfig generalConfig;
+
     @PostMapping("evict/postsCache")
     public String evictPostsCache() throws Exception {
         String indicator = generalConfig.getCommands().get("cachingService");
@@ -31,6 +29,7 @@ public class CachingController {
         cachingService.evictAllEntriesOfPostsCache();
         return "Eviction postsCache done";
     }
+
     @PostMapping("evict/popularPostsCache")
     public String evictPopularPostsCache() throws Exception {
         String indicator = generalConfig.getCommands().get("cachingService");
@@ -38,6 +37,7 @@ public class CachingController {
         cachingService.evictAllEntriesOfPopularPostsCache();
         return "Eviction popularPostsCache done";
     }
+
     @PostMapping("evict/popularChannelsCache")
     public String evictPopularChannelsCache() throws Exception {
         String indicator = generalConfig.getCommands().get("cachingService");
@@ -45,5 +45,4 @@ public class CachingController {
         cachingService.evictAllEntriesOfPopularChannelsCache();
         return "Eviction popularChannelsCache done";
     }
-
 }

@@ -1,16 +1,17 @@
 package com.ScalableTeam.reddit.app.moderation;
 
+import com.ScalableTeam.amqp.MessagePublisher;
 import com.ScalableTeam.arango.Channel;
 import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.models.reddit.ViewReportsForm;
 import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
-import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -24,16 +25,13 @@ public class ViewReportsService implements MyCommand {
     private ChannelRepository channelRepository;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private GeneralConfig generalConfig;
 
     private final String serviceName = "viewReports";
 
     @RabbitListener(queues = "${mq.queues.request.reddit." + serviceName + "}", returnExceptions = "true")
-    public String listenToRequestQueue(ViewReportsForm viewReportsForm, Message message) throws Exception {
+    public String listenToRequestQueue(ViewReportsForm viewReportsForm, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
         String correlationId = message.getMessageProperties().getCorrelationId();
-        String indicator = generalConfig.getCommands().get(serviceName);
-        log.info(indicator + "Service::View Reports, CorrelationId={}", correlationId);
+        log.info("Queue Listener::Command={}, CorrelationId={}, View Reports Form={}", commandName, correlationId, viewReportsForm);
         return execute(viewReportsForm);
     }
 
@@ -43,6 +41,7 @@ public class ViewReportsService implements MyCommand {
 
         try {
             ViewReportsForm request = (ViewReportsForm) body;
+            log.info("Service::View Reports Form={}", request);
             Optional<Channel> reddit = channelRepository.findById(request.getRedditId());
             if (!reddit.isPresent()) {
                 throw new IllegalStateException("reddit " + request.getRedditId() + " not found in DB");

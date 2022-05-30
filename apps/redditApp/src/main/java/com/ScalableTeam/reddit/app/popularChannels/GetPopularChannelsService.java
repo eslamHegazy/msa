@@ -1,10 +1,9 @@
 package com.ScalableTeam.reddit.app.popularChannels;
 
 
-
-import com.ScalableTeam.reddit.MyCommand;
+import com.ScalableTeam.amqp.MessagePublisher;
 import com.ScalableTeam.arango.Post;
-import com.ScalableTeam.reddit.config.GeneralConfig;
+import com.ScalableTeam.reddit.MyCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -13,9 +12,11 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Set;
 
 @ComponentScan("com.ScalableTeam.reddit")
 @Service
@@ -25,30 +26,30 @@ public class GetPopularChannelsService implements MyCommand {
     private CacheManager cacheManager;
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
-    @Autowired
-    private GeneralConfig generalConfig;
 
     private Post getValue(String cacheName, String key) {
         return (Post) cacheManager.getCache(cacheName).get(key);
     }
+
     @RabbitListener(queues = "${mq.queues.request.reddit.getPopularChannels}", returnExceptions = "true")
-    public String listenToRequestQueue(Object body, Message message) throws Exception {
+    public String listenToRequestQueue(Object body, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
         String correlationId = message.getMessageProperties().getCorrelationId();
-        String indicator = generalConfig.getCommands().get("getPopularChannels");
-        log.info(indicator + "Service::Get popular Channels, CorrelationId={}", correlationId);
+        log.info("Queue Listener::Command={}, CorrelationId={}, Get Popular Channels={}", commandName, correlationId, body);
         return execute(null);
     }
+
     @Override
     public String execute(Object body) throws Exception {
+        log.info("Service::Get Popular Channels={}", body);
         String cacheName = "popularChannelsCache";
-        Set<String> keys = redisTemplate.keys(cacheName+"*");
+        Set<String> keys = redisTemplate.keys(cacheName + "*");
         ArrayList<String> popularChannels = new ArrayList<>();
 //        System.err.println("hello1");
-        if(keys!=null) {
+        if (keys != null) {
 //            System.err.println("hello "+keys.size());
             for (String s : keys) {
 //                System.err.println(s + "hi hi");
-                Cache.ValueWrapper v = cacheManager.getCache(cacheName).get(s.substring((cacheName+"::").length()));
+                Cache.ValueWrapper v = cacheManager.getCache(cacheName).get(s.substring((cacheName + "::").length()));
                 if (v != null)
                     popularChannels.add((String) v.get());
             }

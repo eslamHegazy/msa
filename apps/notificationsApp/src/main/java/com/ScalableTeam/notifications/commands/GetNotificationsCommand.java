@@ -11,13 +11,14 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class GetNotificationsCommand implements Command<String, List<NotificationResponse>> {
+public class GetNotificationsCommand implements Command<String, List<String>> {
 
     @Autowired
     private NotificationsRepository notificationsRepository;
 
     @Override
-    public List<NotificationResponse> execute(String body) throws Exception {
-        return notificationsRepository.getNotifications(body);
+    public List<String> execute(String body) throws Exception {
+//        return notificationsRepository.getNotifications(body);
+        return List.of("maria");
     }
 }

@@ -1,8 +1,8 @@
 package com.ScalableTeam.reddit.app.post;
 
-import com.ScalableTeam.reddit.MyCommand;
+import com.ScalableTeam.amqp.MessagePublisher;
 import com.ScalableTeam.arango.Post;
-import com.ScalableTeam.reddit.config.GeneralConfig;
+import com.ScalableTeam.reddit.MyCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -11,9 +11,11 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Set;
 
 @ComponentScan("com.ScalableTeam.reddit")
 @Service
@@ -23,28 +25,28 @@ public class GetPopularPostsService implements MyCommand {
     private CacheManager cacheManager;
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
-    @Autowired
-    private GeneralConfig generalConfig;
 
     private Post getValue(String cacheName, String key) {
         return (Post) cacheManager.getCache(cacheName).get(key);
     }
+
     @RabbitListener(queues = "${mq.queues.request.reddit.getPopularPosts}", returnExceptions = "true")
-    public String listenToRequestQueue(Object body, Message message) throws Exception {
+    public String listenToRequestQueue(Object body, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
         String correlationId = message.getMessageProperties().getCorrelationId();
-        String indicator = generalConfig.getCommands().get("getPopularPosts");
-        log.info(indicator + "Service::Get popular Posts, CorrelationId={}", correlationId);
+        log.info("Queue Listener::Command={}, CorrelationId={}, Get Popular Posts Form={}", commandName, correlationId, body);
         return execute(null);
     }
+
     @Override
     public String execute(Object body) throws Exception {
+        log.info("Service::Get Popular Posts Form={}", body);
         String cacheName = "popularPostsCache";
-        Set<String> keys = redisTemplate.keys(cacheName+"*");
+        Set<String> keys = redisTemplate.keys(cacheName + "*");
         ArrayList<String> popularPosts = new ArrayList<>();
-        if(keys!=null) {
+        if (keys != null) {
             for (String s : keys) {
                 System.err.println(s + "hi hi");
-                Cache.ValueWrapper v = cacheManager.getCache(cacheName).get(s.substring((cacheName+"::").length()));
+                Cache.ValueWrapper v = cacheManager.getCache(cacheName).get(s.substring((cacheName + "::").length()));
                 if (v != null)
                     popularPosts.add((String) v.get());
             }

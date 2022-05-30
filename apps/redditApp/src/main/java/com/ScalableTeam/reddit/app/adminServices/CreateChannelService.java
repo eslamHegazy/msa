@@ -1,17 +1,18 @@
 package com.ScalableTeam.reddit.app.adminServices;
 
+import com.ScalableTeam.amqp.MessagePublisher;
 import com.ScalableTeam.arango.Channel;
 import com.ScalableTeam.arango.User;
 import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.models.reddit.CreateChannelForm;
 import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
-import com.ScalableTeam.reddit.config.GeneralConfig;
 import com.arangodb.springframework.core.ArangoOperations;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -24,21 +25,19 @@ public class CreateChannelService implements MyCommand {
     private final ArangoOperations operations;
     private final ChannelRepository channelRepository;
     private final UserRepository userRepository;
-    private final GeneralConfig generalConfig;
 
     @RabbitListener(queues = "${mq.queues.request.reddit.createChannel}")
-    public String listenToRequestQueue(CreateChannelForm createChannelForm, Message message) throws Exception {
+    public String listenToRequestQueue(CreateChannelForm createChannelForm, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
         String correlationId = message.getMessageProperties().getCorrelationId();
-        String indicator = generalConfig.getCommands().get("createChannel");
-        log.info(indicator + "Service::CreateChannel, CorrelationId={}", correlationId);
+        log.info("Queue Listener::Command={}, CorrelationId={}, Create Channel Form={}", commandName, correlationId, createChannelForm);
         return execute(createChannelForm);
     }
 
     @Override
     public String execute(Object createChannelFormObj) throws Exception {
-        log.info(generalConfig.getCommands().get("createChannel") + "Service", createChannelFormObj);
         try {
             CreateChannelForm createChannelForm = (CreateChannelForm) createChannelFormObj;
+            log.info("Service::Create Channel Form={}", createChannelForm);
             Optional<Channel> channelOptional = channelRepository.findById(createChannelForm.getChannelNameId());
             if (channelOptional.isPresent()) {
                 throw new Exception();
@@ -69,8 +68,7 @@ public class CreateChannelService implements MyCommand {
 
     @RabbitListener(queues = "${mq.queues.response.reddit.createChannel}")
     public void receive(String response, Message message) {
-        String indicator = generalConfig.getCommands().get("createChannel");
         String correlationId = message.getMessageProperties().getCorrelationId();
-        log.info(indicator + "Service::CorrelationId: {}, message: {}", correlationId, response);
+        log.info("Response Queue Listener::CorrelationId={}, response={}", correlationId, response);
     }
 }

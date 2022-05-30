@@ -79,32 +79,4 @@ public class RabbitMQBinders {
         this.beanFactory.registerSingleton(queueName, q);
         return q;
     }
-
-    private Queue createQueue() {
-        return QueueBuilder.durable("")
-                .withArgument("x-dead-letter-exchange", config.getExceptions().getExchange())
-                .build();
-    }
-
-    @Bean
-    DirectExchange exchange() {
-        return new DirectExchange(config.getExchange());
-    }
-
-    @Bean
-    List<Binding> bindings(Map<String, Queue> queues, DirectExchange exchange) {
-        List<Binding> bindings = new ArrayList<>();
-        for (String key : queues.keySet()) {
-            bindings.add(binding(queues, key, exchange));
-        }
-        return bindings;
-    }
-
-    private Binding binding(Map<String, Queue> queues, String key, DirectExchange exchange) {
-        Binding b = BindingBuilder.bind(queues.get(key)).to(exchange).withQueueName();
-        this.beanFactory.initializeBean(b, key + "Binder");
-        this.beanFactory.autowireBean(b);
-        this.beanFactory.registerSingleton(key + "Binder", b);
-        return b;
-    }
 }

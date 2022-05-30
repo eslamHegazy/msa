@@ -1,15 +1,16 @@
 package com.ScalableTeam.reddit.app.recommendations;
 
 import com.ScalableTeam.amqp.Config;
+import com.ScalableTeam.amqp.MessagePublisher;
 import com.ScalableTeam.arango.User;
 import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.reddit.MyCommand;
-import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -21,20 +22,14 @@ public class RedditsRecommendationsService implements MyCommand {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private GeneralConfig generalConfig;
-
     @Autowired
     private Config config;
-
     private final String serviceName = "redditsRecommendations";
 
     @RabbitListener(queues = "${mq.queues.request.reddit." + serviceName + "}", returnExceptions = "true")
-    public String[] listenToRequestQueue(String userId, Message message) throws Exception {
+    public String[] listenToRequestQueue(String userId, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
         String correlationId = message.getMessageProperties().getCorrelationId();
-        String indicator = generalConfig.getCommands().get(serviceName);
-        log.info(indicator + "Service::View Reports, CorrelationId={}", correlationId);
+        log.info("Queue Listener::Command={}, CorrelationId={}, Reddit Recommendation Form={}", commandName, correlationId, userId);
         return execute(userId);
     }
 
@@ -43,10 +38,10 @@ public class RedditsRecommendationsService implements MyCommand {
         //    1. get all/10 random/first entries in user's followedUsers
 //    2. get all their followed reddits (put them together)
 //    return most frequently occuring reddits (or first 5 if none repeat)
-        log.info(generalConfig.getCommands().get("redditsRecommendations") + "Service", body);
 
         try {
             String userId = (String) body;
+            log.info("Service::Reddit Recommendation Form={}", userId);
             Optional<User> userO = userRepository.findById(userId);
 
             if (!userO.isPresent()) {

@@ -1,11 +1,11 @@
 package com.ScalableTeam.reddit.app.post;
 
+import com.ScalableTeam.amqp.MessagePublisher;
 import com.ScalableTeam.arango.Post;
 import com.ScalableTeam.arango.User;
 import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
-import com.ScalableTeam.reddit.config.GeneralConfig;
 import com.arangodb.springframework.core.ArangoOperations;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
@@ -13,6 +13,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -29,26 +30,23 @@ public class CreatePostService implements MyCommand {
     private PostRepository postRepository;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private GeneralConfig generalConfig;
 
     //    @Resource(name="redisTemplate")
 //    private HashOperations<String, String, Post> hashOperations;
     @RabbitListener(queues = "${mq.queues.request.reddit.createPost}")
-    public Post listenToRequestQueue(Post post, Message message) throws Exception {
+    public Post listenToRequestQueue(Post post, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
 //        System.err.println("listening");
         String correlationId = message.getMessageProperties().getCorrelationId();
-        String indicator = generalConfig.getCommands().get("createPost");
-        log.info(indicator + "Service::Create Post, CorrelationId={}", correlationId);
+        log.info("Queue Listener::Command={}, CorrelationId={}, Create Post Form={}", commandName, correlationId, post);
         return execute(post);
     }
 
     @Override
     public Post execute(Object postObj) throws Exception {
-        log.info(generalConfig.getCommands().get("createPost") + "Service", postObj);
         // TODO: CHECK THE USER IS AUTHENTICATED AND IS SAME USER IN POST
         try {
             Post post = (Post) postObj;
+            log.info("Service::Create Post Form={}", post);
             //Make necessary checks that the user follows this channel
             final Optional<User> postCreatorOptional = userRepository.findById(post.getUserNameId());
             if (postCreatorOptional.isEmpty() ||
@@ -73,9 +71,8 @@ public class CreatePostService implements MyCommand {
     }
 
     @RabbitListener(queues = "${mq.queues.response.reddit.createPost}")
-    public void receive(Message message) {
-        String indicator = generalConfig.getCommands().get("createPost");
+    public void receive(Post response, Message message) {
         String correlationId = message.getMessageProperties().getCorrelationId();
-        //log.info(indicator + "Service:: CREATE POST CorrelationId: {}, message: {}", correlationId, response);
+        log.info("Response Queue Listener::CorrelationId={}, response={}", correlationId, response);
     }
 }
