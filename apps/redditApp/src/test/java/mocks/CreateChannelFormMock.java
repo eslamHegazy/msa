@@ -3,7 +3,7 @@ package mocks;
 import com.ScalableTeam.models.reddit.CreateChannelForm;
 
 public class CreateChannelFormMock {
-    private static String channelNameId = ChannelMock.getChannelNameId();
+    private static String channelNameId = ChannelMock2.getChannelNameId();
     private static String adminId = UserMock.getId();
 
     public static CreateChannelForm getCreateChannelForm() {

@@ -1,10 +1,9 @@
 package mocks;
 
 import com.ScalableTeam.models.reddit.AssignModeratorsForm;
-import com.ScalableTeam.models.reddit.CreateChannelForm;
 
 public class AssignModeratorsFormMock {
-    private static String channelNameId = ChannelMock.getChannelNameId();
+    private static String channelNameId = ChannelMock2.getChannelNameId();
     private static String adminId = UserMock.getId();
     public static String moderatorId=ModeratorMock.getId();
 

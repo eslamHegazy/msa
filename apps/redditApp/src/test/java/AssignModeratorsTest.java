@@ -1,15 +1,11 @@
 import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.models.reddit.AssignModeratorsForm;
-import com.ScalableTeam.models.reddit.CreateChannelForm;
 import com.ScalableTeam.reddit.RedditApplication;
 import com.ScalableTeam.reddit.app.adminServices.AssignModeratorsService;
-import com.ScalableTeam.reddit.app.adminServices.CreateChannelService;
-import com.ScalableTeam.reddit.app.post.CreatePostService;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import config.TestBeansConfig;
 import mocks.AssignModeratorsFormMock;
-import mocks.ChannelMock;
-import mocks.CreateChannelFormMock;
+import mocks.ChannelMock2;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +14,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import utils.AssignModeratorsPopulator;
-import utils.CreateChannelPopulator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -41,7 +36,7 @@ public class AssignModeratorsTest {
         AssignModeratorsService command= context.getBean(AssignModeratorsService.class);
         command.execute(assignModeratorsForm);
         //then
-        assertTrue(channelRepository.findById(ChannelMock.getChannelNameId()).get().getModerators().get(assignModeratorsForm.getModeratorId()));
+        assertTrue(channelRepository.findById(ChannelMock2.getChannelNameId()).get().getModerators().get(assignModeratorsForm.getModeratorId()));
     }
 
     @BeforeEach

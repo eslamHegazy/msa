@@ -2,16 +2,16 @@ package utils;
 
 import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
-import mocks.ChannelMock;
+import mocks.ChannelMock2;
 import mocks.CreateChannelFormMock;
 import mocks.ModeratorMock;
 import mocks.UserMock;
 
 public class AssignModeratorsPopulator {
     public static void populate(UserRepository userRepository,ChannelRepository channelRepository) {
-        userRepository.save(UserMock.getUserFollowsChannel(ChannelMock.getChannelNameId()));
-        userRepository.save(ModeratorMock.getModeratorFollowsChannel(ChannelMock.getChannelNameId()));
-        channelRepository.save(ChannelMock.getChannelWithAdminAsModerator());
+        userRepository.save(UserMock.getUserFollowsChannel(ChannelMock2.getChannelNameId()));
+        userRepository.save(ModeratorMock.getModeratorFollowsChannel(ChannelMock2.getChannelNameId()));
+        channelRepository.save(ChannelMock2.getChannelWithAdminAsModerator());
 
     }
 

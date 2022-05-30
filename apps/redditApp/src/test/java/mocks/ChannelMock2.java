@@ -4,7 +4,7 @@ import com.ScalableTeam.arango.Channel;
 
 import java.util.HashMap;
 
-public class ChannelMock {
+public class ChannelMock2 {
     private static String channelNameId = "newChannel";
     private static String adminId = UserMock.getId();
     public static Channel getChannelWithAdminAsModerator(){
