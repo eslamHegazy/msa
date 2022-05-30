@@ -66,6 +66,9 @@ public class CachingService {
     @CacheEvict(cacheNames = "popularPostsCache", key = "#postId")
     public void removePreviouslyPopularPost(String postId) {
     }
+    @CacheEvict(cacheNames = "postsCache", key = "#userNameId")
+    public void removeWallFromCache(String userNameId) {
+    }
     @CacheEvict(cacheNames = "postsCache", allEntries = true)
     public void evictAllEntriesOfPostsCache() {
     }
@@ -83,7 +86,7 @@ public class CachingService {
     private Post[]getPostsFromFollowedUsers(String newLatestReadPostId,HashMap<String,Boolean>followedUsers){
         return postRepository.getPostsByTimeAndUser(newLatestReadPostId,followedUsers);
     }
-    @Cacheable(cacheNames = "postsCache")
+    @Cacheable(cacheNames = "postsCache",key="#userNameId")
     public String getWall(String userNameId) throws Exception {
         try {
 

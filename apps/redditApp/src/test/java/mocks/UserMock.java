@@ -38,7 +38,7 @@ public class UserMock {
     }
     public static User getUserWithIdFollowsChannel(String userNameId,String channelId){
         User user = getUser();
-        user.setUserNameId(id);
+        user.setUserNameId(userNameId);
         HashMap<String,Boolean>follows=new HashMap<>();
         follows.put(channelId,true);
         user.setFollowedChannels(follows);
