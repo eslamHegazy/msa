@@ -1,23 +1,16 @@
 package com.ScalableTeam.models.notifications.requests;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-@Data
+@ToString
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class DeviceTokenRequest {
 
-    private final String userId;
-    private final String deviceToken;
-
-    public DeviceTokenRequest(String userId, String deviceToken) {
-        this.userId = userId;
-        this.deviceToken = deviceToken;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public String getDeviceToken() {
-        return deviceToken;
-    }
+    private String userId;
+    private String deviceToken;
 }

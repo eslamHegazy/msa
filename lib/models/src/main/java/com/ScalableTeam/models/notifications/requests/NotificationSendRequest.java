@@ -1,37 +1,20 @@
 package com.ScalableTeam.models.notifications.requests;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
-@Data
+@ToString
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class NotificationSendRequest {
 
-    private final String title;
-    private final String body;
-    private final String sender;
-    private final List<String> receivers;
-
-    public NotificationSendRequest(String title, String body, String sender, List<String> receivers) {
-        this.title = title;
-        this.body = body;
-        this.sender = sender;
-        this.receivers = receivers;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-    public String getSender() {
-        return sender;
-    }
-
-    public List<String> getReceivers() {
-        return receivers;
-    }
+    private String title;
+    private String body;
+    private String sender;
+    private List<String> receivers;
 }
