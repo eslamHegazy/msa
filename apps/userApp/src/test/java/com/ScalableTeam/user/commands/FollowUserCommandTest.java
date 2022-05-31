@@ -3,25 +3,20 @@ package com.ScalableTeam.user.commands;
 import com.ScalableTeam.arango.User;
 import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.models.user.BlockedUserBody;
-import com.ScalableTeam.models.user.BlockedUserResponse;
 import com.ScalableTeam.models.user.FollowUserBody;
 import com.ScalableTeam.models.user.FollowUserResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-@ActiveProfiles("test")
 @SpringBootTest
 class FollowUserCommandTest {
 
