@@ -16,6 +16,7 @@
     <name>notificationsApp</name>
     <description>Semester 10 Scalable Reddit Microservice - Notifications</description>
     <packaging>jar</packaging>
+
     <dependencies>
         <dependency>
             <groupId>com.google.firebase</groupId>
