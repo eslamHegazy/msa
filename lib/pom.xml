@@ -2,11 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <parent>
         <artifactId>reddit</artifactId>
         <groupId>com.ScalableTeam-0-0-1</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>lib</artifactId>
@@ -14,6 +16,7 @@
     <packaging>pom</packaging>
     <name>lib</name>
     <description>Semester 10 Scalable Reddit Microservices Libs</description>
+
     <modules>
         <module>arango</module>
         <module>services</module>
@@ -21,4 +24,5 @@
         <module>amqp</module>
         <module>utils</module>
     </modules>
+
 </project>
