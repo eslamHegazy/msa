@@ -5,18 +5,24 @@ import com.ScalableTeam.notifications.data.NotificationsRepository;
 import com.ScalableTeam.notifications.utils.Command;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class SendNotificationCommand implements Command<NotificationSendRequest, Integer> {
+public class SendNotificationCommand implements Command<NotificationSendRequest, ResponseEntity<HttpStatus>> {
 
     @Autowired
     private NotificationsRepository notificationsRepository;
 
     @Override
-    public Integer execute(NotificationSendRequest body) throws Exception {
-        notificationsRepository.sendNotification(body);
-        return 200;
+    public ResponseEntity<HttpStatus> execute(NotificationSendRequest body) {
+        try {
+            notificationsRepository.sendNotification(body);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
