@@ -30,8 +30,6 @@ public class BaseService {
             try {
                 int port = addressConfig.getDefaultPort();
                 Map<String, Integer> m = addressConfig.getPorts();
-                System.out.println(appName);
-                System.out.println(m);
                 if (m.containsKey(appName))
                     port = m.get(appName);
                 controllerRequestsServer.setTcpPort(port);

@@ -18,6 +18,8 @@ import org.springframework.context.annotation.PropertySource;
 //@EnableEurekaClient
 @EnableCaching
 @PropertySource("classpath:message-queues.properties")
+@PropertySource("classpath:address-config.properties")
+
 public class RedditApplication extends BaseService {
     public static void main(String[] args) {
         SpringApplication.run(RedditApplication.class, args);

@@ -16,6 +16,8 @@ import org.springframework.context.annotation.PropertySource;
 @ConfigurationPropertiesScan
 //@EnableEurekaClient
 @PropertySource("classpath:message-queues.properties")
+@PropertySource("classpath:address-config.properties")
+
 public class ChatApplication extends BaseService {
 
     public static void main(String[] args) {

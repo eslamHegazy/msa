@@ -13,6 +13,8 @@ import org.springframework.context.annotation.PropertySource;
 })
 //@EnableEurekaClient
 @PropertySource("classpath:message-queues.properties")
+@PropertySource("classpath:address-config.properties")
+
 public class MediaAppApplication extends BaseService {
 
     public static void main(String[] args) {
