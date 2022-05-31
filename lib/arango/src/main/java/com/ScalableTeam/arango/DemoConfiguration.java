@@ -11,7 +11,7 @@ public class DemoConfiguration implements ArangoConfiguration {
 
     @Override
     public ArangoDB.Builder arango() {
-        return new ArangoDB.Builder().host("localhost", 8529).user("root").password(null);
+        return new ArangoDB.Builder().host("localhost", 8529).user("root").password("root");
     }
 
     @Override

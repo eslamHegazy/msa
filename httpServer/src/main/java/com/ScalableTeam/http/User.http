@@ -19,7 +19,7 @@ Content-Type: application/json
 ###
 DELETE http://localhost:3000/user/deleteAccount
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtbyIsImV4cCI6MTY1Mzk1MjY4OCwiaWF0IjoxNjUzOTE2Njg4fQ.WB6ydgDZh1eY232UCIirBF_IFlaihbPzQxVPL4CWVGg
+//Authorization: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtbyIsImV4cCI6MTY1Mzk1MjY4OCwiaWF0IjoxNjUzOTE2Njg4fQ.WB6ydgDZh1eY232UCIirBF_IFlaihbPzQxVPL4CWVGg
 
 {
   "userId": "mo"
@@ -33,3 +33,52 @@ Authorization: abcd
   "userId": "mo",
   "photoUrl": "http://127.0.0.1:9000/profile-photos/128391246_2764299190449968_4793434281869584914_o.jpg"
 }
+
+###
+GET http://localhost:3000/search/by_title/the
+
+###
+GET http://localhost:3000/search/by_channel/xxx
+
+###
+POST http://localhost:3000/posts/upvote/1?userNameId=MockUser
+
+###
+POST http://localhost:3000/posts/downvote/1?userNameId=MockUser
+
+###
+POST http://localhost:3000/comments
+Content-Type: application/json
+
+{
+  "id": "1234",
+  "arangoId": "posts/1234",
+  "commentOnPost": true,
+  "commentParentId": "1",
+  "postId": "1",
+  "body": "great post!",
+  "userNameId": "1",
+  "upvoteCount": "0",
+  "downvoteCount": "0"
+}
+
+###
+POST http://localhost:3000/posts
+Content-Type: application/json
+
+{
+  "id": "1234",
+  "arangoId": "1234",
+  "channelId": "MockChannel",
+  "userNameId": "MockUser",
+  "title": "title",
+  "body": "body",
+  "photoLink": "http://127.0.0.1:9000/profile-photos/128391246_2764299190449968_4793434281869584914_o.jpg",
+  "upvoteCount": "0",
+  "downvoteCount": "0",
+  "time": "2019-03-30"
+}
+
+###
+GET http://localhost:3000/popularPosts
+
