@@ -1,6 +1,6 @@
 package com.ScalableTeam.reddit.app.seeders;
 
-import com.ScalableTeam.reddit.app.entity.Channel;
+import com.ScalableTeam.arango.Channel;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

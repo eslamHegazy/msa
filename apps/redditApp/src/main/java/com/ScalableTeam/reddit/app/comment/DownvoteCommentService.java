@@ -1,56 +1,48 @@
 package com.ScalableTeam.reddit.app.comment;
 
-import com.ScalableTeam.reddit.MyCommand;
-import com.ScalableTeam.reddit.app.entity.Comment;
+import com.ScalableTeam.amqp.MessagePublisher;
+import com.ScalableTeam.arango.Comment;
+import com.ScalableTeam.models.reddit.VoteCommentForm;
+import com.ScalableTeam.reddit.ICommand;
 import com.ScalableTeam.reddit.app.entity.vote.CommentVote;
 import com.ScalableTeam.reddit.app.repository.CommentRepository;
 import com.ScalableTeam.reddit.app.repository.vote.CommentVoteRepository;
 import com.ScalableTeam.reddit.app.repository.vote.UserVoteCommentRepository;
-import com.ScalableTeam.reddit.app.requestForms.VoteCommentForm;
 import com.ScalableTeam.reddit.app.validation.CommentVoteValidation;
-import com.ScalableTeam.reddit.config.GeneralConfig;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @ComponentScan("com.ScalableTeam.reddit")
 @Service
 @Slf4j
 @AllArgsConstructor
-public class DownvoteCommentService implements MyCommand {
+public class DownvoteCommentService implements ICommand<VoteCommentForm, String> {
     private final CommentRepository commentRepository;
     private final UserVoteCommentRepository userVoteCommentRepository;
     private final CommentVoteRepository commentVoteRepository;
-    private final GeneralConfig generalConfig;
     private final CommentVoteValidation commentVoteValidation;
 
     @RabbitListener(queues = "${mq.queues.request.reddit.downvoteComment}")
-    public String execute(VoteCommentForm voteCommentForm, Message message) throws Exception {
-        Map<String, Object> attributes = new HashMap<>();
-        attributes.put("form", voteCommentForm);
-        attributes.put("message", message);
-        return (String) execute(attributes);
+    public String execute(VoteCommentForm voteCommentForm, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
+        String correlationId = message.getMessageProperties().getCorrelationId();
+        log.info("Queue Listener::Command={}, CorrelationId={}, Vote Comment Form={}", commandName, correlationId, voteCommentForm);
+        return execute(voteCommentForm);
     }
 
-    @Transactional(rollbackFor = {Exception.class})
+    @Transactional(rollbackFor = {Exception.class}, isolation = Isolation.REPEATABLE_READ)
     @Override
-    public Object execute(Object obj) throws Exception {
-        Map<String, Object> attributes = (Map<String, Object>) obj;
-        VoteCommentForm voteCommentForm = (VoteCommentForm) attributes.get("form");
-        Message message = (Message) attributes.get("message");
+    public String execute(VoteCommentForm voteCommentForm) throws Exception {
+        log.info("Service::Vote Comment Form={}", voteCommentForm);
 
         String userNameId = voteCommentForm.getUserNameId();
         String commentId = voteCommentForm.getCommentId();
-        String correlationId = message.getMessageProperties().getCorrelationId();
-        String indicator = generalConfig.getCommands().get("downvoteComment");
-        log.info(indicator + "Service::Comment Id={}, User Id={}, correlationId={}", commentId, userNameId, correlationId);
 
         commentVoteValidation.validateCommentVote(userNameId, commentId);
         String responseMessage = userVoteCommentRepository.downvoteComment(userNameId, commentId);
@@ -68,9 +60,7 @@ public class DownvoteCommentService implements MyCommand {
 
     @RabbitListener(queues = "${mq.queues.response.reddit.downvoteComment}")
     public void receive(String response, Message message) {
-        String indicator = generalConfig.getCommands().get("downvoteComment");
         String correlationId = message.getMessageProperties().getCorrelationId();
-        log.info(indicator + "Service::CorrelationId: {}, message: {}", correlationId, response);
+        log.info("Response Queue Listener::CorrelationId={}, response={}", correlationId, response);
     }
-
 }

@@ -1,19 +1,17 @@
 package com.ScalableTeam.reddit.config;
 
-import com.ScalableTeam.reddit.app.entity.vote.PostVote;
+import com.ScalableTeam.services.managers.BaseDatabasePooling;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -24,10 +22,10 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 @EnableJpaRepositories(
         basePackages = "com.ScalableTeam.reddit.app.repository.vote",
-        entityManagerFactoryRef = "sqlEntityManagerFactory",
         transactionManagerRef = "sqlTransactionManager"
 )
-public class SqlJpaConfig {
+@Slf4j
+public class SqlJpaConfig extends BaseDatabasePooling {
 
     @Primary
     @Bean
@@ -66,19 +64,75 @@ public class SqlJpaConfig {
 
     @Primary
     @Bean
-    public LocalContainerEntityManagerFactoryBean sqlEntityManagerFactory(EntityManagerFactoryBuilder builder) {
-        return builder
-                .dataSource(sqlDataSource())
-                .packages(PostVote.class)
-                .persistenceUnit("sql")
-                .build();
+    public PlatformTransactionManager sqlTransactionManager(
+            EntityManagerFactory sqlEntityManagerFactory) {
+        return new JpaTransactionManager(sqlEntityManagerFactory);
     }
 
-    @Primary
-    @Bean
-    public PlatformTransactionManager sqlTransactionManager(
-            @Qualifier("sqlEntityManagerFactory")
-                    EntityManagerFactory sqlEntityManagerFactory) {
-        return new JpaTransactionManager(sqlEntityManagerFactory);
+    @Override
+    public void changeMaxPoolSize(int max) {
+        DataSource ds = sqlDataSource();
+        HikariDataSource hikari = (HikariDataSource) ds;
+        hikari.setMaximumPoolSize(max);
+        log.info("Change Max Pool Size to {} for Hikari Data Source {} with url {}", max, hikari, hikari.getJdbcUrl());
+    }
+
+    @Override
+    public boolean canChangeMaxPoolSize() {
+        return true;
+    }
+
+    @Override
+    public void changeMaxConnectionTimeout(long max) {
+        DataSource ds = sqlDataSource();
+        HikariDataSource hikari = (HikariDataSource) ds;
+        hikari.setConnectionTimeout(max);
+        log.info("Change Max Connection Timeout to {} for Hikari Data Source {} with url {}", max, hikari, hikari.getJdbcUrl());
+    }
+
+    @Override
+    public boolean canChangeMaxConnectionTimeout() {
+        return true;
+    }
+
+    @Override
+    public void changeMinIdleConnectionSize(int min) {
+        DataSource ds = sqlDataSource();
+        HikariDataSource hikari = (HikariDataSource) ds;
+        hikari.setMinimumIdle(min);
+        log.info("Change Min Idle Connection Size to {} for Hikari Data Source {} with url {}", min, hikari, hikari.getJdbcUrl());
+    }
+
+    @Override
+    public boolean canChangeMinIdleConnectionSize() {
+        return true;
+    }
+
+    @Override
+    public void changeMaxLifetime(long max) {
+        DataSource ds = sqlDataSource();
+        HikariDataSource hikari = (HikariDataSource) ds;
+        hikari.setMaxLifetime(max);
+        log.info("Change Max Lifetime to {} for Hikari Data Source {} with url {}", max, hikari, hikari.getJdbcUrl());
+    }
+
+    @Override
+    public boolean canChangeMaxLifetime() {
+        return true;
+    }
+
+    @Override
+    public void changePoolName(String pool) {
+        DataSource ds = sqlDataSource();
+        HikariDataSource hikari = (HikariDataSource) ds;
+        hikari.setPoolName(pool);
+        log.info("Change Pool Name to {} for Hikari Data Source {} with url {}", pool, hikari, hikari.getJdbcUrl());
+    }
+
+    @Override
+    public String getPoolName() {
+        DataSource ds = sqlDataSource();
+        HikariDataSource hikari = (HikariDataSource) ds;
+        return hikari.getPoolName();
     }
 }

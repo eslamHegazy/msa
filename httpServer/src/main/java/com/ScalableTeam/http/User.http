@@ -1,0 +1,35 @@
+POST http://localhost:3000/auth/signUp
+Content-Type: application/json
+
+{
+  "userId": "mo",
+  "email": "mo@gmail.com",
+  "password": "pass"
+}
+
+###
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "userId": "mo",
+  "password": "pass"
+}
+
+###
+DELETE http://localhost:3000/user/deleteAccount
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtbyIsImV4cCI6MTY1Mzk1MjY4OCwiaWF0IjoxNjUzOTE2Njg4fQ.WB6ydgDZh1eY232UCIirBF_IFlaihbPzQxVPL4CWVGg
+
+{
+  "userId": "mo"
+}
+###
+POST http://localhost:3000/user/updatePhoto
+Content-Type: application/json
+Authorization: abcd
+
+{
+  "userId": "mo",
+  "photoUrl": "http://127.0.0.1:9000/profile-photos/128391246_2764299190449968_4793434281869584914_o.jpg"
+}

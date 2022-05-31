@@ -1,24 +1,18 @@
 package com.ScalableTeam.reddit.app.readWall;
 
+import com.ScalableTeam.amqp.MessagePublisher;
+import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.caching.CachingService;
-import com.ScalableTeam.reddit.app.entity.Post;
-import com.ScalableTeam.reddit.app.entity.User;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
-import com.ScalableTeam.reddit.app.repository.UserRepository;
-import com.ScalableTeam.reddit.config.GeneralConfig;
 import com.arangodb.springframework.core.ArangoOperations;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
-
-import java.time.Instant;
-import java.util.*;
 
 @ComponentScan("com.ScalableTeam.reddit")
 @Service
@@ -32,22 +26,19 @@ public class ReadWallService implements MyCommand {
     private UserRepository userRepository;
     @Autowired
     private CachingService cachingService;
-    @Autowired
-    private GeneralConfig generalConfig;
 
-    @RabbitListener(queues = "${mq.queues.request.reddit.readWall}")
-    public String listenToRequestQueue(String userNameIdString, Message message) throws Exception {
+    @RabbitListener(queues = "${mq.queues.request.reddit.readWall}", returnExceptions = "true")
+    public String listenToRequestQueue(String userNameIdString, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
         String correlationId = message.getMessageProperties().getCorrelationId();
-        String indicator = generalConfig.getCommands().get("readWall");
-        log.info(indicator + "Service::Read Wall, CorrelationId={}", correlationId);
+        log.info("Queue Listener::Command={}, CorrelationId={}, Read Wall Form={}", commandName, correlationId, userNameIdString);
         return execute(userNameIdString);
     }
 
     @Override
 
     public String execute(Object userNameIdString) throws Exception {
-        log.info(generalConfig.getCommands().get("readWall") + "Service", userNameIdString);
         String userNameId = (String) userNameIdString;
+        log.info("Service::Read Wall Form={}", userNameId);
         return cachingService.getWall(userNameId);
     }
 

@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>apps</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>apps</name>
     <description>Semester 10 Scalable Reddit Microservices Container</description>
@@ -18,33 +19,29 @@
     <modules>
         <module>notificationsApp</module>
         <module>redditApp</module>
+        <module>userApp</module>
+        <module>mediaApp</module>
+        <module>controllerApp</module>
+        <module>chatApp</module>
     </modules>
 
-    <properties>
-        <junit.jupiter.version>5.8.1</junit.jupiter.version>
-    </properties>
-
     <dependencies>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>-->
+<!--            <version>3.1.2</version>-->
+<!--        </dependency>-->
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>${junit.jupiter.version}</version>
-            <scope>test</scope>
+            <groupId>com.ScalableTeam-0-0-1</groupId>
+            <artifactId>services</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <version>2.5.5</version>
-            <scope>test</scope>
-
-            <!-- Exclude JUnit 4 -->
-            <exclusions>
-                <exclusion>
-                    <groupId>junit</groupId>
-                    <artifactId>junit</artifactId>
-                </exclusion>
-            </exclusions>
-
+            <groupId>com.ScalableTeam-0-0-1</groupId>
+            <artifactId>models</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.google.api</groupId>
@@ -85,6 +82,4 @@
             <artifactId>spring-rabbit</artifactId>
         </dependency>
     </dependencies>
-
-
 </project>

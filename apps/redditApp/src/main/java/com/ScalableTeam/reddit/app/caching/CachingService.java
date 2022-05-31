@@ -1,9 +1,10 @@
 package com.ScalableTeam.reddit.app.caching;
 
-import com.ScalableTeam.reddit.app.entity.Post;
-import com.ScalableTeam.reddit.app.entity.User;
+import com.ScalableTeam.arango.Channel;
+import com.ScalableTeam.arango.Post;
+import com.ScalableTeam.arango.User;
+import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
-import com.ScalableTeam.reddit.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -55,8 +56,18 @@ public class CachingService {
     public String updatePostsCache(String postId, Post post){
         return post.toString();
     }
+    @CachePut(cacheNames = "popularChannelsCache",key="#redditId")
+    public String updatePopularChannelsCache(String redditId, Channel channel){
+        return channel.toString();
+    }
+    @CacheEvict(cacheNames = "popularChannelsCache", key = "#redditId")
+    public void removePreviouslyPopularChannel(String redditId) {
+    }
     @CacheEvict(cacheNames = "popularPostsCache", key = "#postId")
     public void removePreviouslyPopularPost(String postId) {
+    }
+    @CacheEvict(cacheNames = "postsCache", key = "#userNameId")
+    public void removeWallFromCache(String userNameId) {
     }
     @CacheEvict(cacheNames = "postsCache", allEntries = true)
     public void evictAllEntriesOfPostsCache() {
@@ -75,7 +86,7 @@ public class CachingService {
     private Post[]getPostsFromFollowedUsers(String newLatestReadPostId,HashMap<String,Boolean>followedUsers){
         return postRepository.getPostsByTimeAndUser(newLatestReadPostId,followedUsers);
     }
-    @Cacheable(cacheNames = "postsCache")
+    @Cacheable(cacheNames = "postsCache",key="#userNameId")
     public String getWall(String userNameId) throws Exception {
         try {
 

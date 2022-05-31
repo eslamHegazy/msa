@@ -1,6 +1,6 @@
 package com.ScalableTeam.reddit.app.seeders;
 
-import com.ScalableTeam.reddit.app.entity.Post;
+import com.ScalableTeam.arango.Post;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class PostSeeder {
 
     public Set<String> seedPosts(Set<String> userNameIds) {
         log.info("Seed Posts:-----");
-            ArrayList<String> users = new ArrayList<>(userNameIds);
+        ArrayList<String> users = new ArrayList<>(userNameIds);
         Set<String> posts = new HashSet<>();
         int postNum = 0;
         for (int i = 0; i < userNameIds.size(); i++) {

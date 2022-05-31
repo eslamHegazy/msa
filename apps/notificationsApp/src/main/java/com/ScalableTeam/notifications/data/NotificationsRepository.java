@@ -1,19 +1,16 @@
 package com.ScalableTeam.notifications.data;
 
+import com.ScalableTeam.models.notifications.requests.DeviceTokenRequest;
+import com.ScalableTeam.models.notifications.requests.NotificationDeleteRequest;
+import com.ScalableTeam.models.notifications.requests.NotificationReadRequest;
+import com.ScalableTeam.models.notifications.requests.NotificationSendRequest;
+import com.ScalableTeam.models.notifications.responses.NotificationResponse;
 import com.ScalableTeam.notifications.constants.Collections;
 import com.ScalableTeam.notifications.constants.Fields;
 import com.ScalableTeam.notifications.exceptions.FirebaseCredentialsException;
 import com.ScalableTeam.notifications.exceptions.FirebaseNotificationException;
-import com.ScalableTeam.notifications.models.requests.DeviceTokenRequest;
-import com.ScalableTeam.notifications.models.requests.NotificationDeleteRequest;
-import com.ScalableTeam.notifications.models.requests.NotificationReadRequest;
-import com.ScalableTeam.notifications.models.requests.NotificationSendRequest;
-import com.ScalableTeam.notifications.models.responses.NotificationResponse;
 import com.ScalableTeam.notifications.utils.FirebaseInitializer;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.FieldValue;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.stereotype.Repository;
 
@@ -89,7 +86,8 @@ public class NotificationsRepository {
         }
 
         // Send the notification.
-        notifyUser(notification);
+        // TODO: This code is commented out because the tokens logic cannot be tested without a real mobile device.
+        // notifyUser(notification);
     }
 
     protected void notifyUser(NotificationSendRequest notification) throws FirebaseCredentialsException, FirebaseNotificationException, ExecutionException, InterruptedException {
@@ -103,6 +101,7 @@ public class NotificationsRepository {
         QuerySnapshot query = firestore.collection(Collections.USERS)
                 .document(userId)
                 .collection(Collections.NOTIFICATIONS)
+                .orderBy(Fields.TIMESTAMP, Query.Direction.DESCENDING)
                 .get()
                 .get();
 

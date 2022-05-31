@@ -1,24 +1,21 @@
 package com.ScalableTeam.reddit.app.comment;
 
+import com.ScalableTeam.amqp.MessagePublisher;
+import com.ScalableTeam.arango.*;
 import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.caching.CachingService;
-import com.ScalableTeam.reddit.app.entity.*;
-
-import com.ScalableTeam.reddit.app.repository.*;
-
-import com.ScalableTeam.reddit.app.requestForms.CreateChannelForm;
-import com.ScalableTeam.reddit.config.GeneralConfig;
+import com.ScalableTeam.reddit.app.repository.CommentChildrenHierarchyRepository;
+import com.ScalableTeam.reddit.app.repository.CommentRepository;
+import com.ScalableTeam.reddit.app.repository.PostCommentHierarchyRepository;
+import com.ScalableTeam.reddit.app.repository.PostRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
 
 import java.util.Optional;
 
@@ -35,8 +32,6 @@ public class CommentService implements MyCommand {
     @Autowired
     private CacheManager cacheManager;
     @Autowired
-    private GeneralConfig generalConfig;
-    @Autowired
     private CachingService cachingService;
     @Autowired
     private CommentChildrenHierarchyRepository commentChildrenHierarchyRepository;
@@ -44,20 +39,19 @@ public class CommentService implements MyCommand {
     private PostCommentHierarchyRepository postCommentHierarchyRepository;
 
     @RabbitListener(queues = "${mq.queues.request.reddit.comment}")
-    public Post listenToRequestQueue(Comment comment, Message message) throws Exception {
+    public Post listenToRequestQueue(Comment comment, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
         String correlationId = message.getMessageProperties().getCorrelationId();
-        String indicator = generalConfig.getCommands().get("comment");
-        log.info(indicator + "Service::Comment, CorrelationId={}", correlationId);
+        log.info("Queue Listener::Command={}, CorrelationId={}, Comment Form={}", commandName, correlationId, comment);
         return execute(comment);
     }
 
     @Override
     public Post execute(Object body) throws Exception {
-        log.info(generalConfig.getCommands().get("comment") + "Service", body);
         try {
 //            CommentResponseForm commentResponseForm=(CommentResponseForm) body;
 //            Comment comment=commentResponseForm.getComment();
             Comment comment = (Comment) body;
+            log.info("Service::Comment Form={}", comment);
 
             final Optional<User> postCreatorOptional = userRepository.findById(comment.getUserNameId());
             String postId = comment.getPostId() == null ? comment.getCommentParentId() : comment.getPostId();
@@ -81,12 +75,14 @@ public class CommentService implements MyCommand {
             Post post = postParentOptional.get();
             if (!comment.isCommentOnPost()) {
                 CommentToComment commentToComment = CommentToComment.builder()
+                        .id(comment.getCommentParentId() + comment.getId())
                         .parentComment(commentRepository.findById(comment.getCommentParentId()).get())
                         .childComment(comment)
                         .build();
                 commentChildrenHierarchyRepository.save(commentToComment);
             } else {
                 PostToComment postToComment = PostToComment.builder()
+                        .id(postId + comment.getId())
                         .post(post)
                         .comment(comment)
                         .build();
@@ -107,18 +103,17 @@ public class CommentService implements MyCommand {
             //return "Error: Couldn't add comment";
         }
     }
-//    @Cacheable(cacheNames = {"postsCache"},key = "#postId")
+
+    //    @Cacheable(cacheNames = {"postsCache"},key = "#postId")
 //    private Post getPost(String postId){
 //        final Optional<Post> postParentOptional = postRepository.findById(postId);
 //        if(postParentOptional.isEmpty())
 //            return null;
 //        return postParentOptional.get();
 //    }
-@RabbitListener(queues = "${mq.queues.response.reddit.comment}")
-public void receive(Post response, Message message) {
-    String indicator = generalConfig.getCommands().get("comment");
-    String correlationId = message.getMessageProperties().getCorrelationId();
-    log.info(indicator + "Service:: COMMENT CorrelationId: {}, message: {}", correlationId, response);
-}
-
+    @RabbitListener(queues = "${mq.queues.response.reddit.comment}")
+    public void receive(Post response, Message message) {
+        String correlationId = message.getMessageProperties().getCorrelationId();
+        log.info("Response Queue Listener::CorrelationId={}, response={}", correlationId, response);
+    }
 }

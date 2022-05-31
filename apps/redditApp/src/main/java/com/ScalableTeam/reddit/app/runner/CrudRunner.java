@@ -1,11 +1,9 @@
 package com.ScalableTeam.reddit.app.runner;
 
-import com.ScalableTeam.reddit.app.entity.Comment;
-import com.ScalableTeam.reddit.app.entity.Post;
-import com.ScalableTeam.reddit.app.entity.User;
+import com.ScalableTeam.arango.Post;
+import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
-import com.ScalableTeam.reddit.app.repository.UserRepository;
 import com.ScalableTeam.reddit.app.seeders.ChannelSeeder;
 import com.ScalableTeam.reddit.app.seeders.CommentSeeder;
 import com.ScalableTeam.reddit.app.seeders.PostSeeder;
@@ -17,12 +15,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import javax.annotation.Resource;
-import java.time.Instant;
-import java.util.*;
 
 @ComponentScan("com.ScalableTeam.reddit")
 public class CrudRunner implements CommandLineRunner {

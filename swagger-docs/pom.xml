@@ -12,4 +12,5 @@
     <name>swagger-docs</name>
     <description>Semester 10 Scalable Reddit Application - Swagger Docs</description>
     <artifactId>swagger-docs</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
 </project>

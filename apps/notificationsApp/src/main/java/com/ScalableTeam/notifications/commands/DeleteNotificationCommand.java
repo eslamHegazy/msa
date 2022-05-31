@@ -1,21 +1,28 @@
 package com.ScalableTeam.notifications.commands;
 
+import com.ScalableTeam.models.notifications.requests.NotificationDeleteRequest;
 import com.ScalableTeam.notifications.data.NotificationsRepository;
-import com.ScalableTeam.notifications.models.requests.NotificationDeleteRequest;
 import com.ScalableTeam.notifications.utils.Command;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+@Slf4j
+@AllArgsConstructor
 @Service
-public class DeleteNotificationCommand implements Command {
+public class DeleteNotificationCommand implements Command<NotificationDeleteRequest, ResponseEntity<HttpStatus>> {
 
-    @Autowired
-    private NotificationsRepository notificationsRepository;
+    private final NotificationsRepository notificationsRepository;
 
     @Override
-    public Integer execute(Object body) throws Exception {
-        NotificationDeleteRequest notification = (NotificationDeleteRequest) body;
-        notificationsRepository.deleteNotification(notification);
-        return 200;
+    public ResponseEntity<HttpStatus> execute(NotificationDeleteRequest body) {
+        try {
+            notificationsRepository.deleteNotification(body);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
