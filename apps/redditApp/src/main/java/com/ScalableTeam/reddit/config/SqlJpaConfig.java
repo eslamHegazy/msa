@@ -1,21 +1,17 @@
 package com.ScalableTeam.reddit.config;
 
-import com.ScalableTeam.reddit.app.entity.vote.PostVote;
 import com.ScalableTeam.services.managers.BaseDatabasePooling;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -26,7 +22,6 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 @EnableJpaRepositories(
         basePackages = "com.ScalableTeam.reddit.app.repository.vote",
-        entityManagerFactoryRef = "sqlEntityManagerFactory",
         transactionManagerRef = "sqlTransactionManager"
 )
 @Slf4j
@@ -69,19 +64,8 @@ public class SqlJpaConfig extends BaseDatabasePooling {
 
     @Primary
     @Bean
-    public LocalContainerEntityManagerFactoryBean sqlEntityManagerFactory(EntityManagerFactoryBuilder builder) {
-        return builder
-                .dataSource(sqlDataSource())
-                .packages(PostVote.class)
-                .persistenceUnit("sql")
-                .build();
-    }
-
-    @Primary
-    @Bean
     public PlatformTransactionManager sqlTransactionManager(
-            @Qualifier("sqlEntityManagerFactory")
-                    EntityManagerFactory sqlEntityManagerFactory) {
+            EntityManagerFactory sqlEntityManagerFactory) {
         return new JpaTransactionManager(sqlEntityManagerFactory);
     }
 
