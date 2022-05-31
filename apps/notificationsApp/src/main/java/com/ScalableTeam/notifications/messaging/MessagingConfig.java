@@ -1,8 +1,6 @@
 package com.ScalableTeam.notifications.messaging;
 
 import com.ScalableTeam.amqp.MessageQueues;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
