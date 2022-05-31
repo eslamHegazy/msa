@@ -1,5 +1,6 @@
 package com.ScalableTeam.controller.server;
 
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Component;
 import javax.net.ssl.SSLException;
 import java.security.cert.CertificateException;
 
+@ChannelHandler.Sharable
 @Component
 @RequiredArgsConstructor
 public class ServerInitializer extends ChannelInitializer<SocketChannel> {

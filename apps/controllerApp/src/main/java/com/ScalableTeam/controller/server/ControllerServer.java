@@ -1,15 +1,10 @@
 package com.ScalableTeam.controller.server;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -45,21 +40,16 @@ public class ControllerServer {
         try {
             serverBootstrap
                     .option(ChannelOption.SO_BACKLOG, 1024)
-                    .group(eventLoopGroup)
+                    .group(eventLoopGroup, eventWorkerLoopGroup)
                     .channel(NioServerSocketChannel.class)
-                    .localAddress(tcpPort)
-                    .childHandler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        public void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(serverInitializer);
-                        }
-                    });
+                    .childHandler(serverInitializer);
 
-            ChannelFuture f = serverBootstrap.bind().sync();
-            log.info("{} started and listening on {} ", ControllerServer.class.getSimpleName(), f.channel().localAddress());
-            f.channel().closeFuture().sync();
+            Channel f = serverBootstrap.bind(tcpPort).sync().channel();
+            log.info("{} started and listening on {} ", ControllerServer.class.getSimpleName(), f.localAddress());
+            f.closeFuture().sync();
         } finally {
             eventLoopGroup.shutdownGracefully().sync(); // Terminates all threads
+            eventWorkerLoopGroup.shutdownGracefully().sync(); // Terminates all threads
         }
     }
 

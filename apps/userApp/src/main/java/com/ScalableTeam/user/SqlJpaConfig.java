@@ -1,7 +1,7 @@
-package com.ScalableTeam.reddit.config;
+package com.ScalableTeam.user;
 
-import com.ScalableTeam.reddit.app.entity.vote.PostVote;
 import com.ScalableTeam.services.managers.BaseDatabasePooling;
+import com.ScalableTeam.user.entity.UserProfile;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        basePackages = "com.ScalableTeam.reddit.app.repository.vote",
+        basePackages = "com.ScalableTeam.user.repositories",
         entityManagerFactoryRef = "sqlEntityManagerFactory",
         transactionManagerRef = "sqlTransactionManager"
 )
@@ -72,7 +72,7 @@ public class SqlJpaConfig extends BaseDatabasePooling {
     public LocalContainerEntityManagerFactoryBean sqlEntityManagerFactory(EntityManagerFactoryBuilder builder) {
         return builder
                 .dataSource(sqlDataSource())
-                .packages(PostVote.class)
+                .packages(UserProfile.class)
                 .persistenceUnit("sql")
                 .build();
     }

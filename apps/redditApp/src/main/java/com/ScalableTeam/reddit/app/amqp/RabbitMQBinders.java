@@ -1,6 +1,7 @@
 package com.ScalableTeam.reddit.app.amqp;
 
 import com.ScalableTeam.amqp.Config;
+import com.ScalableTeam.utils.StringUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.amqp.core.*;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -21,10 +22,6 @@ public class RabbitMQBinders {
     private final Config config;
     private final ConfigurableListableBeanFactory beanFactory;
 
-    private String getMethodName(String microservice) {
-        return "get" + microservice.substring(0, 1).toUpperCase() + microservice.substring(1);
-    }
-
     @Bean
     Map<String, Queue> queues() throws InvocationTargetException, IllegalAccessException {
         Map<String, Queue> queues = new HashMap<>();
@@ -38,7 +35,7 @@ public class RabbitMQBinders {
         Map<String, String> commands;
         for (Field micro : microservices) {
             String microservice = micro.getName();
-            String methodName = getMethodName(microservice);
+            String methodName = StringUtils.getMethodName(microservice);
             try {
                 m = requestsClass.getMethod(methodName);
                 commands = (Map<String, String>) m.invoke(requests);
@@ -54,7 +51,7 @@ public class RabbitMQBinders {
         microservices = responsesClass.getDeclaredFields();
         for (Field micro : microservices) {
             String microservice = micro.getName();
-            String methodName = getMethodName(microservice);
+            String methodName = StringUtils.getMethodName(microservice);
             try {
                 m = responsesClass.getMethod(methodName);
                 commands = (Map<String, String>) m.invoke(responses);
