@@ -2,7 +2,7 @@ package com.ScalableTeam.controller;
 
 import com.ScalableTeam.controller.client.ControllerClient;
 import com.ScalableTeam.controller.client.ControllerClientExecutor;
-import com.ScalableTeam.controller.config.AddressConfig;
+import com.ScalableTeam.services.config.AddressConfig;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.configurationprocessor.json.JSONException;
