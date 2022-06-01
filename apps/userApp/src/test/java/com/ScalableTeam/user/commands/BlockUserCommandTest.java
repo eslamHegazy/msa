@@ -16,7 +16,6 @@ import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ActiveProfiles("test")
 @SpringBootTest
 public class BlockUserCommandTest {
     @Autowired

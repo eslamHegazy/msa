@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
 
     private final ConnectionFactory connectionFactory;
+    private final Config config;
 
     @Bean
     public AmqpTemplate amqpTemplate() {
@@ -30,6 +31,8 @@ public class RabbitMQConfig {
                 new SimpleRabbitListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         factory.setMessageConverter(jacksonConverter());
+        factory.setMaxConcurrentConsumers(config.getConcurrentConsumers());
+        factory.setConcurrentConsumers(config.getConcurrentConsumers());
         configurer.configure(factory, connectionFactory);
         factory.setContainerCustomizer(c -> c.setShutdownTimeout(10_000L));
         return factory;

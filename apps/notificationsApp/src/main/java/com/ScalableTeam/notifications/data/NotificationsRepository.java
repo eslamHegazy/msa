@@ -10,10 +10,7 @@ import com.ScalableTeam.notifications.constants.Fields;
 import com.ScalableTeam.notifications.exceptions.FirebaseCredentialsException;
 import com.ScalableTeam.notifications.exceptions.FirebaseNotificationException;
 import com.ScalableTeam.notifications.utils.FirebaseInitializer;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.FieldValue;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.stereotype.Repository;
 
@@ -104,6 +101,7 @@ public class NotificationsRepository {
         QuerySnapshot query = firestore.collection(Collections.USERS)
                 .document(userId)
                 .collection(Collections.NOTIFICATIONS)
+                .orderBy(Fields.TIMESTAMP, Query.Direction.DESCENDING)
                 .get()
                 .get();
 

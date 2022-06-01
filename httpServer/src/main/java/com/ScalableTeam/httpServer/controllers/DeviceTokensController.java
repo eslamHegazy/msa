@@ -22,16 +22,16 @@ public class DeviceTokensController {
     private RabbitMQProducer rabbitMQProducer;
 
     @RequestMapping(method = RequestMethod.PUT, value = "/registerDeviceToken")
-    private void registerDeviceToken(@RequestBody DeviceTokenRequest deviceTokenRequest) {
+    private Object registerDeviceToken(@RequestBody DeviceTokenRequest deviceTokenRequest) {
         String commandName = commandsMapper.getNotifications().get("registerDeviceToken");
         log.info("Controller - Queue: {}, Command: {}, Payload: {}", MessageQueues.NOTIFICATIONS, commandName, deviceTokenRequest);
-        rabbitMQProducer.publishAsynchronous(MessageQueues.NOTIFICATIONS, commandName, deviceTokenRequest);
+        return rabbitMQProducer.publishSynchronous(MessageQueues.NOTIFICATIONS, commandName, deviceTokenRequest);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/unregisterDeviceToken")
-    private void unregisterDeviceToken(@RequestBody DeviceTokenRequest deviceTokenRequest) {
+    private Object unregisterDeviceToken(@RequestBody DeviceTokenRequest deviceTokenRequest) {
         String commandName = commandsMapper.getNotifications().get("unregisterDeviceToken");
         log.info("Controller - Queue: {}, Command: {}, Payload: {}", MessageQueues.NOTIFICATIONS, commandName, deviceTokenRequest);
-        rabbitMQProducer.publishAsynchronous(MessageQueues.NOTIFICATIONS, commandName, deviceTokenRequest);
+        return rabbitMQProducer.publishSynchronous(MessageQueues.NOTIFICATIONS, commandName, deviceTokenRequest);
     }
 }

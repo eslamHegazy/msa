@@ -1,23 +1,16 @@
 package com.ScalableTeam.models.notifications.requests;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-@Data
+@ToString
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class NotificationDeleteRequest {
 
-    private final String userId;
-    private final String notificationId;
-
-    public NotificationDeleteRequest(String userId, String notificationId) {
-        this.userId = userId;
-        this.notificationId = notificationId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public String getNotificationId() {
-        return notificationId;
-    }
+    private String userId;
+    private String notificationId;
 }
