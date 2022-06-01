@@ -155,4 +155,16 @@ public class CachingService {
             throw new Exception("Exception When getting the feed");
         }
     }
+    @Cacheable(cacheNames = "postsCache",key="#userNameId")
+    public String getRecommendations(String redditId) throws Exception {
+        try {
+
+//            ArrayList<Optional<User>> users = userRepository.findAll();
+            return "";
+
+        } catch (Exception e) {
+
+            throw new Exception("Exception When getting the feed");
+        }
+    }
 }

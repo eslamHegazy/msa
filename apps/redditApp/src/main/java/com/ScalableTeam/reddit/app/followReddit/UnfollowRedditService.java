@@ -1,9 +1,12 @@
 package com.ScalableTeam.reddit.app.followReddit;
 
 import com.ScalableTeam.amqp.MessagePublisher;
+import com.ScalableTeam.amqp.MessageQueues;
+import com.ScalableTeam.amqp.RabbitMQProducer;
 import com.ScalableTeam.arango.Channel;
 import com.ScalableTeam.arango.User;
 import com.ScalableTeam.arango.UserRepository;
+import com.ScalableTeam.models.notifications.requests.NotificationSendRequest;
 import com.ScalableTeam.models.reddit.FollowRedditForm;
 import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.caching.CachingService;
@@ -19,6 +22,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 @ComponentScan("com.ScalableTeam.reddit")
@@ -35,7 +39,8 @@ public class UnfollowRedditService implements MyCommand {
     private PopularityConfig popularityConfig;
     @Autowired
     private CachingService cachingService;
-
+    @Autowired
+    private RabbitMQProducer rabbitMQProducer;
     private final String serviceName = "unfollowReddit";
 
 
@@ -88,6 +93,21 @@ public class UnfollowRedditService implements MyCommand {
                 cachingService.removePreviouslyPopularChannel(redditId);
             } else {
                 cachingService.updatePopularChannelsCache(redditId, reddit.get());
+            }
+
+            try {
+                List admins = List.of(channelRepository.findById(redditId).get().getAdminId());
+                System.out.println(admins);
+                log.info("Controller - Queue: {}, Command: {}, Payload: {}", "sendNotificationCommand", serviceName, request);
+                rabbitMQProducer.publishAsynchronousToQueue(MessageQueues.REQUEST_NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
+                        "Channel Follower Left",
+                        userId +" unfollowed your channel "+redditId,
+                        userId,
+                        admins
+                ), MessageQueues.RESPONSE_NOTIFICATIONS);
+            }
+            catch(Exception e){
+                System.out.println("no admin to receive notification");
             }
 
             return "unfollowed reddit " + numfollowers;
