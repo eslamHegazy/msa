@@ -64,7 +64,7 @@ public class DownvoteCommentService implements ICommand<VoteCommentForm, String>
             commentRepository.save(comment);
 
             String result = String.format("User %s %s %s", userNameId, responseMessage, commentId);
-            rabbitMQProducer.publishAsynchronous(MessageQueues.NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
+            rabbitMQProducer.publishSynchronous(MessageQueues.NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
                     "Downvote Update on one of your comments",
                     result,
                     userNameId,
