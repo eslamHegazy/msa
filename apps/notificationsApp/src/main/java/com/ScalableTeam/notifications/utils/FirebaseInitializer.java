@@ -11,6 +11,7 @@ public class FirebaseInitializer {
     public static boolean initialize() {
         try {
             if (!isInitialized) {
+                GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
                 FirebaseOptions options = FirebaseOptions.builder().setCredentials(GoogleCredentials.getApplicationDefault()).build();
                 FirebaseApp.initializeApp(options);
                 isInitialized = true;

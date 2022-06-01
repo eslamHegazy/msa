@@ -2,10 +2,11 @@ package com.ScalableTeam.chat.app.entity;
 
 import com.google.api.client.util.DateTime;
 import com.google.cloud.Timestamp;
-
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Message {
+
+public class Message  {
     String messageId;
     String authorId;
     String content;

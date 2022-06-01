@@ -13,20 +13,23 @@ import org.springframework.context.annotation.Configuration;
 public class MessageConfig {
 
     public final static String QUEUE_NAME = "chatMQ";
-    public final static String RES_QUEUE_NAME = "responseChatMQ";
-    public final static String TOPIC_NAME = "generic_exchange";
-    public final static String ROUTING_KEY = "chat_routingKey";
+    public final static String QUEUE_NAME_SYNC = "chatMQ_sync";
 
-//    @Bean
-//    public Queue queue() {
-//        return new Queue(QUEUE_NAME);
-//    }
-//
+    @Bean
+    public Queue queue() {
+        return new Queue(QUEUE_NAME);
+    }
+
+    @Bean
+    public Queue queueSync() {
+        return new Queue(QUEUE_NAME_SYNC);
+    }
+
 //    @Bean
 //    public TopicExchange exchange() {
 //        return new TopicExchange(TOPIC_NAME);
 //    }
-//
+
 //    @Bean
 //    public Binding binding(Queue queue, TopicExchange topicExchange) {
 //        return BindingBuilder.bind(queue).to(topicExchange).with(ROUTING_KEY);

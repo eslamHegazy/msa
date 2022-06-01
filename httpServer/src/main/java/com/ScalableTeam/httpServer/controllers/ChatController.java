@@ -3,6 +3,7 @@ package com.ScalableTeam.httpServer.controllers;
 import com.ScalableTeam.amqp.Config;
 import com.ScalableTeam.amqp.LegacyRabbitMQProducer;
 import com.ScalableTeam.amqp.MessagePublisher;
+import com.ScalableTeam.amqp.RabbitMQProducer;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.MessagePostProcessor;
@@ -23,7 +24,7 @@ public class ChatController {
     private Config config;
 
     @Autowired
-    private LegacyRabbitMQProducer rabbitMQProducer;
+    private RabbitMQProducer rabbitMQProducer;
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -32,15 +33,13 @@ public class ChatController {
     public Object getGroupChat(@PathVariable String chatId, @RequestParam String lastMessageId) {
         Map<String, Object> msg = new HashMap<>();
         msg.put("ChatType", "GroupChat");
-        msg.put("Command", "GetMessageByGroupId");
+        msg.put("Command", "getMessageByGroupId");
         Map<String, Object> body = new HashMap<>();
         body.put("chatId", chatId);
         body.put("lastMessageId", lastMessageId);
         msg.put("Body", body);
         System.out.println(msg);
-        MessagePostProcessor messagePostProcessor = MessagePublisher.getMessageHeaders(
-                "responseChatMQ");
-        return rabbitMQProducer.publishSynchronous(msg, "generic_exchange", "chat_routingKey");
+        return rabbitMQProducer.publishSynchronous("chatMQ_sync", "GetMessageByGroupId", msg);
     }
 
     @PostMapping("/group-chat")
@@ -48,12 +47,12 @@ public class ChatController {
         try {
             Map<String, Object> msg = new HashMap<>();
             msg.put("ChatType", "GroupChat");
-            msg.put("Command", "CreateGroup");
+            msg.put("Command", "createGroup");
             msg.put("Body", body);
             System.out.println(msg);
             MessagePostProcessor messagePostProcessor = MessagePublisher.getMessageHeaders(
                     "responseChatMQ");
-            rabbitMQProducer.publishAsynchronous(msg, "generic_exchange", "chat_routingKey", messagePostProcessor);
+            rabbitMQProducer.publishAsynchronous("chatMQ", "CreateGroup", msg);
 
             return "0";
         } catch (Exception ex) {
@@ -67,12 +66,12 @@ public class ChatController {
         try {
             Map<String, Object> msg = new HashMap<>();
             msg.put("ChatType", "GroupChat");
-            msg.put("Command", "UpdateGroup");
+            msg.put("Command", "updateGroup");
             msg.put("Body", body);
             System.out.println(msg);
             MessagePostProcessor messagePostProcessor = MessagePublisher.getMessageHeaders(
                     "responseChatMQ");
-            rabbitMQProducer.publishAsynchronous(msg, "generic_exchange", "chat_routingKey", messagePostProcessor);
+            rabbitMQProducer.publishAsynchronous("chatMQ", "UpdateGroup", msg);
 
             return "0";
         } catch (Exception ex) {
@@ -86,13 +85,13 @@ public class ChatController {
         try {
             Map<String, Object> msg = new HashMap<>();
             msg.put("ChatType", "GroupChat");
-            msg.put("Command", "DeleteGroup");
+            msg.put("Command", "deleteGroup");
             body.put("groupChatId", chatId);
             msg.put("Body", body);
             System.out.println(msg);
             MessagePostProcessor messagePostProcessor = MessagePublisher.getMessageHeaders(
                     "responseChatMQ");
-            rabbitMQProducer.publishAsynchronous(msg, "generic_exchange", "chat_routingKey", messagePostProcessor);
+            rabbitMQProducer.publishAsynchronous("chatMQ", "DeleteGroup", msg);
 
             return "0";
         } catch (Exception ex) {
@@ -106,11 +105,11 @@ public class ChatController {
         try {
             Map<String, Object> msg = new HashMap<>();
             msg.put("ChatType", "GroupChat");
-            msg.put("Command", "AddMember");
+            msg.put("Command", "addMember");
             msg.put("Body", body);
             MessagePostProcessor messagePostProcessor = MessagePublisher.getMessageHeaders(
                     "responseChatMQ");
-            rabbitMQProducer.publishAsynchronous(msg, "generic_exchange", "chat_routingKey", messagePostProcessor);
+            rabbitMQProducer.publishAsynchronous("chatMQ", "AddMember", msg);
 
             return "0";
         } catch (Exception ex) {
@@ -124,11 +123,11 @@ public class ChatController {
         try {
             Map<String, Object> msg = new HashMap<>();
             msg.put("ChatType", "GroupChat");
-            msg.put("Command", "RemoveMember");
+            msg.put("Command", "removeMember");
             msg.put("Body", body);
             MessagePostProcessor messagePostProcessor = MessagePublisher.getMessageHeaders(
                     "responseChatMQ");
-            rabbitMQProducer.publishAsynchronous(msg, "generic_exchange", "chat_routingKey", messagePostProcessor);
+            rabbitMQProducer.publishAsynchronous("chatMQ", "RemoveMember", msg);
 
             return "0";
         } catch (Exception ex) {
@@ -142,11 +141,11 @@ public class ChatController {
         try {
             Map<String, Object> msg = new HashMap<>();
             msg.put("ChatType", "GroupChat");
-            msg.put("Command", "SendMessageToGroup");
+            msg.put("Command", "sendMessageToGroup");
             msg.put("Body", body);
             MessagePostProcessor messagePostProcessor = MessagePublisher.getMessageHeaders(
                     "responseChatMQ");
-            rabbitMQProducer.publishAsynchronous(msg, "generic_exchange", "chat_routingKey", messagePostProcessor);
+            rabbitMQProducer.publishAsynchronous("chatMQ", "SendMessageToGroup", msg);
 
             return "0";
         } catch (Exception ex) {
@@ -161,12 +160,12 @@ public class ChatController {
         try {
             Map<String, Object> msg = new HashMap<>();
             msg.put("ChatType", "PrivateChat");
-            msg.put("Command", "CreateChat");
+            msg.put("Command", "createChat");
             msg.put("Body", body);
             System.out.println(msg);
             MessagePostProcessor messagePostProcessor = MessagePublisher.getMessageHeaders(
                     "responseChatMQ");
-            rabbitMQProducer.publishAsynchronous(msg, "generic_exchange", "chat_routingKey", messagePostProcessor);
+            rabbitMQProducer.publishAsynchronous("chatMQ", "CreateChat", msg);
 
             return "0";
         } catch (Exception ex) {
@@ -180,12 +179,12 @@ public class ChatController {
         try {
             Map<String, Object> msg = new HashMap<>();
             msg.put("ChatType", "PrivateChat");
-            msg.put("Command", "AddMessage");
+            msg.put("Command", "addMessage");
             msg.put("Body", body);
             System.out.println(msg);
             MessagePostProcessor messagePostProcessor = MessagePublisher.getMessageHeaders(
                     "responseChatMQ");
-            rabbitMQProducer.publishAsynchronous(msg, "generic_exchange", "chat_routingKey", messagePostProcessor);
+            rabbitMQProducer.publishAsynchronous("chatMQ", "AddMessage", msg);
 
             return "0";
         } catch (Exception ex) {
@@ -198,28 +197,27 @@ public class ChatController {
     public Object getPrivateChat(@PathVariable String chatId, @RequestParam String lastMessageId) {
         Map<String, Object> msg = new HashMap<>();
         msg.put("ChatType", "PrivateChat");
-        msg.put("Command", "GetChat");
+        msg.put("Command", "getChat");
         Map<String, Object> body = new HashMap<>();
         body.put("chatId", chatId);
         body.put("lastMessageId", lastMessageId);
         msg.put("Body", body);
         System.out.println(msg);
-        MessagePostProcessor messagePostProcessor = MessagePublisher.getMessageHeaders(
-                "responseChatMQ");
-        return rabbitMQProducer.publishSynchronous(msg, "generic_exchange", "chat_routingKey");
+
+        Object out = rabbitMQProducer.publishSynchronous("chatMQ_sync", "GetChat", msg);
+        System.out.println(out);
+        return out;
     }
 
     @GetMapping("/{userId}")
     public Object getAllChat(@PathVariable String userId) {
         Map<String, Object> msg = new HashMap<>();
         msg.put("ChatType", "PrivateChat");
-        msg.put("Command", "GetAllChats");
+        msg.put("Command", "getAllChats");
         Map<String, Object> body = new HashMap<>();
         body.put("userId", userId);
         msg.put("Body", body);
         System.out.println(msg);
-        MessagePostProcessor messagePostProcessor = MessagePublisher.getMessageHeaders(
-                "responseChatMQ");
-        return rabbitMQProducer.publishSynchronous(msg, "generic_exchange", "chat_routingKey");
+        return rabbitMQProducer.publishSynchronous("chatMQ_sync", "GetAllChats", msg);
     }
 }
