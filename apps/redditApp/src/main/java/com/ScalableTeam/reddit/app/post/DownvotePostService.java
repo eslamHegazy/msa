@@ -85,7 +85,7 @@ public class DownvotePostService implements ICommand<VotePostForm, String> {
                 cachingService.updatePostsCache(postId, post);
             }
             String result = String.format("User %s %s %s", userNameId, responseMessage, postId);
-            rabbitMQProducer.publishSynchronous(MessageQueues.NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
+            rabbitMQProducer.publishSynchronous(MessageQueues.REQUEST_NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
                     "Downvote Update on one of your posts",
                     result,
                     userNameId,

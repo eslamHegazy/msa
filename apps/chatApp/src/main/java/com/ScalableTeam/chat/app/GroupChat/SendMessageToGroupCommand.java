@@ -8,7 +8,6 @@ import com.ScalableTeam.models.notifications.requests.NotificationSendRequest;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +49,7 @@ public class SendMessageToGroupCommand implements MyCommand {
 
             List<String> users = (List<String>) docSnap.get("users");
 
-            rabbitMQProducer.publishSynchronous(MessageQueues.NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
+            rabbitMQProducer.publishSynchronous(MessageQueues.REQUEST_NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
                     "New Chat Message",
                     content,
                     authorId,

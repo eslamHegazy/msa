@@ -63,7 +63,7 @@ public class UpvoteCommentService implements ICommand<VoteCommentForm, String> {
             commentRepository.save(comment);
 
             String result = String.format("User %s %s %s", userNameId, responseMessage, commentId);
-            rabbitMQProducer.publishSynchronous(MessageQueues.NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
+            rabbitMQProducer.publishSynchronous(MessageQueues.REQUEST_NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
                     "Upvote Update on one of your comments",
                     result,
                     userNameId,

@@ -9,7 +9,12 @@ import org.springframework.context.annotation.Configuration;
 public class MessagingConfig {
 
     @Bean
-    public Queue queue() {
-        return new Queue(MessageQueues.NOTIFICATIONS, true);
+    public Queue requestQueue() {
+        return new Queue(MessageQueues.REQUEST_NOTIFICATIONS, true);
+    }
+
+    @Bean
+    public Queue responseQueue() {
+        return new Queue(MessageQueues.RESPONSE_NOTIFICATIONS, true);
     }
 }

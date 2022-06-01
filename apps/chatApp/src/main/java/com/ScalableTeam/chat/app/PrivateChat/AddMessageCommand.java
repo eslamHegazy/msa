@@ -51,7 +51,7 @@ public class AddMessageCommand implements MyCommand {
                 receiverId = users.get(1);
             else
                 receiverId = users.get(0);
-            rabbitMQProducer.publishSynchronous(MessageQueues.NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
+            rabbitMQProducer.publishSynchronous(MessageQueues.REQUEST_NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
                     "New Chat Message",
                     content,
                     authorId,

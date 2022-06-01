@@ -20,12 +20,20 @@ public class CommandDispatcher {
 
     private static final String HEADER_COMMAND = "Command";
 
-    @RabbitListener(queues = MessageQueues.NOTIFICATIONS, returnExceptions = "true")
-    public Object receiveMessage(Message message, @Header(HEADER_COMMAND) String commandName) throws Exception {
+    @RabbitListener(queues = MessageQueues.REQUEST_NOTIFICATIONS, returnExceptions = "true")
+    public Object onRequestReceived(Message message, @Header(HEADER_COMMAND) String commandName) throws Exception {
         Command command = commandsMap.get(commandName);
-        log.info("Service: Notifications, Message: {}, Payload: {}",
+        log.info("Service: Notifications, Queue: {}, Message: {}, Payload: {}",
+                MessageQueues.REQUEST_NOTIFICATIONS,
                 command.getClass().getCanonicalName(),
                 message.getPayload());
         return command.execute(message.getPayload());
+    }
+
+    @RabbitListener(queues = MessageQueues.RESPONSE_NOTIFICATIONS, returnExceptions = "true")
+    public void onResponseReceived(Message message) {
+        log.info("Service: Notifications, Queue: {}, Payload: {}",
+                MessageQueues.RESPONSE_NOTIFICATIONS,
+                message.getPayload());
     }
 }
