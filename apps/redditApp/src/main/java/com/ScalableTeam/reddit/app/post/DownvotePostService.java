@@ -1,7 +1,10 @@
 package com.ScalableTeam.reddit.app.post;
 
 import com.ScalableTeam.amqp.MessagePublisher;
+import com.ScalableTeam.amqp.MessageQueues;
+import com.ScalableTeam.amqp.RabbitMQProducer;
 import com.ScalableTeam.arango.Post;
+import com.ScalableTeam.models.notifications.requests.NotificationSendRequest;
 import com.ScalableTeam.models.reddit.VotePostForm;
 import com.ScalableTeam.reddit.ICommand;
 import com.ScalableTeam.reddit.app.caching.CachingService;
@@ -23,6 +26,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @ComponentScan("com.ScalableTeam.reddit")
 @Service
 @Slf4j
@@ -40,6 +45,8 @@ public class DownvotePostService implements ICommand<VotePostForm, String> {
     private CachingService cachingService;
     @Autowired
     private PopularityConfig popularityConfig;
+    @Autowired
+    private RabbitMQProducer rabbitMQProducer;
 
     @RabbitListener(queues = "${mq.queues.request.reddit.downvotePost}")
     public String execute(VotePostForm votePostForm, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
@@ -57,25 +64,40 @@ public class DownvotePostService implements ICommand<VotePostForm, String> {
         String postId = votePostForm.getPostId();
 
         postVoteValidation.validatePostVote(userNameId, postId);
-        String responseMessage = userVotePostRepository.downvotePost(userNameId, postId);
-
-        PostVote postVote = postVoteRepository.findById(postId).get();
-        Long upvotesCount = postVote.getUpvotes(), downvotesCount = postVote.getDownvotes();
         Post post = postRepository.findById(postId).get();
-        long previousUpvotes = post.getUpvoteCount();
-        post.setUpvoteCount(upvotesCount);
-        post.setDownvoteCount(downvotesCount);
-        postRepository.save(post);
-        if (previousUpvotes == popularityConfig.getPostsUpvoteThreshold() && upvotesCount == popularityConfig.getPostsUpvoteThreshold() - 1) {
-            cachingService.removePreviouslyPopularPost(postId);
-        } else {
-            cachingService.updatePopularPostsCache(postId, post);
+        Long oldUpvotesCount = post.getUpvoteCount(), oldDownvotesCount = post.getDownvoteCount();
+
+        try {
+            String responseMessage = userVotePostRepository.downvotePost(userNameId, postId);
+
+            PostVote postVote = postVoteRepository.findById(postId).get();
+            Long upvotesCount = postVote.getUpvotes(), downvotesCount = postVote.getDownvotes();
+            long previousUpvotes = post.getUpvoteCount();
+            post.setUpvoteCount(upvotesCount);
+            post.setDownvoteCount(downvotesCount);
+            postRepository.save(post);
+            if (previousUpvotes == popularityConfig.getPostsUpvoteThreshold() && upvotesCount == popularityConfig.getPostsUpvoteThreshold() - 1) {
+                cachingService.removePreviouslyPopularPost(postId);
+            } else {
+                cachingService.updatePopularPostsCache(postId, post);
+            }
+            if (cacheManager.getCache("postsCache").get(postId) != null) {
+                cachingService.updatePostsCache(postId, post);
+            }
+            String result = String.format("User %s %s %s", userNameId, responseMessage, postId);
+            rabbitMQProducer.publishAsynchronous(MessageQueues.NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
+                    "Downvote Update on one of your posts",
+                    result,
+                    userNameId,
+                    List.of(post.getUserNameId())
+            ));
+            return result;
+        } catch (Exception e) {
+            post.setUpvoteCount(oldUpvotesCount);
+            post.setDownvoteCount(oldDownvotesCount);
+            postRepository.save(post);
+            throw e;
         }
-        if (cacheManager.getCache("postsCache").get(postId) != null) {
-            cachingService.updatePostsCache(postId, post);
-        }
-        // todo: integrate notifications
-        return String.format("User %s %s %s", userNameId, responseMessage, postId);
     }
 
     @RabbitListener(queues = "${mq.queues.response.reddit.downvotePost}")

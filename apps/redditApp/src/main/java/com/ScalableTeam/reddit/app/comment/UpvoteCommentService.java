@@ -1,7 +1,10 @@
 package com.ScalableTeam.reddit.app.comment;
 
 import com.ScalableTeam.amqp.MessagePublisher;
+import com.ScalableTeam.amqp.MessageQueues;
+import com.ScalableTeam.amqp.RabbitMQProducer;
 import com.ScalableTeam.arango.Comment;
+import com.ScalableTeam.models.notifications.requests.NotificationSendRequest;
 import com.ScalableTeam.models.reddit.VoteCommentForm;
 import com.ScalableTeam.reddit.ICommand;
 import com.ScalableTeam.reddit.app.entity.vote.CommentVote;
@@ -19,6 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @ComponentScan("com.ScalableTeam.reddit")
 @Service
 @Slf4j
@@ -28,6 +33,7 @@ public class UpvoteCommentService implements ICommand<VoteCommentForm, String> {
     private final UserVoteCommentRepository userVoteCommentRepository;
     private final CommentVoteRepository commentVoteRepository;
     private final CommentVoteValidation commentVoteValidation;
+    private final RabbitMQProducer rabbitMQProducer;
 
     @RabbitListener(queues = "${mq.queues.request.reddit.upvoteComment}")
     public String execute(VoteCommentForm voteCommentForm, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
@@ -44,17 +50,32 @@ public class UpvoteCommentService implements ICommand<VoteCommentForm, String> {
         String commentId = voteCommentForm.getCommentId();
 
         commentVoteValidation.validateCommentVote(userNameId, commentId);
-        String responseMessage = userVoteCommentRepository.upvoteComment(userNameId, commentId);
-
-        CommentVote commentVote = commentVoteRepository.findById(commentId).get();
-        Long upvotesCount = commentVote.getUpvotes(), downvotesCount = commentVote.getDownvotes();
         Comment comment = commentRepository.findById(commentId).get();
-        comment.setUpvoteCount(upvotesCount);
-        comment.setDownvoteCount(downvotesCount);
-        commentRepository.save(comment);
+        Long oldUpvotesCount = comment.getUpvoteCount(), oldDownvotesCount = comment.getDownvoteCount();
 
-        // todo: integrate notifications
-        return String.format("User %s %s %s", userNameId, responseMessage, commentId);
+        try {
+            String responseMessage = userVoteCommentRepository.upvoteComment(userNameId, commentId);
+
+            CommentVote commentVote = commentVoteRepository.findById(commentId).get();
+            Long upvotesCount = commentVote.getUpvotes(), downvotesCount = commentVote.getDownvotes();
+            comment.setUpvoteCount(upvotesCount);
+            comment.setDownvoteCount(downvotesCount);
+            commentRepository.save(comment);
+
+            String result = String.format("User %s %s %s", userNameId, responseMessage, commentId);
+            rabbitMQProducer.publishAsynchronous(MessageQueues.NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
+                    "Upvote Update on one of your comments",
+                    result,
+                    userNameId,
+                    List.of(comment.getUserNameId())
+            ));
+            return result;
+        } catch (Exception e) {
+            comment.setUpvoteCount(oldUpvotesCount);
+            comment.setDownvoteCount(oldDownvotesCount);
+            commentRepository.save(comment);
+            throw e;
+        }
     }
 
     @RabbitListener(queues = "${mq.queues.response.reddit.upvoteComment}")

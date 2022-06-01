@@ -1,7 +1,10 @@
 package com.ScalableTeam.reddit.app.post;
 
 import com.ScalableTeam.amqp.MessagePublisher;
+import com.ScalableTeam.amqp.MessageQueues;
+import com.ScalableTeam.amqp.RabbitMQProducer;
 import com.ScalableTeam.arango.Post;
+import com.ScalableTeam.models.notifications.requests.NotificationSendRequest;
 import com.ScalableTeam.models.reddit.VotePostForm;
 import com.ScalableTeam.reddit.ICommand;
 import com.ScalableTeam.reddit.app.caching.CachingService;
@@ -23,6 +26,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @ComponentScan("com.ScalableTeam.reddit")
 @Service
 @Slf4j
@@ -32,6 +37,7 @@ public class UpvotePostService implements ICommand<VotePostForm, String> {
     private final UserVotePostRepository userVotePostRepository;
     private final PostVoteRepository postVoteRepository;
     private final PostVoteValidation postVoteValidation;
+    private final RabbitMQProducer rabbitMQProducer;
     //    @Value("${popularPostsUpvoteThreshold}")
     //    @Value("${popularPostsCache}")
     //    private String popularPostsCache;
@@ -79,8 +85,14 @@ public class UpvotePostService implements ICommand<VotePostForm, String> {
             if (cacheManager.getCache("postsCache").get(postId) != null) {
                 cachingService.updatePostsCache(postId, post);
             }
-            // todo: integrate notifications
-            return String.format("User %s %s %s", userNameId, responseMessage, postId);
+            String result = String.format("User %s %s %s", userNameId, responseMessage, postId);
+            rabbitMQProducer.publishAsynchronous(MessageQueues.NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
+                    "Upvote Update on one of your posts",
+                    result,
+                    userNameId,
+                    List.of(post.getUserNameId())
+            ));
+            return result;
         } catch (Exception e) {
             post.setUpvoteCount(oldUpvotesCount);
             post.setDownvoteCount(oldDownvotesCount);
