@@ -47,16 +47,16 @@ public class AddMessageCommand implements MyCommand {
             List<String> users = (List<String>) docSnap.get("users");
 
             String receiverId = "";
-            if(users.get(0).equals(authorId))
+            if (users.get(0).equals(authorId))
                 receiverId = users.get(1);
             else
                 receiverId = users.get(0);
-            rabbitMQProducer.publishSynchronous(MessageQueues.REQUEST_NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
+            rabbitMQProducer.publishAsynchronousToQueue(MessageQueues.REQUEST_NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
                     "New Chat Message",
                     content,
                     authorId,
                     Arrays.asList(receiverId)
-            ));
+            ), MessageQueues.RESPONSE_NOTIFICATIONS);
             return addedDocRef.get().getId();
         } catch (Exception e) {
             System.out.println(e);

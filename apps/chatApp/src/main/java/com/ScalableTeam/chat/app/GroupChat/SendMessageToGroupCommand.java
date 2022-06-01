@@ -13,6 +13,7 @@ import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -49,12 +50,12 @@ public class SendMessageToGroupCommand implements MyCommand {
 
             List<String> users = (List<String>) docSnap.get("users");
 
-            rabbitMQProducer.publishSynchronous(MessageQueues.REQUEST_NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
+            rabbitMQProducer.publishAsynchronousToQueue(MessageQueues.REQUEST_NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
                     "New Chat Message",
                     content,
                     authorId,
                     users
-            ));
+            ), MessageQueues.RESPONSE_NOTIFICATIONS);
 
             return addedDocRef.get().getId();
         } catch (Exception e) {
