@@ -11,6 +11,7 @@ public class Config {
     private Queues queues;
     private String exchange;
     private Exceptions exceptions;
+    private int concurrentConsumers;
 
     @ConfigurationProperties(prefix = "exceptions")
     @Data
