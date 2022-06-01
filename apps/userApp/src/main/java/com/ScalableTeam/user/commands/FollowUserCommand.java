@@ -1,7 +1,10 @@
 package com.ScalableTeam.user.commands;
 
+import com.ScalableTeam.amqp.MessageQueues;
+import com.ScalableTeam.amqp.RabbitMQProducer;
 import com.ScalableTeam.arango.User;
 import com.ScalableTeam.arango.UserRepository;
+import com.ScalableTeam.models.notifications.requests.NotificationSendRequest;
 import com.ScalableTeam.models.user.FollowUserBody;
 import com.ScalableTeam.models.user.FollowUserResponse;
 import lombok.AllArgsConstructor;
@@ -10,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 //@ComponentScan("com.ScalableTeam.user")
@@ -20,6 +24,8 @@ public class FollowUserCommand implements ICommand<FollowUserBody, FollowUserRes
     @Autowired
     private final UserRepository userRepository;
 
+    @Autowired
+    private RabbitMQProducer rabbitMQProducer;
 
     public FollowUserResponse execute(FollowUserBody body) {
 
@@ -27,6 +33,7 @@ public class FollowUserCommand implements ICommand<FollowUserBody, FollowUserRes
         String requestedFollowUserID = body.getRequestedFollowUserID();
 
         if(userId.equals(requestedFollowUserID)){
+
             return new FollowUserResponse(false,"Can't follow yourself");
         }
         Optional<User> followUser = userRepository.findById(requestedFollowUserID);
@@ -52,6 +59,15 @@ public class FollowUserCommand implements ICommand<FollowUserBody, FollowUserRes
         HashMap<String, Boolean> follow = new HashMap<String, Boolean>();
         follow.put(requestedFollowUserID, true);
         userRepository.updateFollowedUsersWithID(userId, follow);
+
+
+        rabbitMQProducer.publishAsynchronousToQueue(MessageQueues.REQUEST_NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
+                "New follower",
+                userId+" has followed you",
+                userId,
+                List.of(requestedFollowUserID)
+        ), MessageQueues.RESPONSE_NOTIFICATIONS);
+
         return new FollowUserResponse(true, "User followed successfully");
 
     }
