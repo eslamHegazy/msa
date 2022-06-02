@@ -63,12 +63,13 @@ public class UpvoteCommentService implements ICommand<VoteCommentForm, String> {
             commentRepository.save(comment);
 
             String result = String.format("User %s %s %s", userNameId, responseMessage, commentId);
-            rabbitMQProducer.publishSynchronous(MessageQueues.REQUEST_NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
-                    "Upvote Update on one of your comments",
-                    result,
-                    userNameId,
-                    List.of(comment.getUserNameId())
-            ));
+            rabbitMQProducer.publishAsynchronousToQueue(MessageQueues.REQUEST_NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
+                            "Upvote Update on one of your comments",
+                            result,
+                            userNameId,
+                            List.of(comment.getUserNameId())),
+                    MessageQueues.RESPONSE_NOTIFICATIONS
+            );
             return result;
         } catch (Exception e) {
             comment.setUpvoteCount(oldUpvotesCount);
