@@ -71,7 +71,24 @@ public class ChatController {
             System.out.println(msg);
             MessagePostProcessor messagePostProcessor = MessagePublisher.getMessageHeaders(
                     "responseChatMQ");
-            rabbitMQProducer.publishAsynchronous("chatMQ", "UpdateGroup", msg);
+            rabbitMQProducer.publishAsynchronous("chatMQ", "updateGroup", msg);
+
+            return "0";
+        } catch (Exception ex) {
+            System.out.println(ex);
+            return "Internal Server Error";
+        }
+    }
+
+    @PutMapping("/group-chat/change-admin")
+    public String changeGroupChatAdmin(@RequestBody Map<String, Object> body) {
+        try {
+            Map<String, Object> msg = new HashMap<>();
+            msg.put("ChatType", "GroupChat");
+            msg.put("Command", "changeGroupAdmin");
+            msg.put("Body", body);
+            System.out.println(msg);
+            rabbitMQProducer.publishAsynchronous("chatMQ", "changeGroupAdmin", msg);
 
             return "0";
         } catch (Exception ex) {
