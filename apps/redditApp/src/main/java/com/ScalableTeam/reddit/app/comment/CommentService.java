@@ -1,7 +1,10 @@
 package com.ScalableTeam.reddit.app.comment;
 
 import com.ScalableTeam.amqp.MessagePublisher;
+import com.ScalableTeam.amqp.MessageQueues;
+import com.ScalableTeam.amqp.RabbitMQProducer;
 import com.ScalableTeam.arango.*;
+import com.ScalableTeam.models.notifications.requests.NotificationSendRequest;
 import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.caching.CachingService;
 import com.ScalableTeam.reddit.app.repository.CommentChildrenHierarchyRepository;
@@ -17,6 +20,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @ComponentScan("com.ScalableTeam.reddit")
@@ -37,6 +41,8 @@ public class CommentService implements MyCommand {
     private CommentChildrenHierarchyRepository commentChildrenHierarchyRepository;
     @Autowired
     private PostCommentHierarchyRepository postCommentHierarchyRepository;
+    @Autowired
+    private  RabbitMQProducer rabbitMQProducer;
 
     @RabbitListener(queues = "${mq.queues.request.reddit.comment}")
     public Post listenToRequestQueue(Comment comment, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
@@ -96,6 +102,24 @@ public class CommentService implements MyCommand {
             }
             if (cacheManager.getCache("popularPostsCache").get(postId) != null)
                 cachingService.updatePopularPostsCache(postId, post);
+            if(comment.isCommentOnPost()) {
+                rabbitMQProducer.publishAsynchronousToQueue(MessageQueues.REQUEST_NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
+                        "Comment made on your Post",
+                        "body: " + comment.getBody() + " by " + comment.getUserNameId(),
+                        comment.getUserNameId(),
+                        List.of(post.getUserNameId())
+                ), MessageQueues.RESPONSE_NOTIFICATIONS);
+            }
+            else {
+                Comment parent =commentRepository.findById(comment.getCommentParentId()).get();
+                rabbitMQProducer.publishAsynchronousToQueue(MessageQueues.REQUEST_NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
+                        "Comment made on your Comment",
+                        "body: " + comment.getBody() + " by " + comment.getUserNameId(),
+                        comment.getUserNameId(),
+                        List.of(parent.getUserNameId())
+                ), MessageQueues.RESPONSE_NOTIFICATIONS);
+
+            }
             return post;
         } catch (Exception e) {
 
