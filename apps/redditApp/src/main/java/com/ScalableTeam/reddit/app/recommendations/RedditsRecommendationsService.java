@@ -5,6 +5,7 @@ import com.ScalableTeam.amqp.MessagePublisher;
 import com.ScalableTeam.arango.User;
 import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.reddit.MyCommand;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -27,14 +28,14 @@ public class RedditsRecommendationsService implements MyCommand {
     private final String serviceName = "redditsRecommendations";
 
     @RabbitListener(queues = "${mq.queues.request.reddit." + serviceName + "}", returnExceptions = "true")
-    public String[] listenToRequestQueue(String userId, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
+    public ArrayList<String> listenToRequestQueue(String userId, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
         String correlationId = message.getMessageProperties().getCorrelationId();
         log.info("Queue Listener::Command={}, CorrelationId={}, Reddit Recommendation Form={}", commandName, correlationId, userId);
         return execute(userId);
     }
 
     @Override
-    public String[] execute(Object body) throws Exception {
+    public ArrayList<String> execute(Object body) throws Exception {
         //    1. get all/10 random/first entries in user's followedUsers
 //    2. get all their followed reddits (put them together)
 //    return most frequently occuring reddits (or first 5 if none repeat)
@@ -51,7 +52,7 @@ public class RedditsRecommendationsService implements MyCommand {
 
             User user = userO.get();
             if (user.getFollowedUsers() == null) {
-                return new String[0];
+                return new ArrayList<String>();
             }
 
             HashMap<String, Boolean> followedUsers = user.getFollowedUsers();
@@ -79,15 +80,36 @@ public class RedditsRecommendationsService implements MyCommand {
 
             }
 
-            int counter = 5;
-            String[] result = new String[counter];
-            Set set2 = frequencies.entrySet();
-            Iterator iterator2 = set2.iterator();
-            while (iterator2.hasNext() && counter > 0) {
-                Map.Entry me2 = (Map.Entry) iterator2.next();
-                result[counter - 1] = (String) me2.getKey();
-                counter--;
+            System.out.println(frequencies);
+            Collection<Integer> freq_vals = frequencies.values();
+            List<Integer> freqlist = new ArrayList<Integer>();
+            freqlist.addAll(freq_vals);
+            Collections.sort(freqlist);
+            System.out.println(freqlist.toString());
+
+            ArrayList<String> result = new ArrayList<String>();
+
+            while(result.size()<5){
+                boolean found = false;
+                Iterator it = frequencies.entrySet().iterator();
+                System.out.println(result);
+                while (it.hasNext()){
+                    HashMap.Entry item = (Map.Entry) it.next();
+                    if(item.getValue()==freqlist.get(freqlist.size()-1)){
+                        result.add((String) item.getKey());
+                        found=true;
+                        break;
+                    }
+
+                }
+                frequencies.remove(result.get(result.size()-1));
+                if(!found){
+                    freqlist.remove(freqlist.size()-1);
+                }
             }
+
+
+
             return result;
 
         } catch (Exception e) {

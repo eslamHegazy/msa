@@ -29,6 +29,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.security.auth.callback.CallbackHandler;
 import java.util.*;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -63,16 +64,16 @@ public class RedditTests {
     @Autowired
     RedditsRecommendationsService redditsRecommendationsService;
     public String createTestUser(){
-        String userId = "test"+(int)(Math.random()*100000);
+        String userId = "user"+(int)(Math.random()*100000);
         User testUser = UserMock.getUserWithId(userId);
+        testUser.setFollowedChannels(new HashMap<String, Boolean>());
         System.out.println(userId);
         userRepository.save(testUser);
         return userId;
     }
     public String createTestReddit(){
-        Channel testReddit = new Channel();
-        String redditId = "test"+Math.random()*100000;
-        testReddit.setChannelNameId(redditId);
+        String redditId = "test"+(int)(Math.random()*100000);
+        Channel testReddit = ChannelMock.getChannelWithId(redditId);
         channelRepository.save(testReddit);
         return redditId;
     }
@@ -166,13 +167,13 @@ public class RedditTests {
     void getRecommendations1() throws Exception {
 
         ArrayList<String> users = new ArrayList<String>();
-        for (int i=0;i<16;i++){
+        for (int i=0;i<6;i++){
             users.add(createTestUser());
         }
-        User mainUser = userRepository.findById(users.get(15)).get();
+        User mainUser = userRepository.findById(users.get(5)).get();
         HashMap<String,Boolean> foll = new HashMap<String,Boolean>();
-        for (String id: users){
-            foll.put(id,true);
+        for (int i=0;i<5;i++){
+            foll.put(users.get(i),true);
         }
         mainUser.setFollowedUsers(foll);
         userRepository.save(mainUser);
@@ -180,22 +181,23 @@ public class RedditTests {
         for (int i=0;i<5;i++){
             channels.add(createTestReddit());
         }
-//        int counter=0;
-        for (int i=5;i<0;i++){
-            for(int j=0;j<i;j++){
-            FollowRedditForm followRedditForm = new FollowRedditForm(users.get(j), channels.get(5-i));
+        for (int i=0;i<5;i++){
+            for(int j=0;j<5-i;j++){
+            FollowRedditForm followRedditForm = new FollowRedditForm(users.get(j), channels.get(i));
             followRedditService.execute(followRedditForm);
             }
-//            counter++;
         }
+        System.out.println(channels);
         for (String u :users){
             System.out.println(userRepository.findById(u).get().getFollowedChannels());
         }
 
-        String[] recs = redditsRecommendationsService.execute(mainUser.getUserNameId());
+
+        ArrayList<String> recs = redditsRecommendationsService.execute(mainUser.getUserNameId());
+        System.out.println(userRepository.findById(users.get(5)).get().getFollowedUsers());
 
         System.out.println(recs.toString());
-        assertThat(recs).isEqualTo(List.of(channels.get(4), channels.get(3),channels.get(2), channels.get(1),channels.get(0)));
+        assertThat(recs).isEqualTo(channels);
 
     }
 

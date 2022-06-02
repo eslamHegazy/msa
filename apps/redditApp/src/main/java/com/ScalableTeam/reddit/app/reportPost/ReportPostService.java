@@ -7,6 +7,7 @@ import com.ScalableTeam.models.reddit.ReportPostForm;
 import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -22,18 +23,13 @@ import java.util.Optional;
 @ComponentScan("com.ScalableTeam.reddit")
 @Service
 @Slf4j
+@AllArgsConstructor
 public class ReportPostService implements MyCommand {
 
-    @Autowired
-    private final ChannelRepository channelRepository;
-    @Autowired
-    private final PostRepository postRepository;
+    private ChannelRepository channelRepository;
+    private PostRepository postRepository;
 
-    @Autowired
-    public ReportPostService(ChannelRepository channelRepository, PostRepository postRepository) {
-        this.channelRepository = channelRepository;
-        this.postRepository = postRepository;
-    }
+
 
     @RabbitListener(queues = "${mq.queues.request.reddit.reportPost}")
     public String listenToRequestQueue(ReportPostForm reportPostForm, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {

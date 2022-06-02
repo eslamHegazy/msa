@@ -20,6 +20,12 @@ public interface UserRepository extends ArangoRepository<User, String> {
     @Query("FOR u IN users UPDATE {_key:@key,reportedUsers:@reportedUsers} IN users")
     void updateReportedUsersWithID(@Param("key") String key, @Param("reportedUsers") HashMap<String,String> reportedUsers);
 
+    @Query("FOR u IN users UPDATE {_key:@key,bookmarkedPosts:@bookmarkedPosts} IN users")
+    void updateBookmarkedPosts(@Param("key") String key, @Param("bookmarkedPosts") HashMap<String,Boolean> bookmarkedPosts);
+
+    @Query("FOR u IN users UPDATE {_key:@key,bookmarkedChannels:@bookmarkedChannels} IN users")
+    void updateBookmarkedChannels(@Param("key") String key, @Param("bookmarkedChannels") HashMap<String,Boolean> bookmarkedChannels);
+
     void deleteByUserNameId(String userNameId);
 
     boolean existsByUserNameId(String userNameId);

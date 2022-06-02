@@ -67,7 +67,6 @@ public class FollowRedditService implements MyCommand {
             Optional<User> user = userRepository.findById(userId);
             if (!user.isPresent()) {
                 throw new IllegalStateException("User not found in DB!");
-
             }
 
 
