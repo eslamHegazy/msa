@@ -86,12 +86,13 @@ public class UpvotePostService implements ICommand<VotePostForm, String> {
                 cachingService.updatePostsCache(postId, post);
             }
             String result = String.format("User %s %s %s", userNameId, responseMessage, postId);
-            rabbitMQProducer.publishSynchronous(MessageQueues.REQUEST_NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
-                    "Upvote Update on one of your posts",
-                    result,
-                    userNameId,
-                    List.of(post.getUserNameId())
-            ));
+            rabbitMQProducer.publishAsynchronousToQueue(MessageQueues.REQUEST_NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
+                            "Upvote Update on one of your posts",
+                            result,
+                            userNameId,
+                            List.of(post.getUserNameId())),
+                    MessageQueues.RESPONSE_NOTIFICATIONS
+            );
             return result;
         } catch (Exception e) {
             post.setUpvoteCount(oldUpvotesCount);
