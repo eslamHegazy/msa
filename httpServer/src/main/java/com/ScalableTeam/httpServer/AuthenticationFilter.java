@@ -4,6 +4,7 @@ import com.ScalableTeam.httpServer.caching.RedisUtility;
 import com.ScalableTeam.httpServer.utils.JwtUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -25,14 +26,14 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("Inside Authentication Filter originated by request {}", request.getRequestURI());
 
-//        final String authToken = request.getHeader("Authorization");
-//        String userId = jwtUtil.extractUsername(authToken);
-//        String cachedToken = redisUtility.getValue(userId);
-//
-//        if(authToken == null || !authToken.equals(cachedToken)) {
-//            response.sendError(HttpStatus.UNAUTHORIZED.value());
-//            return;
-//        }
+        final String authToken = request.getHeader("Authorization");
+        String userId = jwtUtil.extractUsername(authToken);
+        String cachedToken = redisUtility.getValue(userId);
+
+        if (authToken == null || !authToken.equals(cachedToken)) {
+            response.sendError(HttpStatus.UNAUTHORIZED.value());
+            return;
+        }
 
         filterChain.doFilter(request, response);
     }
