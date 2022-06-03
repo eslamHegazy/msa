@@ -41,7 +41,37 @@ services:
     volumes:
       - cache:/data
 
+  arangodb:
+    image: arangodb:latest
+    environment:
+      ARANGO_NO_AUTH: 1
+    ports:
+      - "8529:8529"
+    volumes:
+      - arangodb_data_container:/var/lib/arangodb3
+      - arangodb_apps_data_container:/var/lib/arangodb3-apps
+
+  reddit_app:
+    build:
+      context: "../../"
+      dockerfile: "apps/redditApp/Dockerfile"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+#    restart: on-failure
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+      - rabbitmq
+      - pgadmin
+      - cache
+      - arangodb
+
+
 volumes:
   postgres:
   pgadmin:
   cache:
+  arangodb_data_container:
+  arangodb_apps_data_container:
+
