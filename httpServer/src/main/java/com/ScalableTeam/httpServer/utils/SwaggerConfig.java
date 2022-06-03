@@ -1,3 +1,5 @@
+package com.ScalableTeam.httpServer.utils;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -21,6 +23,7 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(getApiInfo());
+
     }
 
     @Bean
@@ -33,5 +36,4 @@ public class SwaggerConfig {
                 .license("Apache License Version 2.0")
                 .build();
     }
-
 }
