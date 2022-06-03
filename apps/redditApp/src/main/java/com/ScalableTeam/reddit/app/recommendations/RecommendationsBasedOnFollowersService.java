@@ -29,14 +29,14 @@ public class RecommendationsBasedOnFollowersService implements MyCommand {
     private Config config;
 
     @RabbitListener(queues = "${mq.queues.request.reddit." + serviceName + "}", returnExceptions = "true")
-    public  ArrayList<String> listenToRequestQueue(String userId, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
+    public  String listenToRequestQueue(String userId, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
         String correlationId = message.getMessageProperties().getCorrelationId();
         log.info("Queue Listener::Command={}, CorrelationId={}, Recommendations Based On Followers Form={}", commandName, correlationId, userId);
         return execute(userId);
     }
 
     @Override
-    public ArrayList<String> execute(Object body) throws Exception {
+    public String execute(Object body) throws Exception {
         //    1. get all/10 random/first entries in user's followedUsers
 //    2. get all their followed reddits (put them together)
 //    return most frequently occuring reddits (or first 5 if none repeat)
@@ -86,7 +86,7 @@ public class RecommendationsBasedOnFollowersService implements MyCommand {
 
             System.out.println(result);
 
-            return result;
+            return result.toString();
 
         } catch (Exception e) {
             throw e;
