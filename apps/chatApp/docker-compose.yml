@@ -1,22 +1,19 @@
-version: "3"
-
 services:
-  rabbitmq3:
-    container_name: rabbitmq
+  rabbitmq:
     image: rabbitmq:3.9.11-management-alpine
-    environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
+    container_name: rabbitmq
     ports:
-      # AMQP protocol port
-      - '5672:5672'
-      # HTTP management UI
-      - '15672:15672'
-  java:
-    container_name: 'spring-chat-app'
+      - "5672:5672"
+      - "15672:15672"
+
+  chat_app:
     build:
-      context: .
+      context: "../../"
+      dockerfile: "apps/chatApp/Dockerfile"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    #    restart: on-failure
     ports:
-      - '8081:8081'
-    volumes:
-      - ../../lib/services:/opt/app/lib/services
+      - "8081:8081"
+    depends_on:
+      - rabbitmq
