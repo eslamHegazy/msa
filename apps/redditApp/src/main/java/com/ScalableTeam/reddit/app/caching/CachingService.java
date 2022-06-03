@@ -156,9 +156,10 @@ public class CachingService {
             throw new Exception("Exception When getting the feed");
         }
     }
-    @Cacheable(cacheNames = "recommendationsCache",key="#redditId")
+    @Cacheable(cacheNames = "recommendationsCache",key="#channelNameId", condition="#channelNameId!=null")
     public String getRecommendations(String redditId) throws Exception {
         try {
+            System.out.println("cache service");
             Channel reddit = channelRepository.findById(redditId).get();
             ArrayList<User> fols = (ArrayList<User>)reddit.getFollowers().getEntity();
 
@@ -178,12 +179,12 @@ public class CachingService {
                 }
             }
 
-
+            System.out.println("freqs "+frequencies);
             return frequencies.toString();
 
         } catch (Exception e) {
 
-            throw new Exception("Exception When getting the feed");
+            return "";
         }
     }
 }
