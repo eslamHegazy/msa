@@ -13,26 +13,26 @@ import java.util.Map;
 @NoArgsConstructor
 public class BaseService {
 
-    @Autowired
-    private ControllerRequestsServer controllerRequestsServer;
-    @Value("${spring.application.name: application}")
-    private String appName;
-    @Autowired
-    private AddressConfig addressConfig;
+//    @Autowired
+//    private ControllerRequestsServer controllerRequestsServer;
+//    @Value("${spring.application.name: application}")
+//    private String appName;
+//    @Autowired
+//    private AddressConfig addressConfig;
 
-    @PostConstruct
-    protected void listenToController() {
-        new Thread(() -> {
-            try {
-                int port = addressConfig.getDefaultPort();
-                Map<String, Integer> m = addressConfig.getPorts();
-                if (m.containsKey(appName))
-                    port = m.get(appName);
-                controllerRequestsServer.setTcp("127.0.0.1", port);
-                controllerRequestsServer.start();
-            } catch (InterruptedException | UnknownHostException e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
+//    @PostConstruct
+//    protected void listenToController() {
+//        new Thread(() -> {
+//            try {
+//                int port = addressConfig.getDefaultPort();
+//                Map<String, Integer> m = addressConfig.getPorts();
+//                if (m.containsKey(appName))
+//                    port = m.get(appName);
+//                controllerRequestsServer.setTcpPort(port);
+//                controllerRequestsServer.start();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }).start();
+//    }
 }

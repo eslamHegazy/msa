@@ -11,15 +11,17 @@ import org.springframework.context.annotation.PropertySource;
         "com.ScalableTeam.user",
         "com.ScalableTeam.amqp",
         "com.ScalableTeam.arango",
-        "com.ScalableTeam.models",
-        "com.ScalableTeam.services"
+        "com.ScalableTeam.models"
+//        ,"com.ScalableTeam.services"
 })
 @ConfigurationPropertiesScan
 @EnableCaching
 @PropertySource("classpath:message-queues.properties")
 @PropertySource("classpath:address-config.properties")
 
-public class RedditUserApplication extends BaseService {
+public class RedditUserApplication
+//        extends BaseService
+{
 
     public static void main(String[] args) {
         SpringApplication.run(RedditUserApplication.class, args);

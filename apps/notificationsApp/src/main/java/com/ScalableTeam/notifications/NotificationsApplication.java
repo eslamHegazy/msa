@@ -12,8 +12,8 @@ import org.springframework.context.annotation.PropertySource;
         scanBasePackages = {
                 "com.ScalableTeam.notifications",
                 "com.ScalableTeam.amqp",
-                "com.ScalableTeam.models",
-                "com.ScalableTeam.services"
+                "com.ScalableTeam.models"
+//                ,                "com.ScalableTeam.services"
         }
 )
 @ConfigurationPropertiesScan
@@ -21,7 +21,9 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:message-queues.properties")
 @PropertySource("classpath:address-config.properties")
 
-public class NotificationsApplication extends BaseService {
+public class NotificationsApplication
+//        extends BaseService
+{
 
     public static void main(String[] args) {
         FirebaseInitializer.initialize();

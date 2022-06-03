@@ -24,7 +24,6 @@
         <module>controllerApp</module>
         <module>chatApp</module>
     </modules>
-
     <dependencies>
 
         <!--        <dependency>-->
@@ -42,14 +41,18 @@
             <groupId>com.ScalableTeam-0-0-1</groupId>
             <artifactId>services</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>com.ScalableTeam-0-0-1</groupId>
             <artifactId>models</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ScalableTeam-0-0-1</groupId>
+            <artifactId>utils</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
