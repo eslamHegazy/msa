@@ -10,11 +10,11 @@ import org.springframework.context.annotation.Configuration;
 @EnableArangoRepositories(basePackages = {"com.ScalableTeam.arango", "com.ScalableTeam.user.repository", "com.ScalableTeam.reddit.app.repository"})
 public class DemoConfiguration implements ArangoConfiguration {
 
-    @Value("$")
+    @Value("${arangodb.host}")
 
     @Override
     public ArangoDB.Builder arango() {
-        return new ArangoDB.Builder().user("root").password(null);
+        return new ArangoDB.Builder().host("arangodb", 8529).user("root").password(null);
     }
 
     @Override
