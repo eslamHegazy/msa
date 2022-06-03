@@ -11,7 +11,11 @@ import java.io.InputStream;
 public class ByteClassLoader extends ClassLoader {
 
     public Class<?> loadClassFromBytes(String name, byte[] b) {
-        return this.defineClass(name, b, 0, b.length);
+        try {
+            return this.defineClass(name, b, 0, b.length);
+        } catch (LinkageError e) {
+            return new ByteClassLoader().loadClassFromBytes(name, b);
+        }
     }
 
     public static byte[] readClassFileAsBytes(String className) throws IOException {
