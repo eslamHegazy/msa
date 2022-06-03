@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,25 +20,22 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class SignUpCommandTest {
 
-    @Autowired
-    private UserProfileRepository userProfileRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
     String userId = "Mo99";
     String email = "mo99@gmail.com";
     String password = "pass";
-
+    @Autowired
+    private UserProfileRepository userProfileRepository;
+    @Autowired
+    private UserRepository userRepository;
     private SignUpCommand signUpCommand;
 
     @BeforeEach
     void setUp() {
         List<UserProfile> profiles = List.of(
-            new UserProfile("Mo98","mo@gmail.com", "pass", ""),
-            new UserProfile("es2000","es@gmail.com", "pass", ""),
-            new UserProfile("Hus2000","hus@gmail.com", "pass", ""),
-            new UserProfile("Abdo99","abdo@gmail.com", "pass", "")
+                new UserProfile("Mo98", "mo@gmail.com", "pass", ""),
+                new UserProfile("es2000", "es@gmail.com", "pass", ""),
+                new UserProfile("Hus2000", "hus@gmail.com", "pass", ""),
+                new UserProfile("Abdo99", "abdo@gmail.com", "pass", "")
         );
 
         List<User> users = profiles.stream()
@@ -61,7 +57,7 @@ class SignUpCommandTest {
     }
 
     @Test
-    void signUpWithExistingEmail(){
+    void signUpWithExistingEmail() {
         SignUpBody signUpBody = new SignUpBody(userId, "mo@gmail.com", password);
         SignUpResponse signUpResponse = signUpCommand.execute(signUpBody);
         assertFalse(signUpResponse.isSuccessful());
@@ -69,7 +65,7 @@ class SignUpCommandTest {
     }
 
     @Test
-    void signUpWithInvalidEmailFormat(){
+    void signUpWithInvalidEmailFormat() {
         SignUpBody signUpBody = new SignUpBody(userId, "mogmail.com", password);
         SignUpResponse signUpResponse = signUpCommand.execute(signUpBody);
         assertFalse(signUpResponse.isSuccessful());
@@ -77,7 +73,7 @@ class SignUpCommandTest {
     }
 
     @Test
-    void signUpSuccessfully(){
+    void signUpSuccessfully() {
         SignUpBody signUpBody = new SignUpBody(userId, email, password);
         SignUpResponse signUpResponse = signUpCommand.execute(signUpBody);
         assertTrue(signUpResponse.isSuccessful());

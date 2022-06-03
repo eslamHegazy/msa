@@ -4,7 +4,6 @@ import com.ScalableTeam.amqp.MessagePublisher;
 import com.ScalableTeam.amqp.RabbitMQProducer;
 import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.models.reddit.BookmarkPostForm;
-import com.ScalableTeam.models.reddit.FollowRedditForm;
 import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
 import lombok.AllArgsConstructor;
@@ -22,12 +21,11 @@ import java.util.HashMap;
 @AllArgsConstructor
 public class BookmarkPostService implements MyCommand {
 
+    private final String serviceName = "bookmarkPost";
     private UserRepository userRepository;
     private PostRepository postRepository;
     @Autowired
     private RabbitMQProducer rabbitMQProducer;
-
-    private final String serviceName = "bookmarkPost";
 
     @RabbitListener(queues = "${mq.queues.request.reddit." + serviceName + "}")
     public String listenToRequestQueue(BookmarkPostForm bookmarkPostForm, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
@@ -43,13 +41,12 @@ public class BookmarkPostService implements MyCommand {
         log.info("Service::Bookmark post form ={}", request);
 
 
-        if(postRepository.findById(request.getPostId()).isEmpty()){
+        if (postRepository.findById(request.getPostId()).isEmpty()) {
             return "post not found";
         }
-            HashMap<String, Boolean> bookmark = new HashMap<String, Boolean>();
-            bookmark.put(request.getPostId(),true);
-            userRepository.updateBookmarkedPosts(request.getUserId(),bookmark);
-
+        HashMap<String, Boolean> bookmark = new HashMap<String, Boolean>();
+        bookmark.put(request.getPostId(), true);
+        userRepository.updateBookmarkedPosts(request.getUserId(), bookmark);
 
 
         return "Post Bookmarked successfully";

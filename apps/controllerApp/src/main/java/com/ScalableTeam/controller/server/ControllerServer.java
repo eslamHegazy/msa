@@ -1,8 +1,9 @@
 package com.ScalableTeam.controller.server;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.*;
-import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -50,11 +51,11 @@ public class ControllerServer {
         }
     }
 
-    public void setTcpPort(int port) {
-        this.tcpPort = new InetSocketAddress(port);
-    }
-
     public InetSocketAddress getTcpPort() {
         return tcpPort;
+    }
+
+    public void setTcpPort(int port) {
+        this.tcpPort = new InetSocketAddress(port);
     }
 }

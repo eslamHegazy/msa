@@ -18,5 +18,4 @@ public class Data {
     public static final Message m2 = new Message("1", "content2", Timestamp.now());
 
 
-
 }

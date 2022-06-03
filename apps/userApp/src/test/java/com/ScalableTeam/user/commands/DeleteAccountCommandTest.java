@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,6 +35,7 @@ class DeleteAccountCommandTest {
 
     @Autowired
     RedisUtility redisUtility;
+
     @BeforeEach
     void setUp() {
         userProfileRepository.save(new UserProfile(userId, email, password, null));
@@ -44,7 +44,7 @@ class DeleteAccountCommandTest {
     }
 
     @Test
-    void deleteUsingWrongUsername(){
+    void deleteUsingWrongUsername() {
         String wrongId = "Mo20";
         DeleteAccountBody deleteAccountBody = new DeleteAccountBody(wrongId);
         DeleteAccountResponse deleteAccountResponse = deleteAccountCommand.execute(deleteAccountBody);
@@ -54,7 +54,7 @@ class DeleteAccountCommandTest {
     }
 
     @Test
-    void successfulDelete(){
+    void successfulDelete() {
         DeleteAccountBody deleteAccountBody = new DeleteAccountBody(userId);
         DeleteAccountResponse deleteAccountResponse = deleteAccountCommand.execute(deleteAccountBody);
         assertTrue(deleteAccountResponse.isSuccessful());

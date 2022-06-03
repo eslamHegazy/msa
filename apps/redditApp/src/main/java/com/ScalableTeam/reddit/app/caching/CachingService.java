@@ -1,6 +1,9 @@
 package com.ScalableTeam.reddit.app.caching;
 
-import com.ScalableTeam.arango.*;
+import com.ScalableTeam.arango.Channel;
+import com.ScalableTeam.arango.Post;
+import com.ScalableTeam.arango.User;
+import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
 import com.ScalableTeam.reddit.app.repository.RedditFollowersEdgeRepository;
@@ -11,7 +14,9 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Optional;
 
 @Service
 public class CachingService {
@@ -23,13 +28,15 @@ public class CachingService {
     private RedditFollowersEdgeRepository redditFollowersEdgeRepository;
     @Autowired
     private ChannelRepository channelRepository;
-    public static byte[] serialize(Object obj){
+
+    public static byte[] serialize(Object obj) {
         byte[] bytes = null;
         try {
-            ByteArrayOutputStream baos=new ByteArrayOutputStream();;
-            ObjectOutputStream oos=new ObjectOutputStream(baos);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ;
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
             oos.writeObject(obj);
-            bytes=baos.toByteArray();
+            bytes = baos.toByteArray();
             baos.close();
             oos.close();
         } catch (IOException e) {
@@ -37,57 +44,71 @@ public class CachingService {
         }
         return bytes;
     }
-    public static Object deSerialize(byte[] bytes){
-        Object obj=null;
+
+    public static Object deSerialize(byte[] bytes) {
+        Object obj = null;
         try {
-            ByteArrayInputStream bais=new ByteArrayInputStream(bytes);
-            ObjectInputStream ois=new ObjectInputStream(bais);
-            obj=ois.readObject();
+            ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+            ObjectInputStream ois = new ObjectInputStream(bais);
+            obj = ois.readObject();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return obj;
     }
-    @CachePut(cacheNames = "popularPostsCache",key="#postId")
-    public String updatePopularPostsCache(String postId, Post post){
 
-        System.err.println("updating "+post);return post.toString();
-    }
-    @CachePut(cacheNames = "postsCache",key="#postId")
-    public String updatePostsCache(String postId, Post post){
+    @CachePut(cacheNames = "popularPostsCache", key = "#postId")
+    public String updatePopularPostsCache(String postId, Post post) {
+
+        System.err.println("updating " + post);
         return post.toString();
     }
-    @CachePut(cacheNames = "popularChannelsCache",key="#redditId")
-    public String updatePopularChannelsCache(String redditId, Channel channel){
+
+    @CachePut(cacheNames = "postsCache", key = "#postId")
+    public String updatePostsCache(String postId, Post post) {
+        return post.toString();
+    }
+
+    @CachePut(cacheNames = "popularChannelsCache", key = "#redditId")
+    public String updatePopularChannelsCache(String redditId, Channel channel) {
         return channel.toString();
     }
+
     @CacheEvict(cacheNames = "popularChannelsCache", key = "#redditId")
     public void removePreviouslyPopularChannel(String redditId) {
     }
+
     @CacheEvict(cacheNames = "popularPostsCache", key = "#postId")
     public void removePreviouslyPopularPost(String postId) {
     }
+
     @CacheEvict(cacheNames = "postsCache", key = "#userNameId")
     public void removeWallFromCache(String userNameId) {
     }
+
     @CacheEvict(cacheNames = "postsCache", allEntries = true)
     public void evictAllEntriesOfPostsCache() {
     }
+
     @CacheEvict(cacheNames = "popularPostsCache", allEntries = true)
     public void evictAllEntriesOfPopularPostsCache() {
     }
+
     @CacheEvict(cacheNames = "popularChannelsCache", allEntries = true)
     public void evictAllEntriesOfPopularChannelsCache() {
     }
+
     @Cacheable(cacheNames = "postsCache")
-    private Post[]getPostsFromFollowedChannels(String newLatestReadPostId, HashMap<String,Boolean> followedChannels){
+    private Post[] getPostsFromFollowedChannels(String newLatestReadPostId, HashMap<String, Boolean> followedChannels) {
         return postRepository.getPostsByTimeAndChannel(newLatestReadPostId, followedChannels);
     }
+
     @Cacheable(cacheNames = "postsCache")
-    private Post[]getPostsFromFollowedUsers(String newLatestReadPostId,HashMap<String,Boolean>followedUsers){
-        return postRepository.getPostsByTimeAndUser(newLatestReadPostId,followedUsers);
+    private Post[] getPostsFromFollowedUsers(String newLatestReadPostId, HashMap<String, Boolean> followedUsers) {
+        return postRepository.getPostsByTimeAndUser(newLatestReadPostId, followedUsers);
     }
-    @Cacheable(cacheNames = "postsCache",key="#userNameId")
+
+    @Cacheable(cacheNames = "postsCache", key = "#userNameId")
     public String getWall(String userNameId) throws Exception {
         try {
 
@@ -156,30 +177,31 @@ public class CachingService {
             throw new Exception("Exception When getting the feed");
         }
     }
-    @Cacheable(cacheNames = "recommendationsCache",key="#channelNameId", condition="#channelNameId!=null")
+
+    @Cacheable(cacheNames = "recommendationsCache", key = "#channelNameId", condition = "#channelNameId!=null")
     public String getRecommendations(String redditId) throws Exception {
         try {
             System.out.println("cache service");
             Channel reddit = channelRepository.findById(redditId).get();
-            ArrayList<User> fols = (ArrayList<User>)reddit.getFollowers().getEntity();
+            ArrayList<User> fols = (ArrayList<User>) reddit.getFollowers().getEntity();
 
-            HashMap<String, Integer> frequencies= new HashMap<>();
-            for (User u: fols){
+            HashMap<String, Integer> frequencies = new HashMap<>();
+            for (User u : fols) {
                 HashMap<String, Boolean> channels = u.getFollowedChannels();
-                if(channels==null){
+                if (channels == null) {
                     continue;
                 }
-                for (String ch :channels.keySet()){
-                    if (frequencies.containsKey(ch)){
-                        frequencies.replace(ch,frequencies.get(ch)+1);
-                    }else{
-                        frequencies.put(ch,1);
+                for (String ch : channels.keySet()) {
+                    if (frequencies.containsKey(ch)) {
+                        frequencies.replace(ch, frequencies.get(ch) + 1);
+                    } else {
+                        frequencies.put(ch, 1);
                     }
 
                 }
             }
 
-            System.out.println("freqs "+frequencies);
+            System.out.println("freqs " + frequencies);
             return frequencies.toString();
 
         } catch (Exception e) {

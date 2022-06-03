@@ -20,11 +20,11 @@ import java.util.*;
 @Slf4j
 public class RedditsRecommendationsService implements MyCommand {
 
+    private final String serviceName = "redditsRecommendations";
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private Config config;
-    private final String serviceName = "redditsRecommendations";
 
     @RabbitListener(queues = "${mq.queues.request.reddit." + serviceName + "}", returnExceptions = "true")
     public Object listenToRequestQueue(String userId, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {

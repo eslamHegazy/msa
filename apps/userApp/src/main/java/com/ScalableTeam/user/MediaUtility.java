@@ -9,7 +9,8 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class MediaUtility {
     private final RabbitTemplate rabbitTemplate;
-    public void deleteProfilePhoto(String fileUrl){
+
+    public void deleteProfilePhoto(String fileUrl) {
         rabbitTemplate.convertAndSend("mediaApp", new RemovePhotoBody(fileUrl), message -> {
             message.getMessageProperties().setHeader("command", "removePhotoCommand");
             return message;

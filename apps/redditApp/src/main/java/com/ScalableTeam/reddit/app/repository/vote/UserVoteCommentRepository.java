@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface UserVoteCommentRepository extends JpaRepository<UserVoteComment, Long> {
     @Procedure(name = "UserVoteComment.upvoteComment")
     String upvoteComment(@Param("in_userId") String userNameId, @Param("in_commentId") String commentId);
+
     @Procedure(name = "UserVoteComment.downvoteComment")
     String downvoteComment(@Param("in_userId") String userNameId, @Param("in_commentId") String commentId);
 }

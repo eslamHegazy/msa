@@ -1,14 +1,6 @@
 package com.ScalableTeam.services;
 
-import com.ScalableTeam.services.config.AddressConfig;
-import com.ScalableTeam.services.controllerserver.ControllerRequestsServer;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-
-import javax.annotation.PostConstruct;
-import java.net.UnknownHostException;
-import java.util.Map;
 
 @NoArgsConstructor
 public class BaseService {

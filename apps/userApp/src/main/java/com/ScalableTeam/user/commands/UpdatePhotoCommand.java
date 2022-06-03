@@ -1,16 +1,12 @@
 package com.ScalableTeam.user.commands;
 
-import com.ScalableTeam.models.media.RemovePhotoBody;
 import com.ScalableTeam.models.user.UpdatePhotoBody;
 import com.ScalableTeam.models.user.UpdatePhotoResponse;
 import com.ScalableTeam.user.MediaUtility;
 import com.ScalableTeam.user.entity.UserProfile;
 import com.ScalableTeam.user.repositories.UserProfileRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -18,6 +14,7 @@ public class UpdatePhotoCommand implements ICommand<UpdatePhotoBody, UpdatePhoto
 
     private final UserProfileRepository userProfileRepository;
     private final MediaUtility mediaUtility;
+
     @Override
     public UpdatePhotoResponse execute(UpdatePhotoBody body) {
         if (!userProfileRepository.existsById(body.getUserId()))

@@ -5,7 +5,6 @@ import com.ScalableTeam.amqp.RabbitMQProducer;
 import com.ScalableTeam.httpServer.utils.CommandsMapper;
 import com.ScalableTeam.models.reddit.BookmarkChannelForm;
 import com.ScalableTeam.models.reddit.BookmarkPostForm;
-import com.ScalableTeam.models.reddit.FollowRedditForm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -1,4 +1,5 @@
 package com.ScalableTeam.arango;
+
 import com.arangodb.springframework.annotation.ArangoId;
 import com.arangodb.springframework.annotation.Document;
 import com.arangodb.springframework.annotation.Relations;
@@ -26,10 +27,16 @@ public class Channel implements Serializable {
     @Relations(edges = RedditFollowersEdge.class, lazy = true, direction = Relations.Direction.OUTBOUND)
     private Collection<User> followers;
     private String adminId;
-    private HashMap<String,Boolean> moderators;
+    private HashMap<String, Boolean> moderators;
     private HashMap<String, Boolean> bannedUsers;
-//    private HashMap<String, ReportPostForm> reports;
-    private HashMap<String, Boolean>reports;
+    //    private HashMap<String, ReportPostForm> reports;
+    private HashMap<String, Boolean> reports;
+
+    public Channel(String channelNameId, String adminId) {
+        this.channelNameId = channelNameId;
+        this.adminId = adminId;
+        moderators.put(adminId, true);
+    }
 
     public String getChannelNameId() {
         return channelNameId;
@@ -47,8 +54,6 @@ public class Channel implements Serializable {
         this.arangoId = arangoId;
     }
 
-
-
     public String getAdminId() {
         return adminId;
     }
@@ -57,9 +62,11 @@ public class Channel implements Serializable {
         this.adminId = adminId;
     }
 
-    public HashMap<String,Boolean> getModerators() {return moderators;}
+    public HashMap<String, Boolean> getModerators() {
+        return moderators;
+    }
 
-    public void setModerators(HashMap<String,Boolean> moderators) {
+    public void setModerators(HashMap<String, Boolean> moderators) {
         this.moderators = moderators;
     }
 
@@ -75,15 +82,14 @@ public class Channel implements Serializable {
         return reports;
     }
 
-    public void setReports(HashMap<String,Boolean> reports) {
-        this.reports = reports;
-    }
-
 //    @Override
 //    public String toString() {
 //        return "Channel [id=" + channelNameId +", adminId=" + adminId + "]";
 //    }
 
+    public void setReports(HashMap<String, Boolean> reports) {
+        this.reports = reports;
+    }
 
     public LazyLoadingProxy getFollowers() {
         return (LazyLoadingProxy) followers;
@@ -103,11 +109,5 @@ public class Channel implements Serializable {
                 ", bannedUsers=" + bannedUsers +
                 ", reports=" + reports +
                 '}';
-    }
-
-    public Channel(String channelNameId, String adminId) {
-        this.channelNameId = channelNameId;
-        this.adminId = adminId;
-        moderators.put(adminId,true);
     }
 }

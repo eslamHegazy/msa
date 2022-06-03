@@ -17,10 +17,9 @@ import java.util.Map;
 @AllArgsConstructor
 public class CommandDispatcher {
 
+    private static final String HEADER_COMMAND = "Command";
     private final Map<String, Command> commandsMap;
     private final ConfigurableApplicationContext ctx;
-
-    private static final String HEADER_COMMAND = "Command";
 
     @RabbitListener(queues = MessageQueues.REQUEST_NOTIFICATIONS, returnExceptions = "true")
     public Object onRequestReceived(Message message, @Header(HEADER_COMMAND) String commandName) throws Exception {

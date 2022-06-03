@@ -6,7 +6,9 @@ import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import config.TestBeansConfig;
 import mocks.AssignModeratorsFormMock;
 import mocks.ChannelMock2;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +17,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import utils.AssignModeratorsPopulator;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
@@ -28,12 +29,13 @@ public class AssignModeratorsTest {
     private ChannelRepository channelRepository;
     @Autowired
     private UserRepository userRepository;
+
     @Test
     void assignModerator() throws Exception {
         //given
-        AssignModeratorsForm assignModeratorsForm= AssignModeratorsFormMock.getAssignModeratorsForm();
+        AssignModeratorsForm assignModeratorsForm = AssignModeratorsFormMock.getAssignModeratorsForm();
         //when
-        AssignModeratorsService command= context.getBean(AssignModeratorsService.class);
+        AssignModeratorsService command = context.getBean(AssignModeratorsService.class);
         command.execute(assignModeratorsForm);
         //then
         assertTrue(channelRepository.findById(ChannelMock2.getChannelNameId()).get().getModerators().get(assignModeratorsForm.getModeratorId()));
@@ -41,11 +43,11 @@ public class AssignModeratorsTest {
 
     @BeforeEach
     public void prep() {
-        AssignModeratorsPopulator.populate(userRepository,channelRepository);
+        AssignModeratorsPopulator.populate(userRepository, channelRepository);
     }
 
     @AfterEach
     public void clean() {
-        AssignModeratorsPopulator.clear(userRepository,channelRepository);
+        AssignModeratorsPopulator.clear(userRepository, channelRepository);
     }
 }

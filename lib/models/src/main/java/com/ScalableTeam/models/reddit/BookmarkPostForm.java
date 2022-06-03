@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class BookmarkPostForm {
 
-        private String userId;
-        private String postId;
+    private String userId;
+    private String postId;
 }

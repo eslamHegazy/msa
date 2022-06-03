@@ -23,7 +23,7 @@ public class CommandDispatcher {
         if (iCommand == null) {
             iCommand = ctx.getBeansOfType(ICommand.class).get(command);
         }
-        if(iCommand == null) {
+        if (iCommand == null) {
             System.out.println("Command does not exist");
             return null;
         }

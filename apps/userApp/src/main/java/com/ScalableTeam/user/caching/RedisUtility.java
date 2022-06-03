@@ -11,17 +11,17 @@ import java.util.concurrent.TimeUnit;
 public class RedisUtility {
     private final RedisTemplate<String, String> redisTemplate;
 
-    public void setValue(final String userId, String authToken){
+    public void setValue(final String userId, String authToken) {
         redisTemplate.opsForValue().set(userId, authToken);
         redisTemplate.expire(userId, 30, TimeUnit.DAYS);
     }
 
 
-    public String getValue(final String userId){
+    public String getValue(final String userId) {
         return redisTemplate.opsForValue().get(userId);
     }
 
-    public void deleteKeyFromRedis(String userId){
+    public void deleteKeyFromRedis(String userId) {
         redisTemplate.delete(userId);
     }
 }

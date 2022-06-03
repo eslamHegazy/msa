@@ -21,19 +21,18 @@ import java.util.*;
 @Service
 @Slf4j
 public class RecommendationsBasedOnFollowersService implements MyCommand {
-    @Autowired
-    private UserRepository userRepository;
+    private final String serviceName = "recommendationsBasedOnFollowersService";
     @Autowired
     RecommendationsPerChannel recommendationsPerChannel;
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
     private CachingService cachingService;
-
-    private final String serviceName = "recommendationsBasedOnFollowersService";
     @Autowired
     private Config config;
 
     @RabbitListener(queues = "${mq.queues.request.reddit." + serviceName + "}", returnExceptions = "true")
-    public  Object listenToRequestQueue(String userId, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
+    public Object listenToRequestQueue(String userId, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
         String correlationId = message.getMessageProperties().getCorrelationId();
         log.info("Queue Listener::Command={}, CorrelationId={}, Recommendations Based On Followers Form={}", commandName, correlationId, userId);
         return execute(userId);
@@ -48,25 +47,26 @@ public class RecommendationsBasedOnFollowersService implements MyCommand {
             String userId = (String) body;
             log.info("Service::Recommendations Based On Followers Form={}", userId);
             User user = userRepository.findById(userId).get();
-            String [] followIds = user.getFollowedChannels().keySet().toArray(String[]::new);
+            String[] followIds = user.getFollowedChannels().keySet().toArray(String[]::new);
             HashMap<String, Integer> frequencies = new HashMap<>();
-            int end=3;
-            if(followIds.length<end){
-                end= followIds.length;
+            int end = 3;
+            if (followIds.length < end) {
+                end = followIds.length;
             }
-            for(int i=0;i<end;i++){
+            for (int i = 0; i < end; i++) {
                 System.out.println(followIds[i]);
                 String stuff = cachingService.getRecommendations(followIds[i]);
-                System.out.println("hello "+stuff);
-                if (stuff.length()>0){
-                HashMap<String, Integer> temp = String2Hash(stuff);
-                for (String k : temp.keySet()){
-                    if (frequencies.containsKey(k)){
-                        frequencies.replace(k,frequencies.get(k)+temp.get(k));
-                    }else {
-                        frequencies.put(k, temp.get(k));
+                System.out.println("hello " + stuff);
+                if (stuff.length() > 0) {
+                    HashMap<String, Integer> temp = String2Hash(stuff);
+                    for (String k : temp.keySet()) {
+                        if (frequencies.containsKey(k)) {
+                            frequencies.replace(k, frequencies.get(k) + temp.get(k));
+                        } else {
+                            frequencies.put(k, temp.get(k));
+                        }
                     }
-                }}
+                }
             }
 
             System.out.println(frequencies);
@@ -78,22 +78,22 @@ public class RecommendationsBasedOnFollowersService implements MyCommand {
 
             ArrayList<String> result = new ArrayList<String>();
 
-            while(result.size()<5 && freqlist.size()>0){
+            while (result.size() < 5 && freqlist.size() > 0) {
                 boolean found = false;
                 Iterator it = frequencies.entrySet().iterator();
                 System.out.println(result);
-                while (it.hasNext()){
+                while (it.hasNext()) {
                     HashMap.Entry item = (Map.Entry) it.next();
-                    if(item.getValue()==freqlist.get(freqlist.size()-1)){
+                    if (item.getValue() == freqlist.get(freqlist.size() - 1)) {
                         result.add((String) item.getKey());
-                        found=true;
+                        found = true;
                         break;
                     }
 
                 }
-                frequencies.remove(result.get(result.size()-1));
-                if(!found){
-                    freqlist.remove(freqlist.size()-1);
+                frequencies.remove(result.get(result.size() - 1));
+                if (!found) {
+                    freqlist.remove(freqlist.size() - 1);
                 }
             }
 
@@ -107,13 +107,13 @@ public class RecommendationsBasedOnFollowersService implements MyCommand {
 
     }
 
-    private HashMap<String, Integer> String2Hash(String s){
-        HashMap<String,Integer> res = new HashMap<>();
-        s = s.substring(1,s.length()-1);
-        String [] items = s.split(",");
-        for (String it :items){
-            String [] entry = it.split("=");
-            res.put(entry[0],Integer.parseInt(entry[1]));
+    private HashMap<String, Integer> String2Hash(String s) {
+        HashMap<String, Integer> res = new HashMap<>();
+        s = s.substring(1, s.length() - 1);
+        String[] items = s.split(",");
+        for (String it : items) {
+            String[] entry = it.split("=");
+            res.put(entry[0], Integer.parseInt(entry[1]));
         }
         return res;
     }

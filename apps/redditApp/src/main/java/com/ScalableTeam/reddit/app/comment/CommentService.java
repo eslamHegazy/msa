@@ -42,7 +42,7 @@ public class CommentService implements MyCommand {
     @Autowired
     private PostCommentHierarchyRepository postCommentHierarchyRepository;
     @Autowired
-    private  RabbitMQProducer rabbitMQProducer;
+    private RabbitMQProducer rabbitMQProducer;
 
     @RabbitListener(queues = "${mq.queues.request.reddit.comment}")
     public Post listenToRequestQueue(Comment comment, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
@@ -102,16 +102,15 @@ public class CommentService implements MyCommand {
             }
             if (cacheManager.getCache("popularPostsCache").get(postId) != null)
                 cachingService.updatePopularPostsCache(postId, post);
-            if(comment.isCommentOnPost()) {
+            if (comment.isCommentOnPost()) {
                 rabbitMQProducer.publishAsynchronousToQueue(MessageQueues.REQUEST_NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
                         "Comment made on your Post",
                         "body: " + comment.getBody() + " by " + comment.getUserNameId(),
                         comment.getUserNameId(),
                         List.of(post.getUserNameId())
                 ), MessageQueues.RESPONSE_NOTIFICATIONS);
-            }
-            else {
-                Comment parent =commentRepository.findById(comment.getCommentParentId()).get();
+            } else {
+                Comment parent = commentRepository.findById(comment.getCommentParentId()).get();
                 rabbitMQProducer.publishAsynchronousToQueue(MessageQueues.REQUEST_NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
                         "Comment made on your Comment",
                         "body: " + comment.getBody() + " by " + comment.getUserNameId(),

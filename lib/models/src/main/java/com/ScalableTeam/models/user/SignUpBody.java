@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class SignUpBody{
+public class SignUpBody {
     private String userId;
     private String email;
     private String password;

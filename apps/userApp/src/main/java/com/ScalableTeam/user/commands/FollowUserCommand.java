@@ -32,9 +32,9 @@ public class FollowUserCommand implements ICommand<FollowUserBody, FollowUserRes
         String userId = body.getUserID();
         String requestedFollowUserID = body.getRequestedFollowUserID();
 
-        if(userId.equals(requestedFollowUserID)){
+        if (userId.equals(requestedFollowUserID)) {
 
-            return new FollowUserResponse(false,"Can't follow yourself");
+            return new FollowUserResponse(false, "Can't follow yourself");
         }
         Optional<User> followUser = userRepository.findById(requestedFollowUserID);
         if (!followUser.isPresent()) {
@@ -63,7 +63,7 @@ public class FollowUserCommand implements ICommand<FollowUserBody, FollowUserRes
 
         rabbitMQProducer.publishAsynchronousToQueue(MessageQueues.REQUEST_NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
                 "New follower",
-                userId+" has followed you",
+                userId + " has followed you",
                 userId,
                 List.of(requestedFollowUserID)
         ), MessageQueues.RESPONSE_NOTIFICATIONS);

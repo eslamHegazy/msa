@@ -21,6 +21,10 @@ import java.net.URLConnection;
 @Component
 public class AppRunner implements CommandLineRunner {
 
+    final DownloadPhotoCommand downloadPhotoCommand;
+    final UploadPhotoCommand uploadPhotoCommand;
+    final RemovePhotoCommand removePhotoCommand;
+
     @Override
     public void run(String... args) throws Exception {
 //        successfulDownload("s5f914728-5879-4ce9-9f89-a6231052e162.jpeg");
@@ -28,10 +32,9 @@ public class AppRunner implements CommandLineRunner {
 //        UDRD("test_image.jpg");
     }
 
-    final DownloadPhotoCommand downloadPhotoCommand;
-    public void testDownload(String fileName) throws Exception{
+    public void testDownload(String fileName) throws Exception {
         DownloadPhotoResponse r = downloadPhotoCommand.execute(new DownloadPhotoBody(fileName));
-        System.out.println("Download message"+r.getMessage());
+        System.out.println("Download message" + r.getMessage());
         if (r.isSuccessful()) {
             System.out.println("Download content type = " + r.getContentType());
 //        System.out.println(r.getResource());
@@ -42,8 +45,8 @@ public class AppRunner implements CommandLineRunner {
             fos.write(b.getByteArray());
         }
     }
-    final UploadPhotoCommand uploadPhotoCommand;
-    public String testUpload(String fileName) throws Exception{
+
+    public String testUpload(String fileName) throws Exception {
         Resource resource = new ClassPathResource(fileName);
         InputStream f = resource.getInputStream();
         byte[] b = IOUtils.toByteArray(f);
@@ -51,21 +54,22 @@ public class AppRunner implements CommandLineRunner {
         String contentType = URLConnection.guessContentTypeFromName(originalFileName);
         UploadPhotoBody body = new UploadPhotoBody(b, contentType);
         UploadPhotoResponse r = uploadPhotoCommand.execute(body);
-        System.out.println("Upload isSuccessful = "+r.isSuccessful());
-        System.out.println("Upload Message / url = "+r.getMessage());
+        System.out.println("Upload isSuccessful = " + r.isSuccessful());
+        System.out.println("Upload Message / url = " + r.getMessage());
         return r.getMessage();
     }
-    final RemovePhotoCommand removePhotoCommand;
-    public void testDelete(String url){
+
+    public void testDelete(String url) {
         RemovePhotoBody body = new RemovePhotoBody(url);
 //        RemovePhotoResponse r = removePhotoCommand.execute(body);
         removePhotoCommand.execute(body);
 //        System.out.print("Delete isSuccessful = "+r.isSuccessful());
 //        System.out.print("Delete Message = "+r.getMessage());
     }
-    public void UDRD(String fileName) throws Exception{
+
+    public void UDRD(String fileName) throws Exception {
         String uploadedUrl = testUpload(fileName);
-        String uploadedFileName = uploadedUrl.substring(uploadedUrl.lastIndexOf('/')+1);
+        String uploadedFileName = uploadedUrl.substring(uploadedUrl.lastIndexOf('/') + 1);
         testDownload(uploadedFileName);
         Thread.sleep(10000);
         testDelete(uploadedUrl);

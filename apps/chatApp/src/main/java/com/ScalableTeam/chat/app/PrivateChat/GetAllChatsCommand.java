@@ -2,10 +2,7 @@ package com.ScalableTeam.chat.app.PrivateChat;
 
 import com.ScalableTeam.chat.app.MyCommand;
 import com.ScalableTeam.chat.app.entity.GroupChat;
-import com.ScalableTeam.chat.app.entity.Message;
 import com.ScalableTeam.chat.app.entity.PrivateChat;
-import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QueryDocumentSnapshot;

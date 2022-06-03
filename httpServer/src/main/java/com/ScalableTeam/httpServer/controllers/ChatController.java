@@ -1,7 +1,6 @@
 package com.ScalableTeam.httpServer.controllers;
 
 import com.ScalableTeam.amqp.Config;
-import com.ScalableTeam.amqp.LegacyRabbitMQProducer;
 import com.ScalableTeam.amqp.MessagePublisher;
 import com.ScalableTeam.amqp.RabbitMQProducer;
 import lombok.AllArgsConstructor;

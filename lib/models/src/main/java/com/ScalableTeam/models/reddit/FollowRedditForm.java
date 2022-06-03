@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 public class FollowRedditForm {
 
 
-    private String  userId ;
-    private String redditId ;
+    private String userId;
+    private String redditId;
 
     public String getUserId() {
         return userId;

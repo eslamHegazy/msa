@@ -8,7 +8,6 @@ import com.ScalableTeam.user.commands.LoginCommand;
 import com.ScalableTeam.user.commands.SignUpCommand;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
 //@Component
@@ -18,6 +17,7 @@ public class AppRunner implements CommandLineRunner {
     LoginCommand loginCommand;
 
     RedisUtility redisUtility;
+
     @Override
     public void run(String... args) throws Exception {
         String userId = "mo";

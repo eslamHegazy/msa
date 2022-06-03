@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.messaging.handler.annotation.Header;
@@ -28,7 +27,6 @@ public class ReportPostService implements MyCommand {
 
     private ChannelRepository channelRepository;
     private PostRepository postRepository;
-
 
 
     @RabbitListener(queues = "${mq.queues.request.reddit.reportPost}")

@@ -26,7 +26,7 @@ public class AuthenticationController {
     private final CommandsMapper commandsMapper;
 
     @PostMapping("/signUp")
-    public SignUpResponse signUp(@RequestBody SignUpBody body){
+    public SignUpResponse signUp(@RequestBody SignUpBody body) {
         return rabbitTemplate.convertSendAndReceiveAsType(QUEUE, body, message -> {
             message.getMessageProperties().setHeader("command", commandsMapper.getUser().get("signUp"));
             return message;
@@ -35,7 +35,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginBody body){
+    public LoginResponse login(@RequestBody LoginBody body) {
         return rabbitTemplate.convertSendAndReceiveAsType(QUEUE, body, message -> {
             message.getMessageProperties().setHeader("command", commandsMapper.getUser().get("login"));
             return message;

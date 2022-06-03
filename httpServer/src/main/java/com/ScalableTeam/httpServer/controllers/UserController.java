@@ -14,8 +14,8 @@ public class UserController {
     private final RabbitTemplate rabbitTemplate;
 
     @GetMapping("/userTest")
-    public String testUser(){
-        Object o =  rabbitTemplate.convertSendAndReceiveAsType(QUEUE, "", message -> {
+    public String testUser() {
+        Object o = rabbitTemplate.convertSendAndReceiveAsType(QUEUE, "", message -> {
             message.getMessageProperties().setHeader("command", "userTestCommand");
             return message;
         }, new ParameterizedTypeReference<>() {
@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @DeleteMapping("/deleteAccount")
-    public DeleteAccountResponse deleteUser(@RequestBody DeleteAccountBody body){
+    public DeleteAccountResponse deleteUser(@RequestBody DeleteAccountBody body) {
         return rabbitTemplate.convertSendAndReceiveAsType(QUEUE, body, message -> {
             message.getMessageProperties().setHeader("command", "deleteAccountCommand");
             return message;
@@ -33,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping("/blockUser")
-    public BlockedUserResponse blockUser(@RequestBody BlockedUserBody body){
+    public BlockedUserResponse blockUser(@RequestBody BlockedUserBody body) {
         return rabbitTemplate.convertSendAndReceiveAsType(QUEUE, body, message -> {
             message.getMessageProperties().setHeader("command", "blockUserCommand");
             return message;
@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @PostMapping("/reportUser")
-    public ReportedUserResponse reportUser(@RequestBody ReportUserBody body){
+    public ReportedUserResponse reportUser(@RequestBody ReportUserBody body) {
         return rabbitTemplate.convertSendAndReceiveAsType(QUEUE, body, message -> {
             message.getMessageProperties().setHeader("command", "reportUserCommand");
             return message;
@@ -51,7 +51,7 @@ public class UserController {
     }
 
     @PostMapping("/followUser")
-    public FollowUserResponse FollowUser(@RequestBody FollowUserBody body){
+    public FollowUserResponse FollowUser(@RequestBody FollowUserBody body) {
         return rabbitTemplate.convertSendAndReceiveAsType(QUEUE, body, message -> {
             message.getMessageProperties().setHeader("command", "followUserCommand");
             return message;
@@ -60,7 +60,7 @@ public class UserController {
     }
 
     @PostMapping("/unfollowUser")
-    public UnFollowUserResponse UnfollowUser(@RequestBody UnFollowUserBody body){
+    public UnFollowUserResponse UnfollowUser(@RequestBody UnFollowUserBody body) {
         return rabbitTemplate.convertSendAndReceiveAsType(QUEUE, body, message -> {
             message.getMessageProperties().setHeader("command", "unFollowUserCommand");
             return message;
@@ -69,15 +69,16 @@ public class UserController {
     }
 
     @PostMapping("/editProfile")
-    public EditProfileResponse editProfile(@RequestBody EditProfileBody body){
+    public EditProfileResponse editProfile(@RequestBody EditProfileBody body) {
         return rabbitTemplate.convertSendAndReceiveAsType(QUEUE, body, message -> {
             message.getMessageProperties().setHeader("command", "editProfileCommand");
             return message;
         }, new ParameterizedTypeReference<>() {
         });
     }
+
     @PostMapping("/updatePhoto")
-    public UpdatePhotoResponse updatePhoto(@RequestBody UpdatePhotoBody body){
+    public UpdatePhotoResponse updatePhoto(@RequestBody UpdatePhotoBody body) {
         return rabbitTemplate.convertSendAndReceiveAsType(QUEUE, body, message -> {
             message.getMessageProperties().setHeader("command", "updatePhotoCommand");
             return message;

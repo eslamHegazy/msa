@@ -1,9 +1,9 @@
 package com.ScalableTeam.media.commands;
 
-import io.minio.GetObjectArgs;
-import io.minio.MinioClient;
 import com.ScalableTeam.models.media.DownloadPhotoBody;
 import com.ScalableTeam.models.media.DownloadPhotoResponse;
+import io.minio.GetObjectArgs;
+import io.minio.MinioClient;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +24,7 @@ public class DownloadPhotoCommand implements ICommand<DownloadPhotoBody, Downloa
     @Override
     public DownloadPhotoResponse execute(DownloadPhotoBody body) {
         try {
-            System.out.println("Default Bucket name: "+defaultBucketName);
+            System.out.println("Default Bucket name: " + defaultBucketName);
             String fileName = body.getFileName();
             String contentType = URLConnection.guessContentTypeFromName(fileName);
             System.out.println("content type from file name is: " + contentType);
@@ -38,8 +38,7 @@ public class DownloadPhotoCommand implements ICommand<DownloadPhotoBody, Downloa
             obj.close();
             ByteArrayResource resource = new ByteArrayResource(data);
             return new DownloadPhotoResponse("Success", true, contentType, resource);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return new DownloadPhotoResponse(e.getMessage(), false, "", null);
         }
     }

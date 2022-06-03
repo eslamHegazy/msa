@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,11 +23,12 @@ public class BlockUserCommandTest {
     @Autowired
     private BlockUserCommand blockUserCommand;
     private ArrayList<String> savedUsers;
+
     @BeforeEach
-    void setup(){
-        savedUsers=new ArrayList<>();
+    void setup() {
+        savedUsers = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            User user=User.builder().build();
+            User user = User.builder().build();
             user.setBlockedUsers(new HashMap<>());
             userRepository.save(user);
             savedUsers.add(user.getUserNameId());
@@ -37,7 +37,7 @@ public class BlockUserCommandTest {
 
     @Test
     void blockHimself() {
-        BlockedUserBody body = new BlockedUserBody(savedUsers.get(0),savedUsers.get(0));
+        BlockedUserBody body = new BlockedUserBody(savedUsers.get(0), savedUsers.get(0));
         BlockedUserResponse response = blockUserCommand.execute(body);
         assertFalse(response.isSuccessful());
         assertEquals(response.getMessage(), "The user can not block himself/herself!");
@@ -45,7 +45,7 @@ public class BlockUserCommandTest {
 
     @Test
     void blockNonExistingUser() {
-        BlockedUserBody body = new BlockedUserBody(savedUsers.get(0),"0000");
+        BlockedUserBody body = new BlockedUserBody(savedUsers.get(0), "0000");
         BlockedUserResponse response = blockUserCommand.execute(body);
         assertFalse(response.isSuccessful());
         assertEquals(response.getMessage(), "The blocked user not found in DB!");
@@ -53,7 +53,7 @@ public class BlockUserCommandTest {
 
     @Test
     void userNotFound() {
-        BlockedUserBody body = new BlockedUserBody("0000",savedUsers.get(0));
+        BlockedUserBody body = new BlockedUserBody("0000", savedUsers.get(0));
         BlockedUserResponse response = blockUserCommand.execute(body);
         assertFalse(response.isSuccessful());
         assertEquals(response.getMessage(), "User not found in DB!");
@@ -61,7 +61,7 @@ public class BlockUserCommandTest {
 
     @Test
     void blockSuccessfully() {
-        BlockedUserBody body = new BlockedUserBody(savedUsers.get(1),savedUsers.get(0));
+        BlockedUserBody body = new BlockedUserBody(savedUsers.get(1), savedUsers.get(0));
         BlockedUserResponse response = blockUserCommand.execute(body);
         assertTrue(response.isSuccessful());
         assertEquals(response.getMessage(), "User blocked successfully");

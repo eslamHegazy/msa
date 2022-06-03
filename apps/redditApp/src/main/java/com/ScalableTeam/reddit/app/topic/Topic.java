@@ -10,7 +10,8 @@ public class Topic {
         this.name = name;
         this.description = description;
     }
-    public Topic(){
+
+    public Topic() {
 
     }
 

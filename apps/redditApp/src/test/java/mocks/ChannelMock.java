@@ -1,24 +1,6 @@
 package mocks;
 
 import com.ScalableTeam.arango.Channel;
-import com.ScalableTeam.arango.Post;
-import com.sun.istack.NotNull;
-
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import com.ScalableTeam.arango.Post;
-import com.sun.istack.NotNull;
-
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 
 public class ChannelMock {
@@ -45,19 +27,23 @@ public class ChannelMock {
         return id;
     }
 
-    public static String getAdminId(){return adminId;}
+    public static String getAdminId() {
+        return adminId;
+    }
 
-    public static Channel getChannelWithId(String channelId){
+    public static Channel getChannelWithId(String channelId) {
         Channel ch = getChannel();
         ch.setChannelNameId(channelId);
         return ch;
     }
-    public static Channel getChannelWithAdminId(String adminId){
+
+    public static Channel getChannelWithAdminId(String adminId) {
         Channel ch = getChannel();
         ch.setAdminId(adminId);
         return ch;
     }
-    public static Channel getChannelWithAdminChannelId(String channelId,String adminId){
+
+    public static Channel getChannelWithAdminChannelId(String channelId, String adminId) {
         Channel ch = getChannel();
         ch.setChannelNameId(channelId);
         ch.setAdminId(adminId);

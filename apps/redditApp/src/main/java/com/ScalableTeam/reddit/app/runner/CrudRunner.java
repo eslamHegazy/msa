@@ -8,7 +8,6 @@ import com.ScalableTeam.reddit.app.seeders.ChannelSeeder;
 import com.ScalableTeam.reddit.app.seeders.CommentSeeder;
 import com.ScalableTeam.reddit.app.seeders.PostSeeder;
 import com.ScalableTeam.reddit.app.seeders.UserSeeder;
-//import com.ScalableTeam.reddit.app.topic.Topic;
 import com.arangodb.springframework.core.ArangoOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

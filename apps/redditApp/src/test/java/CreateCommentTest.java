@@ -1,22 +1,16 @@
 import com.ScalableTeam.arango.Comment;
-import com.ScalableTeam.arango.Post;
 import com.ScalableTeam.arango.UserRepository;
-import com.ScalableTeam.models.reddit.VoteCommentForm;
 import com.ScalableTeam.reddit.RedditApplication;
 import com.ScalableTeam.reddit.app.comment.CommentService;
-import com.ScalableTeam.reddit.app.comment.DownvoteCommentService;
-import com.ScalableTeam.reddit.app.comment.UpvoteCommentService;
-import com.ScalableTeam.reddit.app.post.CreatePostService;
 import com.ScalableTeam.reddit.app.repository.CommentRepository;
 import com.ScalableTeam.reddit.app.repository.PostCommentHierarchyRepository;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
-import com.ScalableTeam.reddit.app.repository.vote.CommentVoteRepository;
-import com.ScalableTeam.reddit.app.repository.vote.UserVoteCommentRepository;
 import config.TestBeansConfig;
 import mocks.CommentMock;
 import mocks.PostMock;
-import mocks.UserMock;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,10 +18,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import utils.CreateCommentPopulator;
-import utils.CreatePostPopulator;
-import utils.VoteCommentPopulator;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
@@ -44,25 +35,26 @@ public class CreateCommentTest {
     private CommentRepository commentRepository;
     @Autowired
     private PostCommentHierarchyRepository postCommentHierarchyRepository;
+
     @Test
     void createComment() throws Exception {
         //given
-        Comment c=CommentMock.getComment();
+        Comment c = CommentMock.getComment();
         //when
         CommentService command = context.getBean(CommentService.class);
         command.execute(c);
         //then
         assertTrue(commentRepository.existsById(c.getId()));
-        assertTrue(postCommentHierarchyRepository.existsById(PostMock.getId()+CommentMock.getId()));
+        assertTrue(postCommentHierarchyRepository.existsById(PostMock.getId() + CommentMock.getId()));
     }
 
     @BeforeEach
     public void prep() {
-        CreateCommentPopulator.populate(userRepository,postRepository);
+        CreateCommentPopulator.populate(userRepository, postRepository);
     }
 
     @AfterEach
     public void clean() {
-        CreateCommentPopulator.clear(userRepository,postRepository,commentRepository,postCommentHierarchyRepository);
+        CreateCommentPopulator.clear(userRepository, postRepository, commentRepository, postCommentHierarchyRepository);
     }
 }

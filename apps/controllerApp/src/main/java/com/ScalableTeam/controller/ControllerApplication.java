@@ -1,6 +1,5 @@
 package com.ScalableTeam.controller;
 
-import com.ScalableTeam.controller.server.ControllerService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
@@ -12,7 +11,7 @@ import org.springframework.context.annotation.PropertySource;
         "com.ScalableTeam.models"
 //        ,
 //        "com.ScalableTeam.services"
-        ,        "com.ScalableTeam.utils"
+        , "com.ScalableTeam.utils"
 })
 @ConfigurationPropertiesScan
 //@EnableEurekaClient

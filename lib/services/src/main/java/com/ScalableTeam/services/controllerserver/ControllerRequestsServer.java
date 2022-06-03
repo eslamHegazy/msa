@@ -9,11 +9,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
-import io.netty.handler.codec.Delimiters;
-import io.netty.handler.codec.FixedLengthFrameDecoder;
-import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -66,15 +61,15 @@ public class ControllerRequestsServer {
         }
     }
 
-    public void setTcpPort(int port) {
-        this.tcpPort = new InetSocketAddress(port);
-    }
-
     public void setTcp(String ip, int port) throws UnknownHostException {
         this.tcpPort = new InetSocketAddress(ip, port);
     }
 
     public InetSocketAddress getTcpPort() {
         return tcpPort;
+    }
+
+    public void setTcpPort(int port) {
+        this.tcpPort = new InetSocketAddress(port);
     }
 }

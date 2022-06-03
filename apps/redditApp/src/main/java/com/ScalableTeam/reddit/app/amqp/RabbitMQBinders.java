@@ -3,7 +3,8 @@ package com.ScalableTeam.reddit.app.amqp;
 import com.ScalableTeam.amqp.Config;
 import com.ScalableTeam.utils.StringUtils;
 import lombok.AllArgsConstructor;
-import org.springframework.amqp.core.*;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,9 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Configuration

@@ -1,11 +1,8 @@
 package com.ScalableTeam.reddit.app.bookmark;
 
 import com.ScalableTeam.amqp.MessagePublisher;
-import com.ScalableTeam.arango.Channel;
 import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.models.reddit.BookmarkChannelForm;
-import com.ScalableTeam.models.reddit.BookmarkPostForm;
-import com.ScalableTeam.models.reddit.ReportPostForm;
 import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import lombok.AllArgsConstructor;
@@ -21,10 +18,9 @@ import java.util.HashMap;
 @Slf4j
 @AllArgsConstructor
 public class BookmarkChannelService implements MyCommand {
+    private final String serviceName = "bookmarkChannel";
     private UserRepository userRepository;
     private ChannelRepository channelRepository;
-    private final String serviceName = "bookmarkChannel";
-
 
     @RabbitListener(queues = "${mq.queues.request.reddit." + serviceName + "}")
     public String listenToRequestQueue(BookmarkChannelForm bookmarkChannelForm, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
@@ -35,17 +31,17 @@ public class BookmarkChannelService implements MyCommand {
 
     @Override
     public String execute(Object body) {
-        BookmarkChannelForm request =  (BookmarkChannelForm) body;
+        BookmarkChannelForm request = (BookmarkChannelForm) body;
 
         log.info("Service::Bookmark channel form ={}", request);
 
 
-        if(channelRepository.findById(request.getChannelId()).isEmpty()){
+        if (channelRepository.findById(request.getChannelId()).isEmpty()) {
             return "channel not found";
         }
         HashMap<String, Boolean> bookmark = new HashMap<String, Boolean>();
-            bookmark.put(request.getChannelId(),true);
-            userRepository.updateBookmarkedChannels(request.getUserId(),bookmark);
+        bookmark.put(request.getChannelId(), true);
+        userRepository.updateBookmarkedChannels(request.getUserId(), bookmark);
 
         return "Channel Bookmarked successfully";
     }

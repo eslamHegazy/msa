@@ -31,7 +31,7 @@ public class ChannelSeeder {
 ////                    .password(password)
 ////                    .profilePhotoLink(photoLink)
 //                    .build();
-            Channel channel = new Channel(prefix+i,adminprefix+channelNum);
+            Channel channel = new Channel(prefix + i, adminprefix + channelNum);
             channelRepository.save(channel);
         }
         return channels;

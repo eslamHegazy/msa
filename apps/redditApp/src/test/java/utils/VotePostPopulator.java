@@ -15,7 +15,7 @@ public class VotePostPopulator {
         postRepository.save(PostMock.getPostWithUserNameId(UserMock.getId()));
     }
 
-    public static void clear(UserRepository userRepository, PostRepository postRepository, UserVotePostRepository userVotePostRepository, PostVoteRepository postVoteRepository){
+    public static void clear(UserRepository userRepository, PostRepository postRepository, UserVotePostRepository userVotePostRepository, PostVoteRepository postVoteRepository) {
         userRepository.delete(UserMock.getUser());
         userRepository.delete(UserMock.getUserWithId(UserMock.getId() + "Voter"));
         postRepository.delete(PostMock.getPostWithUserNameId(UserMock.getId()));

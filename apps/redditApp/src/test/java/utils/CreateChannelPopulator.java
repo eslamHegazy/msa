@@ -11,7 +11,7 @@ public class CreateChannelPopulator {
 
     }
 
-    public static void clear(UserRepository userRepository, ChannelRepository channelRepository){
+    public static void clear(UserRepository userRepository, ChannelRepository channelRepository) {
         userRepository.deleteById(UserMock.getId());
         channelRepository.deleteById(CreateChannelFormMock.getChannelNameId());
     }

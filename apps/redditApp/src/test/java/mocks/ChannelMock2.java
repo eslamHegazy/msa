@@ -7,9 +7,10 @@ import java.util.HashMap;
 public class ChannelMock2 {
     private static String channelNameId = "newChannel";
     private static String adminId = UserMock.getId();
-    public static Channel getChannelWithAdminAsModerator(){
-        HashMap<String,Boolean>moderators=new HashMap<>();
-        moderators.put(adminId,true);
+
+    public static Channel getChannelWithAdminAsModerator() {
+        HashMap<String, Boolean> moderators = new HashMap<>();
+        moderators.put(adminId, true);
         return Channel.builder().channelNameId(channelNameId).adminId(adminId).moderators(moderators).build();
     }
 

@@ -31,6 +31,9 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class FollowRedditService implements MyCommand {
+    private final String serviceName = "followReddit";
+    @Autowired
+    RedditFollowersEdgeRepository redditFollowersEdgeRepository;
     @Autowired
     private ChannelRepository channelRepository;
     @Autowired
@@ -43,10 +46,6 @@ public class FollowRedditService implements MyCommand {
     private CachingService cachingService;
     @Autowired
     private RabbitMQProducer rabbitMQProducer;
-
-    @Autowired
-    RedditFollowersEdgeRepository redditFollowersEdgeRepository;
-    private final String serviceName = "followReddit";
 
     @RabbitListener(queues = "${mq.queues.request.reddit." + serviceName + "}")
     public String listenToRequestQueue(FollowRedditForm followRedditForm, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
@@ -109,12 +108,11 @@ public class FollowRedditService implements MyCommand {
                 log.info("Controller - Queue: {}, Command: {}, Payload: {}", "sendNotificationCommand", serviceName, request);
                 rabbitMQProducer.publishAsynchronousToQueue(MessageQueues.REQUEST_NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
                         "New Channel Follower",
-                        userId +" followed your channel "+redditId,
+                        userId + " followed your channel " + redditId,
                         userId,
                         admins
                 ), MessageQueues.RESPONSE_NOTIFICATIONS);
-            }
-            catch(Exception e){
+            } catch (Exception e) {
                 System.out.println("no admin to receive notification");
             }
 

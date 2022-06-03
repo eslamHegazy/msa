@@ -27,7 +27,10 @@ public class User {
     private HashMap<String, Boolean> blockedUsers;
     private HashMap<String, Boolean> bookmarkedPosts;
     private HashMap<String, Boolean> bookmarkedChannels;
-
+    private HashMap<String, String> reportedUsers;
+    private Date earliestTime;
+    private Date latestTime;
+    private String latestReadPostId;
 
     public HashMap<String, String> getReportedUsers() {
         return reportedUsers;
@@ -36,13 +39,6 @@ public class User {
     public void setReportedUsers(HashMap<String, String> reportedUsers) {
         this.reportedUsers = reportedUsers;
     }
-
-    private HashMap<String, String> reportedUsers;
-    private Date earliestTime;
-    private Date latestTime;
-
-    private String latestReadPostId;
-
 
     public Date getLatestTime() {
         return latestTime;

@@ -1,7 +1,9 @@
 package com.ScalableTeam.chat.utils;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.*;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
 import com.google.firebase.cloud.FirestoreClient;
 
 import java.util.List;
@@ -26,7 +28,7 @@ public class DBMethods {
         return doc;
     }
 
-    public static Object checkMsgDocExists(String collectionName, String chatId,String msgId) throws ExecutionException, InterruptedException {
+    public static Object checkMsgDocExists(String collectionName, String chatId, String msgId) throws ExecutionException, InterruptedException {
         Object doc = database.collection(collectionName)
                 .document(chatId).collection("Messages").document(msgId).get().get().getData();
         System.out.println(doc);

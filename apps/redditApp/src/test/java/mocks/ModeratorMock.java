@@ -23,10 +23,11 @@ public class ModeratorMock {
         user.setUserNameId(id);
         return user;
     }
-    public static User getModeratorFollowsChannel(String channelId){
+
+    public static User getModeratorFollowsChannel(String channelId) {
         User user = getModerator();
-        HashMap<String,Boolean>follows=new HashMap<>();
-        follows.put(channelId,true);
+        HashMap<String, Boolean> follows = new HashMap<>();
+        follows.put(channelId, true);
         user.setFollowedChannels(follows);
         return user;
     }

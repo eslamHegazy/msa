@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,32 +37,32 @@ public class ReportUserCommandTest {
     }
 
     @Test
-    void userReportHimself(){
-        ReportUserBody body = new ReportUserBody(savedUsers.get(0),savedUsers.get(0),"dummy reason");
+    void userReportHimself() {
+        ReportUserBody body = new ReportUserBody(savedUsers.get(0), savedUsers.get(0), "dummy reason");
         ReportedUserResponse response = reportUserCommand.execute(body);
         assertFalse(response.isSuccessful());
         assertEquals(response.getMessage(), "The user can not report himself/herself!");
     }
 
     @Test
-    void reportNonExistingUser(){
-        ReportUserBody body = new ReportUserBody(savedUsers.get(0),"0000","dummy reason");
+    void reportNonExistingUser() {
+        ReportUserBody body = new ReportUserBody(savedUsers.get(0), "0000", "dummy reason");
         ReportedUserResponse response = reportUserCommand.execute(body);
         assertFalse(response.isSuccessful());
         assertEquals(response.getMessage(), "The reported user not found in DB!");
     }
 
     @Test
-    void userNotFound(){
-        ReportUserBody body = new ReportUserBody("0000",savedUsers.get(0),"dummy reason");
+    void userNotFound() {
+        ReportUserBody body = new ReportUserBody("0000", savedUsers.get(0), "dummy reason");
         ReportedUserResponse response = reportUserCommand.execute(body);
         assertFalse(response.isSuccessful());
         assertEquals(response.getMessage(), "User not found in DB!");
     }
 
     @Test
-    public void reportSuccessfully(){
-        ReportUserBody body = new ReportUserBody(savedUsers.get(1),savedUsers.get(0),"dummy reason");
+    public void reportSuccessfully() {
+        ReportUserBody body = new ReportUserBody(savedUsers.get(1), savedUsers.get(0), "dummy reason");
         ReportedUserResponse response = reportUserCommand.execute(body);
         assertTrue(response.isSuccessful());
         assertEquals(response.getMessage(), "User reported successfully");

@@ -2,18 +2,18 @@ package com.ScalableTeam.user.commands;
 
 import com.ScalableTeam.arango.User;
 import com.ScalableTeam.arango.UserRepository;
-import com.ScalableTeam.models.user.*;
+import com.ScalableTeam.models.user.FollowUserBody;
+import com.ScalableTeam.models.user.UnFollowUserBody;
+import com.ScalableTeam.models.user.UnFollowUserResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @SpringBootTest

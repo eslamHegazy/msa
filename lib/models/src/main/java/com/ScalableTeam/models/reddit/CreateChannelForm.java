@@ -33,7 +33,7 @@ public class CreateChannelForm {
     }
 
     @Override
-    public String toString(){
-        return "Create Channel Form"+"Channel Name: "+ channelNameId +" adminId: "+ adminId;
+    public String toString() {
+        return "Create Channel Form" + "Channel Name: " + channelNameId + " adminId: " + adminId;
     }
 }

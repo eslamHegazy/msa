@@ -1,6 +1,5 @@
 package com.ScalableTeam.chat.app.entity;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

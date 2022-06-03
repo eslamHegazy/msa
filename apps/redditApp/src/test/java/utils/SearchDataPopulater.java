@@ -25,7 +25,7 @@ public class SearchDataPopulater {
         postRepository.saveAll(PostMock.getPostsWithTitle(titles));
     }
 
-    public static void clear(UserRepository userRepository, PostRepository postRepository){
+    public static void clear(UserRepository userRepository, PostRepository postRepository) {
         userRepository.delete(UserMock.getUser());
         postRepository.deleteAll(PostMock.getPostsWithTitle(titles));
     }

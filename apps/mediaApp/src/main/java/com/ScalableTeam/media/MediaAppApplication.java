@@ -1,6 +1,5 @@
 package com.ScalableTeam.media;
 
-import com.ScalableTeam.services.BaseService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
@@ -17,7 +16,7 @@ import org.springframework.context.annotation.PropertySource;
 
 public class MediaAppApplication
 //        extends BaseService
-        {
+{
 
     public static void main(String[] args) {
         SpringApplication.run(MediaAppApplication.class, args);

@@ -42,8 +42,8 @@ public class ChangeGroupAdminCommand implements MyCommand {
             HashMap<String, String> chatUpdates = new HashMap<>();
             if (newAdminId != null)
                 chatUpdates.put("adminId", newAdminId);
-           else
-               return "No New Admin Specified";
+            else
+                return "No New Admin Specified";
 
             final Firestore database = FirestoreClient.getFirestore();
 

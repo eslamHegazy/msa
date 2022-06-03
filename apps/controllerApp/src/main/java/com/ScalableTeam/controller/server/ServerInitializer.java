@@ -14,7 +14,6 @@ import io.netty.handler.codec.http.cors.CorsHandler;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -26,9 +25,9 @@ import java.security.cert.CertificateException;
 @Component
 @RequiredArgsConstructor
 public class ServerInitializer extends ChannelInitializer<SocketChannel> {
-    private SslContext sslCtx;
-    private final ControllerServerExecutor controllerServerExecutor;
     private static final int MAX_CONTENT_LENGTH = 5 * (1 << 20);
+    private final ControllerServerExecutor controllerServerExecutor;
+    private SslContext sslCtx;
     @Value("${ssl}")
     private boolean SSL;
 

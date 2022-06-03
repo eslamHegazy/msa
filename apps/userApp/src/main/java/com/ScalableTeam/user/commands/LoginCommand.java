@@ -18,25 +18,26 @@ public class LoginCommand implements ICommand<LoginBody, LoginResponse> {
     private final UserProfileRepository userProfileRepository;
     private final JwtUtil jwtUtil;
 
-    private final RedisUtility  redisUtility;
+    private final RedisUtility redisUtility;
+
     @Override
-    public LoginResponse execute(LoginBody body){
+    public LoginResponse execute(LoginBody body) {
         String userId = body.getUserId();
         String password = body.getPassword();
 
 
         Optional<UserProfile> userProfile = userProfileRepository.findById(userId);
-        if(userProfile.isEmpty())
+        if (userProfile.isEmpty())
             return new LoginResponse(false, "Wrong username");
 
         boolean isVerified = Password.check(password, userProfile.get().getPassword()).withBCrypt();
 
-        if(!isVerified)
+        if (!isVerified)
             return new LoginResponse(false, "Wrong username or password");
 
         String authToken = jwtUtil.generateToken(userId);
 
         redisUtility.setValue(userId, authToken);
-        return new LoginResponse(true,  "Logged in Successfully", authToken);
+        return new LoginResponse(true, "Logged in Successfully", authToken);
     }
 }

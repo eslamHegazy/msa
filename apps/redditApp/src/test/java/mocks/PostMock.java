@@ -11,6 +11,12 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class PostMock {
+    public final static String upvotePostFirstTime = "upvoted your post with id";
+    public final static String upvotePostSecondTime = "removed their upvote on your post with id";
+    public final static String upvoteAfterDownvote = "removed their downvote and upvoted instead your post with id";
+    public final static String downvotePostFirstTime = "downvoted your post with id";
+    public final static String downvotePostSecondTime = "removed their downvote on your post with id";
+    public final static String downvoteAfterUpvote = "removed their upvote and downvoted instead your post with id";
     private static final String id = "MockPost";
     private static final String title = "Hello";
     private static final String body = "World";
@@ -18,12 +24,6 @@ public class PostMock {
     private static final String channelId = "MockChannel";
     private static final int upvoteCount = 0;
     private static final int downvoteCount = 0;
-    public final static String upvotePostFirstTime = "upvoted your post with id";
-    public final static String upvotePostSecondTime = "removed their upvote on your post with id";
-    public final static String upvoteAfterDownvote = "removed their downvote and upvoted instead your post with id";
-    public final static String downvotePostFirstTime = "downvoted your post with id";
-    public final static String downvotePostSecondTime = "removed their downvote on your post with id";
-    public final static String downvoteAfterUpvote = "removed their upvote and downvoted instead your post with id";
 
     public static Post getPost() {
         return Post.builder()
@@ -38,6 +38,7 @@ public class PostMock {
                 .channelId(channelId)
                 .build();
     }
+
     public static String getChannelId() {
         return channelId;
     }
@@ -59,7 +60,7 @@ public class PostMock {
         return post;
     }
 
-    public static Post getPostWithIdChannelId( String postId,String channelId) {
+    public static Post getPostWithIdChannelId(String postId, String channelId) {
         Post post = getPost();
         post.setId(postId);
         post.setChannelId(channelId);

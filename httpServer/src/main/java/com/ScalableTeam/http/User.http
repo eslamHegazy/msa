@@ -24,6 +24,7 @@ Authorization: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtbyIsImV4cCI6MTY1Mzk1MjY4OCwiaWF0
 {
   "userId": "mo"
 }
+
 ###
 POST http://localhost:3000/user/updatePhoto
 Content-Type: application/json

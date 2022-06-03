@@ -9,9 +9,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class EditProfileCommand implements ICommand<EditProfileBody, EditProfileResponse>{
+public class EditProfileCommand implements ICommand<EditProfileBody, EditProfileResponse> {
 
     private final UserProfileRepository userProfileRepository;
+
     @Override
     public EditProfileResponse execute(EditProfileBody body) {
         if (!userProfileRepository.existsById(body.getUserId()))

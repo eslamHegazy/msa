@@ -24,12 +24,11 @@ import java.net.URLConnection;
 @SpringBootTest
 public class MediaAppTests {
     @Autowired
+    MinioClient minioClient;
+    @Autowired
     private ApplicationContext context;
 
-    @Autowired
-    MinioClient minioClient;
-
-    public UploadPhotoResponse upload(String filePath) throws Exception{
+    public UploadPhotoResponse upload(String filePath) throws Exception {
         UploadPhotoCommand uploadPhotoCommand = context.getBean(UploadPhotoCommand.class);
         Resource resource = new ClassPathResource(filePath);
         InputStream f = resource.getInputStream();
@@ -40,33 +39,37 @@ public class MediaAppTests {
         UploadPhotoResponse r = uploadPhotoCommand.execute(body);
         return r;
     }
-    public DownloadPhotoResponse download(String objectName) throws Exception{
+
+    public DownloadPhotoResponse download(String objectName) throws Exception {
         DownloadPhotoCommand downloadPhotoCommand = context.getBean(DownloadPhotoCommand.class);
         DownloadPhotoResponse r = downloadPhotoCommand.execute(new DownloadPhotoBody(objectName));
         return r;
     }
-    public void remove(String url) throws Exception{
+
+    public void remove(String url) throws Exception {
         RemovePhotoCommand removePhotoCommand = context.getBean(RemovePhotoCommand.class);
         removePhotoCommand.execute(new RemovePhotoBody(url));
     }
+
     @Test
-    public void Upload_Then_Download_Test_1() throws Exception{
+    public void Upload_Then_Download_Test_1() throws Exception {
         UploadPhotoResponse uploadResponse = upload("test_image.jpg");
         String uploaded_url = uploadResponse.getMessage();
         Assert.isTrue(uploadResponse.isSuccessful(), "The upload should've been successful");
-        DownloadPhotoResponse downloadResponse = download(uploaded_url.substring(uploaded_url.lastIndexOf("/")+1));
+        DownloadPhotoResponse downloadResponse = download(uploaded_url.substring(uploaded_url.lastIndexOf("/") + 1));
         Assert.isTrue(downloadResponse.isSuccessful(), "The download should'be been successful");
         Assert.notNull(downloadResponse.getResource(), "The file should've been returned, not null!");
     }
+
     @Test
-    public void download_nonExistingFile_Test() throws Exception{
+    public void download_nonExistingFile_Test() throws Exception {
         DownloadPhotoResponse downloadResponse = download("nonexistinggg.jpg");
         Assert.isTrue(!downloadResponse.isSuccessful(), "The download should've failed");
         Assert.isNull(downloadResponse.getResource(), "Null should've been returned!");
     }
 
     @Test
-    public void delete_existing() throws Exception{
+    public void delete_existing() throws Exception {
         UploadPhotoResponse uploadResponse = upload("test_image.jpg");
         String uploaded_url = uploadResponse.getMessage();
         Assert.isTrue(uploadResponse.isSuccessful(), "The upload should've been successful");
@@ -74,7 +77,7 @@ public class MediaAppTests {
         URL url = new URL(uploaded_url);
         String objectPath = url.getPath().substring(1);
         String bucketName = objectPath.substring(0, objectPath.indexOf("/"));
-        String objectName = objectPath.substring(1+ objectPath.indexOf("/"));
+        String objectName = objectPath.substring(1 + objectPath.indexOf("/"));
         ErrorResponseException e = Assertions.assertThrows(ErrorResponseException.class, () -> {
             InputStream obj = minioClient.getObject(
                     GetObjectArgs.builder()

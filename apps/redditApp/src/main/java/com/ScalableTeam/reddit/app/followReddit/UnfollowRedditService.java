@@ -4,7 +4,6 @@ import com.ScalableTeam.amqp.MessagePublisher;
 import com.ScalableTeam.amqp.MessageQueues;
 import com.ScalableTeam.amqp.RabbitMQProducer;
 import com.ScalableTeam.arango.Channel;
-import com.ScalableTeam.arango.RedditFollowersEdge;
 import com.ScalableTeam.arango.User;
 import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.models.notifications.requests.NotificationSendRequest;
@@ -31,6 +30,9 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class UnfollowRedditService implements MyCommand {
+    private final String serviceName = "unfollowReddit";
+    @Autowired
+    RedditFollowersEdgeRepository redditFollowersEdgeRepository;
     @Autowired
     private ChannelRepository channelRepository;
     @Autowired
@@ -42,10 +44,7 @@ public class UnfollowRedditService implements MyCommand {
     @Autowired
     private CachingService cachingService;
     @Autowired
-    RedditFollowersEdgeRepository redditFollowersEdgeRepository;
-    @Autowired
     private RabbitMQProducer rabbitMQProducer;
-    private final String serviceName = "unfollowReddit";
 
     @RabbitListener(queues = "${mq.queues.request.reddit." + serviceName + "}")
     public String listenToRequestQueue(FollowRedditForm followRedditForm, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
@@ -91,7 +90,7 @@ public class UnfollowRedditService implements MyCommand {
 
             }
 
-            redditFollowersEdgeRepository.unfollow("channels/"+redditId,"users/"+userId);
+            redditFollowersEdgeRepository.unfollow("channels/" + redditId, "users/" + userId);
 
 
             int numfollowers = redditFollowRepository.unfollowReddit(redditId);
@@ -108,12 +107,11 @@ public class UnfollowRedditService implements MyCommand {
                 log.info("Controller - Queue: {}, Command: {}, Payload: {}", "sendNotificationCommand", serviceName, request);
                 rabbitMQProducer.publishAsynchronousToQueue(MessageQueues.REQUEST_NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
                         "Channel Follower Left",
-                        userId +" unfollowed your channel "+redditId,
+                        userId + " unfollowed your channel " + redditId,
                         userId,
                         admins
                 ), MessageQueues.RESPONSE_NOTIFICATIONS);
-            }
-            catch(Exception e){
+            } catch (Exception e) {
                 System.out.println("no admin to receive notification");
             }
 

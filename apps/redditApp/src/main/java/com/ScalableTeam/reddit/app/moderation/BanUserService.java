@@ -1,4 +1,3 @@
-
 package com.ScalableTeam.reddit.app.moderation;
 
 import com.ScalableTeam.amqp.MessagePublisher;
@@ -23,12 +22,11 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class BanUserService implements MyCommand {
+    private final String serviceName = "banUser";
     @Autowired
     private ChannelRepository channelRepository;
     @Autowired
     private UserRepository userRepository;
-
-    private final String serviceName = "banUser";
 
     @RabbitListener(queues = "${mq.queues.request.reddit." + serviceName + "}")
     public String listenToRequestQueue(BanUserForm banUserForm, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {

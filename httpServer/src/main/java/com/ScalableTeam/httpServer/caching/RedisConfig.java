@@ -22,13 +22,14 @@ public class RedisConfig {
                 .withCacheConfiguration(CACHE_NAME,
                         RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofDays(30)));
     }
+
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         return new LettuceConnectionFactory();
     }
 
     @Bean
-    public RedisTemplate<String, String> redisTemplate(){
+    public RedisTemplate<String, String> redisTemplate() {
         RedisTemplate<String, String> empTemplate = new RedisTemplate<>();
         empTemplate.setConnectionFactory(redisConnectionFactory());
         empTemplate.setKeySerializer(new StringRedisSerializer());

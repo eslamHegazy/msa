@@ -57,7 +57,7 @@ services:
       dockerfile: "apps/redditApp/Dockerfile"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-#    restart: on-failure
+    #    restart: on-failure
     ports:
       - "8081:8081"
     depends_on:

@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class BookmarkChannelForm {
 
-        private String userId;
-        private String channelId;
+    private String userId;
+    private String channelId;
 }

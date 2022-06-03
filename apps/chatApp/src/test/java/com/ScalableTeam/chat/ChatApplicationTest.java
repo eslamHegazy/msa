@@ -290,14 +290,14 @@ public class ChatApplicationTest {
         grpData.put("adminId", "1");
         grpData.put("name", "NEWGRP");
         grpData.put("description", "GRP DESCC");
-        grpData.put("users", Arrays.asList("1","3", "4"));
+        grpData.put("users", Arrays.asList("1", "3", "4"));
 
         // Add data to collection of chats
         MyCommand cmd = context.getBean(CreateGroupCommand.class);
         String grpId = (String) cmd.execute(grpData);
 
         // Add Private CHat
-        Map<String, Object>  pvData = new HashMap<>();
+        Map<String, Object> pvData = new HashMap<>();
         pvData.put("users", Arrays.asList("1", "4"));
 
         // Add data to collection of chats
@@ -306,7 +306,7 @@ public class ChatApplicationTest {
 
         // Get ALl chats
         // Add Private CHat
-        Map<String, Object>  getData = new HashMap<>();
+        Map<String, Object> getData = new HashMap<>();
         getData.put("userId", "1");
 
         MyCommand getCmd = context.getBean(GetAllChatsCommand.class);

@@ -12,6 +12,7 @@ public interface RedditFollowRepository extends JpaRepository<RedditFollowers, S
     @Procedure(name = "reddit_followers.followReddit")
     @Transactional
     int followReddit(@Param("in_redditId") String channelNameId);
+
     @Procedure(name = "reddit_followers.unfollowReddit")
     @Transactional
     int unfollowReddit(@Param("in_redditId") String channelNameId);

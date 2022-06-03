@@ -10,14 +10,6 @@ import java.io.InputStream;
 @Component
 public class ByteClassLoader extends ClassLoader {
 
-    public Class<?> loadClassFromBytes(String name, byte[] b) {
-        try {
-            return this.defineClass(name, b, 0, b.length);
-        } catch (LinkageError e) {
-            return new ByteClassLoader().loadClassFromBytes(name, b);
-        }
-    }
-
     public static byte[] readClassFileAsBytes(String className) throws IOException {
         byte[] buffer;
         final String path = StringUtils.getClassSimpleName(className) + StringUtils.CLASS_EXT;
@@ -27,5 +19,13 @@ public class ByteClassLoader extends ClassLoader {
         }
 
         return buffer;
+    }
+
+    public Class<?> loadClassFromBytes(String name, byte[] b) {
+        try {
+            return this.defineClass(name, b, 0, b.length);
+        } catch (LinkageError e) {
+            return new ByteClassLoader().loadClassFromBytes(name, b);
+        }
     }
 }

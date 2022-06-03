@@ -21,24 +21,25 @@ public class SignUpCommand implements ICommand<SignUpBody, SignUpResponse> {
 
     private final UserProfileRepository userProfileRepository;
     private final UserRepository userRepository;
+
     @Override
     public SignUpResponse execute(SignUpBody body) {
         String userId = body.getUserId();
         String email = body.getEmail();
 
         boolean userNameExists = userProfileRepository.existsById(userId);
-        if(userNameExists)
+        if (userNameExists)
             return new SignUpResponse("Username already exists", false);
 
 
         String regex = "^(.+)@(.+)$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(email);
-        if(!matcher.matches())
+        if (!matcher.matches())
             return new SignUpResponse("Not a valid email format", false);
 
         boolean emailExists = userProfileRepository.existsByEmail(email);
-        if(emailExists)
+        if (emailExists)
             return new SignUpResponse("Email already exists", false);
 
         String password = body.getPassword();

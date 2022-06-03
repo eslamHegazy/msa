@@ -21,12 +21,11 @@ import java.util.Optional;
 @Slf4j
 public class ViewReportsService implements MyCommand {
 
+    private final String serviceName = "viewReports";
     @Autowired
     private ChannelRepository channelRepository;
     @Autowired
     private UserRepository userRepository;
-
-    private final String serviceName = "viewReports";
 
     @RabbitListener(queues = "${mq.queues.request.reddit." + serviceName + "}", returnExceptions = "true")
     public String listenToRequestQueue(ViewReportsForm viewReportsForm, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {

@@ -1,19 +1,13 @@
 import com.ScalableTeam.arango.Post;
 import com.ScalableTeam.arango.UserRepository;
-import com.ScalableTeam.models.reddit.VoteCommentForm;
 import com.ScalableTeam.reddit.RedditApplication;
-import com.ScalableTeam.reddit.app.comment.DownvoteCommentService;
-import com.ScalableTeam.reddit.app.comment.UpvoteCommentService;
 import com.ScalableTeam.reddit.app.post.CreatePostService;
-import com.ScalableTeam.reddit.app.repository.CommentRepository;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
-import com.ScalableTeam.reddit.app.repository.vote.CommentVoteRepository;
-import com.ScalableTeam.reddit.app.repository.vote.UserVoteCommentRepository;
 import config.TestBeansConfig;
-import mocks.CommentMock;
 import mocks.PostMock;
-import mocks.UserMock;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,9 +15,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import utils.CreatePostPopulator;
-import utils.VoteCommentPopulator;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
@@ -36,6 +28,7 @@ public class CreatePostTest {
     private PostRepository postRepository;
     @Autowired
     private UserRepository userRepository;
+
     @Test
     void createPost() throws Exception {
         //given
@@ -54,6 +47,6 @@ public class CreatePostTest {
 
     @AfterEach
     public void clean() {
-        CreatePostPopulator.clear(userRepository,postRepository);
+        CreatePostPopulator.clear(userRepository, postRepository);
     }
 }

@@ -29,18 +29,20 @@ public class UserMock {
         user.setUserNameId(id);
         return user;
     }
-    public static User getUserFollowsChannel(String channelId){
+
+    public static User getUserFollowsChannel(String channelId) {
         User user = getUser();
-        HashMap<String,Boolean>follows=new HashMap<>();
-        follows.put(channelId,true);
+        HashMap<String, Boolean> follows = new HashMap<>();
+        follows.put(channelId, true);
         user.setFollowedChannels(follows);
         return user;
     }
-    public static User getUserWithIdFollowsChannel(String userNameId,String channelId){
+
+    public static User getUserWithIdFollowsChannel(String userNameId, String channelId) {
         User user = getUser();
         user.setUserNameId(userNameId);
-        HashMap<String,Boolean>follows=new HashMap<>();
-        follows.put(channelId,true);
+        HashMap<String, Boolean> follows = new HashMap<>();
+        follows.put(channelId, true);
         user.setFollowedChannels(follows);
         return user;
     }

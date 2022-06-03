@@ -27,6 +27,11 @@ public class CommentSeeder {
     private final PostCommentHierarchyRepository postCommentHierarchyRepository;
     private final CommentChildrenHierarchyRepository commentChildrenHierarchyRepository;
 
+    static int rand(ArrayList<String> userNameIds) {
+        Random rand = new Random();
+        return rand.nextInt(userNameIds.size());
+    }
+
     public Set<String> seedComments(Set<String> userNameIds) {
         log.info("Seed Comments:-----");
         ArrayList<String> users = new ArrayList<>(userNameIds);
@@ -152,10 +157,5 @@ public class CommentSeeder {
         commentChildrenHierarchyRepository.save(commentToComment);
 
         return comments;
-    }
-
-    static int rand(ArrayList<String> userNameIds) {
-        Random rand = new Random();
-        return rand.nextInt(userNameIds.size());
     }
 }
