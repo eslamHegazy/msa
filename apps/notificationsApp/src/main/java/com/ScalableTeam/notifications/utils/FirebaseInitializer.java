@@ -12,7 +12,7 @@ public class FirebaseInitializer {
         try {
             if (!isInitialized) {
                 GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
-                FirebaseOptions options = FirebaseOptions.builder().setCredentials(GoogleCredentials.getApplicationDefault()).build();
+                FirebaseOptions options = FirebaseOptions.builder().setCredentials(credentials).build();
                 FirebaseApp.initializeApp(options);
                 isInitialized = true;
                 System.out.println("Firebase notification app has been initialized.");
