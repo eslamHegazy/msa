@@ -6,6 +6,16 @@ services:
       - "5672:5672"
       - "15672:15672"
 
+  arangodb:
+    image: arangodb:latest
+    environment:
+      ARANGO_NO_AUTH: 1
+    ports:
+      - "8529:8529"
+    volumes:
+      - arangodb_data_container:/var/lib/arangodb3
+      - arangodb_apps_data_container:/var/lib/arangodb3-apps
+
   chat_app:
     build:
       context: "../../"
@@ -17,3 +27,8 @@ services:
       - "8081:8081"
     depends_on:
       - rabbitmq
+      - arangodb
+
+volumes:
+  arangodb_data_container:
+  arangodb_apps_data_container:
