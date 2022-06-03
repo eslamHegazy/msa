@@ -5,7 +5,6 @@ import com.ScalableTeam.amqp.MessagePublisher;
 import com.ScalableTeam.arango.User;
 import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.reddit.MyCommand;
-import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -89,25 +88,24 @@ public class RedditsRecommendationsService implements MyCommand {
 
             ArrayList<String> result = new ArrayList<String>();
 
-            while(result.size()<5 && freqlist.size()>0){
+            while (result.size() < 5 && freqlist.size() > 0) {
                 boolean found = false;
                 Iterator it = frequencies.entrySet().iterator();
                 System.out.println(result);
-                while (it.hasNext()){
+                while (it.hasNext()) {
                     HashMap.Entry item = (Map.Entry) it.next();
-                    if(item.getValue()==freqlist.get(freqlist.size()-1)){
+                    if (item.getValue() == freqlist.get(freqlist.size() - 1)) {
                         result.add((String) item.getKey());
-                        found=true;
+                        found = true;
                         break;
                     }
 
                 }
-                frequencies.remove(result.get(result.size()-1));
-                if(!found){
-                    freqlist.remove(freqlist.size()-1);
+                frequencies.remove(result.get(result.size() - 1));
+                if (!found) {
+                    freqlist.remove(freqlist.size() - 1);
                 }
             }
-
 
 
             return result.toString();

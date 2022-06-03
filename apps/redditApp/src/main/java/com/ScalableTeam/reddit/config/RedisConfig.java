@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
+
 @Configuration
 public class RedisConfig {
     @Bean
@@ -20,8 +21,11 @@ public class RedisConfig {
                 .withCacheConfiguration("popularPostsCache",
                         RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofDays(7)))
                 .withCacheConfiguration("popularChannelsCache",
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofDays(7)))
+                .withCacheConfiguration("recommendationsCache",
                         RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofDays(7)));
     }
+
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         return new LettuceConnectionFactory();
@@ -29,7 +33,7 @@ public class RedisConfig {
 
     //Creating RedisTemplate for Entity 'Post'
     @Bean
-    public RedisTemplate<String, String> redisTemplate(){
+    public RedisTemplate<String, String> redisTemplate() {
         RedisTemplate<String, String> empTemplate = new RedisTemplate<>();
         empTemplate.setConnectionFactory(redisConnectionFactory());
         empTemplate.setKeySerializer(new StringRedisSerializer());
