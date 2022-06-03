@@ -5,13 +5,13 @@ import com.ScalableTeam.controller.ControllerPublisher;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
-import io.netty.handler.codec.http.HttpContent;
-import io.netty.handler.codec.http.HttpObject;
+import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@ChannelHandler.Sharable
 @AllArgsConstructor
 @Component
 @Slf4j
@@ -33,13 +33,18 @@ public class ControllerServerExecutor extends SimpleChannelInboundHandler<HttpOb
 
         log.info("Channel for main controller server read command {}", command);
         controllerPublisher.handleRequest(command);
+
+        ByteBuf content = Unpooled.copiedBuffer("Command Submitted!", CharsetUtil.UTF_8);
+        FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, content);
+        response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/html");
+        response.headers().set(HttpHeaderNames.CONTENT_LENGTH, content.readableBytes());
+        ctx.write(response);
+        ctx.flush();
     }
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
         ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
-        ctx.flush();
-        ctx.fireChannelReadComplete();
     }
 
     @Override

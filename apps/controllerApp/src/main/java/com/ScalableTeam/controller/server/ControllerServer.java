@@ -16,7 +16,6 @@ public class ControllerServer {
     private final ServerBootstrap serverBootstrap;
     private final EventLoopGroup eventLoopGroup;
     private final EventLoopGroup eventWorkerLoopGroup;
-    private final ControllerServerExecutor controllerServerExecutor;
     private final ServerInitializer serverInitializer;
 
     private InetSocketAddress tcpPort;
@@ -26,13 +25,11 @@ public class ControllerServer {
                                     EventLoopGroup eventLoopGroup,
                             @Qualifier("controllerWorkerEventLoopGroup")
                                     EventLoopGroup eventWorkerLoopGroup,
-                            ControllerServerExecutor controllerServerExecutor,
                             ServerInitializer serverInitializer
     ) {
         this.serverBootstrap = serverBootstrap;
         this.eventLoopGroup = eventLoopGroup;
         this.eventWorkerLoopGroup = eventWorkerLoopGroup;
-        this.controllerServerExecutor = controllerServerExecutor;
         this.serverInitializer = serverInitializer;
     }
 

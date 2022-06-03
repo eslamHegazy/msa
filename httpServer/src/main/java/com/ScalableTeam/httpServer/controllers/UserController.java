@@ -13,6 +13,16 @@ public class UserController {
     public static final String QUEUE = "user-app";
     private final RabbitTemplate rabbitTemplate;
 
+    @GetMapping("/userTest")
+    public String testUser(){
+        Object o =  rabbitTemplate.convertSendAndReceiveAsType(QUEUE, "", message -> {
+            message.getMessageProperties().setHeader("command", "userTestCommand");
+            return message;
+        }, new ParameterizedTypeReference<>() {
+        });
+        return "Hello Maria";
+    }
+
     @DeleteMapping("/deleteAccount")
     public DeleteAccountResponse deleteUser(@RequestBody DeleteAccountBody body){
         return rabbitTemplate.convertSendAndReceiveAsType(QUEUE, body, message -> {

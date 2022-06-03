@@ -2,9 +2,6 @@ package com.ScalableTeam.utils;
 
 import io.netty.buffer.ByteBuf;
 
-import java.util.Arrays;
-import java.util.Locale;
-
 public class StringUtils {
     public static final String CLASS_EXT = ".class";
     public static final char PACKAGE_SEPARATOR = '.';
@@ -23,10 +20,8 @@ public class StringUtils {
     }
 
     public static String getClassSimpleName(String packageName) {
-        System.out.println(packageName);
-        String[] name = packageName.split(".");
-        System.out.println(Arrays.toString(name));
-        return camelCase(name[name.length - 1]);
+        String[] name = packageName.replace(PACKAGE_SEPARATOR, ' ').split(" ");
+        return name[name.length - 1];
     }
 
     public static String camelCase(String str) {

@@ -2,6 +2,7 @@ package com.ScalableTeam.controller.client;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -22,7 +23,7 @@ public class ControllerClientExecutor extends SimpleChannelInboundHandler<ByteBu
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         log.info("Channel {} is active\n", ctx.channel().id());
-        ctx.writeAndFlush(Unpooled.copiedBuffer(command, CharsetUtil.UTF_8));
+        ctx.writeAndFlush(Unpooled.copiedBuffer(command + "EOF\n", CharsetUtil.UTF_8)).addListener(ChannelFutureListener.CLOSE);
     }
 
     @Override

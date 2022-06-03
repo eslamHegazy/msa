@@ -2,16 +2,12 @@ package com.ScalableTeam.services;
 
 import com.ScalableTeam.services.config.AddressConfig;
 import com.ScalableTeam.services.controllerserver.ControllerRequestsServer;
-import com.ScalableTeam.utils.StringUtils;
-import io.swagger.models.auth.In;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.PostConstruct;
-import java.lang.reflect.Method;
+import java.net.UnknownHostException;
 import java.util.Map;
 
 @NoArgsConstructor
@@ -32,9 +28,9 @@ public class BaseService {
                 Map<String, Integer> m = addressConfig.getPorts();
                 if (m.containsKey(appName))
                     port = m.get(appName);
-                controllerRequestsServer.setTcpPort(port);
+                controllerRequestsServer.setTcp("127.0.0.1", port);
                 controllerRequestsServer.start();
-            } catch (InterruptedException e) {
+            } catch (InterruptedException | UnknownHostException e) {
                 e.printStackTrace();
             }
         }).start();
