@@ -4,6 +4,7 @@ import com.ScalableTeam.amqp.MessagePublisher;
 import com.ScalableTeam.amqp.MessageQueues;
 import com.ScalableTeam.amqp.RabbitMQProducer;
 import com.ScalableTeam.arango.Channel;
+import com.ScalableTeam.arango.RedditFollowersEdge;
 import com.ScalableTeam.arango.User;
 import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.models.notifications.requests.NotificationSendRequest;
@@ -11,6 +12,7 @@ import com.ScalableTeam.models.reddit.FollowRedditForm;
 import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.caching.CachingService;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
+import com.ScalableTeam.reddit.app.repository.RedditFollowersEdgeRepository;
 import com.ScalableTeam.reddit.app.repository.vote.RedditFollowRepository;
 import com.ScalableTeam.reddit.config.PopularityConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +44,8 @@ public class FollowRedditService implements MyCommand {
     @Autowired
     private RabbitMQProducer rabbitMQProducer;
 
+    @Autowired
+    RedditFollowersEdgeRepository redditFollowersEdgeRepository;
     private final String serviceName = "followReddit";
 
     @RabbitListener(queues = "${mq.queues.request.reddit." + serviceName + "}")
@@ -67,7 +71,6 @@ public class FollowRedditService implements MyCommand {
             Optional<User> user = userRepository.findById(userId);
             if (!user.isPresent()) {
                 throw new IllegalStateException("User not found in DB!");
-
             }
 
 
@@ -89,6 +92,9 @@ public class FollowRedditService implements MyCommand {
                 }
                 userRepository.updateFollowedChannelsWithID(userId, follow);
             }
+            RedditFollowersEdge redditFollowersEdge = RedditFollowersEdge.builder().channel(reddit.get()).user(actualUser).build();
+
+            redditFollowersEdgeRepository.save(redditFollowersEdge);
 
             int numfollowers = redditFollowRepository.followReddit(redditId);
             System.err.println("currentFollowers " + numfollowers);

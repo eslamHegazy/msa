@@ -1,11 +1,15 @@
 package com.ScalableTeam.chat.app.GroupChat;
 
+import com.ScalableTeam.amqp.MessageQueues;
+import com.ScalableTeam.amqp.RabbitMQProducer;
 import com.ScalableTeam.chat.app.MyCommand;
 import com.ScalableTeam.chat.app.entity.GroupChat;
+import com.ScalableTeam.models.notifications.requests.NotificationSendRequest;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.cloud.FirestoreClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,6 +18,14 @@ import java.util.Map;
 
 @Service
 public class CreateGroupCommand implements MyCommand {
+
+    public RabbitMQProducer rabbitMQProducer;
+
+    @Autowired
+    public CreateGroupCommand(RabbitMQProducer rabbitMQProducer) {
+        this.rabbitMQProducer = rabbitMQProducer;
+    }
+
     @Override
     public Object execute(Map<String, Object> groupChatDetails) {
         try {
@@ -30,6 +42,14 @@ public class CreateGroupCommand implements MyCommand {
             ApiFuture<DocumentReference> addedDocRef = database.collection("GroupChats")
                     .add(groupChat);
             System.out.println("Added document with ID: " + addedDocRef.get().getId());
+
+            rabbitMQProducer.publishAsynchronousToQueue(MessageQueues.REQUEST_NOTIFICATIONS, "sendNotificationCommand", new NotificationSendRequest(
+                    "You are added to group " + name,
+                    adminId + " added you to group " + name + " with description " + description,
+                    adminId,
+                    userIds
+            ), MessageQueues.RESPONSE_NOTIFICATIONS);
+
             return addedDocRef.get().getId();
         } catch (Exception e) {
             System.out.println(e);

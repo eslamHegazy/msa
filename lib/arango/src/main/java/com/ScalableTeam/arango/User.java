@@ -25,6 +25,9 @@ public class User {
     private HashMap<String, Boolean> followedUsers;
 
     private HashMap<String, Boolean> blockedUsers;
+    private HashMap<String, Boolean> bookmarkedPosts;
+    private HashMap<String, Boolean> bookmarkedChannels;
+
 
     public HashMap<String, String> getReportedUsers() {
         return reportedUsers;
@@ -127,6 +130,22 @@ public class User {
 
     public void setLatestReadPostId(String latestReadPostId) {
         this.latestReadPostId = latestReadPostId;
+    }
+
+    public HashMap<String, Boolean> getBookmarkedPosts() {
+        return bookmarkedPosts;
+    }
+
+    public void setBookmarkedPosts(HashMap<String, Boolean> bookmarkedPosts) {
+        this.bookmarkedPosts = bookmarkedPosts;
+    }
+
+    public HashMap<String, Boolean> getBookmarkedChannels() {
+        return bookmarkedChannels;
+    }
+
+    public void setBookmarkedChannels(HashMap<String, Boolean> bookmarkedChannels) {
+        this.bookmarkedChannels = bookmarkedChannels;
     }
 
     @Override

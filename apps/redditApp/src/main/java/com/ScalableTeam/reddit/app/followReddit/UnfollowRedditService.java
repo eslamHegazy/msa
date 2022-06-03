@@ -4,6 +4,7 @@ import com.ScalableTeam.amqp.MessagePublisher;
 import com.ScalableTeam.amqp.MessageQueues;
 import com.ScalableTeam.amqp.RabbitMQProducer;
 import com.ScalableTeam.arango.Channel;
+import com.ScalableTeam.arango.RedditFollowersEdge;
 import com.ScalableTeam.arango.User;
 import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.models.notifications.requests.NotificationSendRequest;
@@ -11,6 +12,7 @@ import com.ScalableTeam.models.reddit.FollowRedditForm;
 import com.ScalableTeam.reddit.MyCommand;
 import com.ScalableTeam.reddit.app.caching.CachingService;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
+import com.ScalableTeam.reddit.app.repository.RedditFollowersEdgeRepository;
 import com.ScalableTeam.reddit.app.repository.vote.RedditFollowRepository;
 import com.ScalableTeam.reddit.config.PopularityConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -40,9 +42,10 @@ public class UnfollowRedditService implements MyCommand {
     @Autowired
     private CachingService cachingService;
     @Autowired
+    RedditFollowersEdgeRepository redditFollowersEdgeRepository;
+    @Autowired
     private RabbitMQProducer rabbitMQProducer;
     private final String serviceName = "unfollowReddit";
-
 
     @RabbitListener(queues = "${mq.queues.request.reddit." + serviceName + "}")
     public String listenToRequestQueue(FollowRedditForm followRedditForm, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
@@ -87,6 +90,10 @@ public class UnfollowRedditService implements MyCommand {
                 userRepository.save(actualUser);
 
             }
+
+            redditFollowersEdgeRepository.unfollow("channels/"+redditId,"users/"+userId);
+
+
             int numfollowers = redditFollowRepository.unfollowReddit(redditId);
             System.err.println("currentFollowers " + numfollowers);
             if (numfollowers < popularityConfig.getPostsUpvoteThreshold()) {

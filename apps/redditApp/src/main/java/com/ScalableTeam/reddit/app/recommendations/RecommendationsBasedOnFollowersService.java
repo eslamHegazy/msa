@@ -22,68 +22,71 @@ import java.util.*;
 public class RecommendationsBasedOnFollowersService implements MyCommand {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    RecommendationsPerChannel recommendationsPerChannel;
     private final String serviceName = "recommendationsBasedOnFollowersService";
     @Autowired
     private Config config;
 
     @RabbitListener(queues = "${mq.queues.request.reddit." + serviceName + "}", returnExceptions = "true")
-    public String[] listenToRequestQueue(String userId, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
+    public  String listenToRequestQueue(String userId, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
         String correlationId = message.getMessageProperties().getCorrelationId();
         log.info("Queue Listener::Command={}, CorrelationId={}, Recommendations Based On Followers Form={}", commandName, correlationId, userId);
         return execute(userId);
     }
 
     @Override
-    public String[] execute(Object body) throws Exception {
+    public String execute(Object body) throws Exception {
         //    1. get all/10 random/first entries in user's followedUsers
 //    2. get all their followed reddits (put them together)
 //    return most frequently occuring reddits (or first 5 if none repeat)
         try {
             String userId = (String) body;
             log.info("Service::Recommendations Based On Followers Form={}", userId);
-
-            Optional<User> userO = userRepository.findById(userId);
-            if (!userO.isPresent()) {
-                throw new IllegalStateException("User " + userId + "not found in DataBase");
+            User user = userRepository.findById(userId).get();
+            String [] followIds = user.getFollowedChannels().keySet().toArray(String[]::new);
+            HashMap<String, Integer> frequencies = new HashMap<>();
+            for(int i=0;i<3;i++){
+                HashMap<String, Integer> temp = String2Hash(recommendationsPerChannel.execute(followIds[i]));
+                for (String k : temp.keySet()){
+                    if (frequencies.containsKey(k)){
+                        frequencies.replace(k,frequencies.get(k)+temp.get(k));
+                    }else {
+                        frequencies.put(k, temp.get(k));
+                    }
+                }
             }
 
-            User user = userO.get();
-            if (user.getFollowedUsers() == null) {
-                return new String[0];
-            }
-            HashMap<String, Boolean> followedUsers = user.getFollowedUsers();
-            HashMap<String, Integer> frequencies = new HashMap<String, Integer>();
+            Collection<Integer> freq_vals = frequencies.values();
+            List<Integer> freqlist = new ArrayList<Integer>();
+            freqlist.addAll(freq_vals);
+            Collections.sort(freqlist);
+            System.out.println(freqlist.toString());
 
-            for (String uId : followedUsers.keySet()) {
-                Optional<User> u = userRepository.findById(uId);
-                if (u.isPresent()) {
-                    User u2 = u.get();
-                    if (u2.getFollowedChannels() != null) {
-                        Set<String> rList = u2.getFollowedChannels().keySet();
-                        for (String r : rList) {
+            ArrayList<String> result = new ArrayList<String>();
 
-                            if (frequencies.containsKey(r)) {
-                                frequencies.replace(r, frequencies.get(r) + 1);
-                            } else {
-                                frequencies.put(r, 1);
-                            }
-                        }
-
+            while(result.size()<5){
+                boolean found = false;
+                Iterator it = frequencies.entrySet().iterator();
+                System.out.println(result);
+                while (it.hasNext()){
+                    HashMap.Entry item = (Map.Entry) it.next();
+                    if(item.getValue()==freqlist.get(freqlist.size()-1)){
+                        result.add((String) item.getKey());
+                        found=true;
+                        break;
                     }
 
                 }
+                frequencies.remove(result.get(result.size()-1));
+                if(!found){
+                    freqlist.remove(freqlist.size()-1);
+                }
+            }
 
-            }
-            int counter = 5;
-            String[] result = new String[counter];
-            Set set2 = frequencies.entrySet();
-            Iterator iterator2 = set2.iterator();
-            while (iterator2.hasNext() && counter > 0) {
-                Map.Entry me2 = (Map.Entry) iterator2.next();
-                result[counter - 1] = (String) me2.getKey();
-                counter--;
-            }
-            return result;
+            System.out.println(result);
+
+            return result.toString();
 
         } catch (Exception e) {
             throw e;
@@ -91,4 +94,14 @@ public class RecommendationsBasedOnFollowersService implements MyCommand {
 
     }
 
+    private HashMap<String, Integer> String2Hash(String s){
+        HashMap<String,Integer> res = new HashMap<>();
+        s = s.substring(1,s.length()-1);
+        String [] items = s.split(",");
+        for (String it :items){
+            String [] entry = it.split("=");
+            res.put(entry[0],Integer.parseInt(entry[1]));
+        }
+        return res;
+    }
 }

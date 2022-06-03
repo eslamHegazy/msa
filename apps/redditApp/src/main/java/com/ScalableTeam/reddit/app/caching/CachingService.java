@@ -1,10 +1,9 @@
 package com.ScalableTeam.reddit.app.caching;
 
-import com.ScalableTeam.arango.Channel;
-import com.ScalableTeam.arango.Post;
-import com.ScalableTeam.arango.User;
-import com.ScalableTeam.arango.UserRepository;
+import com.ScalableTeam.arango.*;
+import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
+import com.ScalableTeam.reddit.app.repository.RedditFollowersEdgeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -12,9 +11,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CachingService {
@@ -22,6 +19,10 @@ public class CachingService {
     private PostRepository postRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private RedditFollowersEdgeRepository redditFollowersEdgeRepository;
+    @Autowired
+    private ChannelRepository channelRepository;
     public static byte[] serialize(Object obj){
         byte[] bytes = null;
         try {
@@ -155,12 +156,30 @@ public class CachingService {
             throw new Exception("Exception When getting the feed");
         }
     }
-    @Cacheable(cacheNames = "postsCache",key="#userNameId")
+    @Cacheable(cacheNames = "recommendationsCache",key="#redditId")
     public String getRecommendations(String redditId) throws Exception {
         try {
+            Channel reddit = channelRepository.findById(redditId).get();
+            ArrayList<User> fols = (ArrayList<User>)reddit.getFollowers().getEntity();
 
-//            ArrayList<Optional<User>> users = userRepository.findAll();
-            return "";
+            HashMap<String, Integer> frequencies= new HashMap<>();
+            for (User u: fols){
+                HashMap<String, Boolean> channels = u.getFollowedChannels();
+                if(channels==null){
+                    continue;
+                }
+                for (String ch :channels.keySet()){
+                    if (frequencies.containsKey(ch)){
+                        frequencies.replace(ch,frequencies.get(ch)+1);
+                    }else{
+                        frequencies.put(ch,1);
+                    }
+
+                }
+            }
+
+
+            return frequencies.toString();
 
         } catch (Exception e) {
 
