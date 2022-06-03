@@ -57,6 +57,7 @@ services:
       dockerfile: "apps/redditApp/Dockerfile"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+    command: --spring.profiles.active=docker
 #    restart: on-failure
     ports:
       - "8081:8081"
