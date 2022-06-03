@@ -1,24 +1,24 @@
-#FROM openjdk:11
-#ARG JAR_FILE=target/chatApp-0.0.1-SNAPSHOT.jar
-#COPY ${JAR_FILE} chatApp.jar
-#ENTRYPOINT ["java", "-jar", "/chatApp.jar"]
+# syntax=docker/dockerfile:1
 
-FROM maven:3.8.1-openjdk-11-slim AS build
+# Build stage
+FROM maven:3.8.1-openjdk-15-slim AS build
 ENV APP_NAME=notificationsApp
 
-COPY pom.xml /reddit/
-WORKDIR /reddit
+COPY pom.xml /M2/
+
+WORKDIR /M2
 
 COPY lib lib
 COPY apps apps
+COPY service-discovery service-discovery
+COPY httpServer httpServer
 
 RUN mvn clean package -pl :${APP_NAME} -am -DskipTests
 
 # Package stage
-FROM openjdk:11-alpine
+FROM openjdk:15-alpine
 ENV APP_NAME=notificationsApp
 
-COPY --from=build /msa/apps/${APP_NAME}/target/${APP_NAME}-0.0.1-SNAPSHOT.jar /usr/local/lib/${APP_NAME}.jar
+COPY --from=build /M2/apps/${APP_NAME}/target/${APP_NAME}-0.0.1-SNAPSHOT-exec.jar /usr/local/lib/${APP_NAME}-exec.jar
 
-
-ENTRYPOINT ["java", "-jar", "/usr/local/lib/notificationsApp.jar"]
+ENTRYPOINT ["java", "-jar", "/usr/local/lib/notificationsApp-exec.jar"]
