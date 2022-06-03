@@ -22,6 +22,7 @@ public class RecommendationsPerChannel implements MyCommand {
     public String execute(Object body) throws Exception {
         String redditId = (String) body;
         log.info("Service::Reddit specific recommendations for ={}", redditId);
-        return cachingService.getRecommendations(redditId);
+        return "{caching=80}";
+//                cachingService.getRecommendations(redditId);
     }
 }

@@ -35,7 +35,7 @@ public class RecommendationsController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/recommendationsBasedOnFollowers/{userNameId}")
-    public String recommendationsBasedOnFollowersService(@PathVariable String userNameId) throws Exception {
+    public Object recommendationsBasedOnFollowersService(@PathVariable String userNameId) throws Exception {
         String command = "recommendationsBasedOnFollowersService";
         String commandName = commandsMapper.getReddit().get(command);
         String queueName = config.getQueues().getRequest().getReddit().get(command);

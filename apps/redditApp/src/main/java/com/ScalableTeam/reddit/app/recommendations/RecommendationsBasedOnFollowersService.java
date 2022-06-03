@@ -6,6 +6,7 @@ import com.ScalableTeam.amqp.MessagePublisher;
 import com.ScalableTeam.arango.User;
 import com.ScalableTeam.arango.UserRepository;
 import com.ScalableTeam.reddit.MyCommand;
+import com.ScalableTeam.reddit.app.caching.CachingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -24,19 +25,22 @@ public class RecommendationsBasedOnFollowersService implements MyCommand {
     private UserRepository userRepository;
     @Autowired
     RecommendationsPerChannel recommendationsPerChannel;
+    @Autowired
+    private CachingService cachingService;
+
     private final String serviceName = "recommendationsBasedOnFollowersService";
     @Autowired
     private Config config;
 
     @RabbitListener(queues = "${mq.queues.request.reddit." + serviceName + "}", returnExceptions = "true")
-    public  String listenToRequestQueue(String userId, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
+    public  Object listenToRequestQueue(String userId, Message message, @Header(MessagePublisher.HEADER_COMMAND) String commandName) throws Exception {
         String correlationId = message.getMessageProperties().getCorrelationId();
         log.info("Queue Listener::Command={}, CorrelationId={}, Recommendations Based On Followers Form={}", commandName, correlationId, userId);
         return execute(userId);
     }
 
     @Override
-    public String execute(Object body) throws Exception {
+    public Object execute(Object body) throws Exception {
         //    1. get all/10 random/first entries in user's followedUsers
 //    2. get all their followed reddits (put them together)
 //    return most frequently occuring reddits (or first 5 if none repeat)
@@ -46,17 +50,26 @@ public class RecommendationsBasedOnFollowersService implements MyCommand {
             User user = userRepository.findById(userId).get();
             String [] followIds = user.getFollowedChannels().keySet().toArray(String[]::new);
             HashMap<String, Integer> frequencies = new HashMap<>();
-            for(int i=0;i<3;i++){
-                HashMap<String, Integer> temp = String2Hash(recommendationsPerChannel.execute(followIds[i]));
+            int end=3;
+            if(followIds.length<end){
+                end= followIds.length;
+            }
+            for(int i=0;i<end;i++){
+                System.out.println(followIds[i]);
+                String stuff = cachingService.getRecommendations(followIds[i]);
+                System.out.println("hello "+stuff);
+                if (stuff.length()>0){
+                HashMap<String, Integer> temp = String2Hash(stuff);
                 for (String k : temp.keySet()){
                     if (frequencies.containsKey(k)){
                         frequencies.replace(k,frequencies.get(k)+temp.get(k));
                     }else {
                         frequencies.put(k, temp.get(k));
                     }
-                }
+                }}
             }
 
+            System.out.println(frequencies);
             Collection<Integer> freq_vals = frequencies.values();
             List<Integer> freqlist = new ArrayList<Integer>();
             freqlist.addAll(freq_vals);
@@ -65,7 +78,7 @@ public class RecommendationsBasedOnFollowersService implements MyCommand {
 
             ArrayList<String> result = new ArrayList<String>();
 
-            while(result.size()<5){
+            while(result.size()<5 && freqlist.size()>0){
                 boolean found = false;
                 Iterator it = frequencies.entrySet().iterator();
                 System.out.println(result);
