@@ -7,6 +7,7 @@ import com.ScalableTeam.models.reddit.FollowRedditForm;
 import com.ScalableTeam.models.reddit.ReportPostForm;
 import com.ScalableTeam.models.reddit.ViewReportsForm;
 import com.ScalableTeam.reddit.RedditApplication;
+import com.ScalableTeam.reddit.app.caching.CachingService;
 import com.ScalableTeam.reddit.app.entity.vote.RedditFollowers;
 import com.ScalableTeam.reddit.app.followReddit.FollowRedditService;
 import com.ScalableTeam.reddit.app.followReddit.UnfollowRedditService;
@@ -16,11 +17,14 @@ import com.ScalableTeam.reddit.app.recommendations.RedditsRecommendationsService
 import com.ScalableTeam.reddit.app.reportPost.ReportPostService;
 import com.ScalableTeam.reddit.app.repository.ChannelRepository;
 import com.ScalableTeam.reddit.app.repository.PostRepository;
+import com.ScalableTeam.reddit.app.repository.RedditFollowersEdgeRepository;
 import com.ScalableTeam.reddit.app.repository.vote.RedditFollowRepository;
 import config.TestBeansConfig;
+import io.swagger.models.auth.In;
 import mocks.ChannelMock;
 import mocks.PostMock;
 import mocks.UserMock;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +67,10 @@ public class RedditTests {
     UnfollowRedditService unfollowRedditService;
     @Autowired
     RedditsRecommendationsService redditsRecommendationsService;
+    @Autowired
+    CachingService cachingService;
+    @Autowired
+    private RedditFollowersEdgeRepository redditFollowersEdgeRepository;
     public String createTestUser(){
         String userId = "user"+(int)(Math.random()*100000);
         User testUser = UserMock.getUserWithId(userId);
@@ -201,6 +209,37 @@ public class RedditTests {
 
     }
 
+    @Test
+    void getRecommendations2() throws Exception {
+
+//        String res = cachingService.getRecommendations("JJK");
+
+        String redditId = "JJK";
+        Channel reddit = channelRepository.findById(redditId).get();
+        ArrayList<User> fols = (ArrayList<User>)reddit.getFollowers().getEntity();
+
+        HashMap<String, Integer> frequencies= new HashMap<>();
+        for (User u: fols){
+            HashMap<String, Boolean> channels = u.getFollowedChannels();
+            if(channels==null){
+                continue;
+            }
+            for (String ch :channels.keySet()){
+                if (frequencies.containsKey(ch)){
+                    frequencies.replace(ch,frequencies.get(ch)+1);
+                }else{
+                    frequencies.put(ch,1);
+                }
+
+            }
+        }
+        System.out.println(frequencies);
+        String res = frequencies.toString();
+        assertThat(res).isEqualTo("salma");
+
+
+
+    }
     @Test
     void reportPostPass() throws Exception {
         String adminId ="admin"+(int)(Math.random()*100000);

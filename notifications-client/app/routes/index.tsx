@@ -10,7 +10,7 @@ import {
 import { format, fromUnixTime } from 'date-fns';
 import cx from 'classnames';
 
-const USER = 'fake_user_2';
+const USER = 'u1';
 const JWT = 'fghjkhgf';
 
 export const loader: LoaderFunction = async () => {
@@ -38,7 +38,7 @@ export const action: ActionFunction = async ({ request }) => {
           body: JSON.stringify({
             title: 'test',
             body: 'helloooo',
-            sender: 'fake_user_1',
+            sender: 'fake_user_2',
             receivers: [USER],
           }),
           method: 'POST',

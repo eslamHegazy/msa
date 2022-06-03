@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 @ComponentScan("com.ScalableTeam.reddit")
 @Service
 @Slf4j
@@ -18,7 +21,7 @@ public class RecommendationsPerChannel implements MyCommand {
     @Override
     public String execute(Object body) throws Exception {
         String redditId = (String) body;
-        log.info("Service::Read Wall Form={}", redditId);
+        log.info("Service::Reddit specific recommendations for ={}", redditId);
         return cachingService.getRecommendations(redditId);
     }
 }
