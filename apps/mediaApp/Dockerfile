@@ -18,9 +18,9 @@ RUN mvn clean package -pl :${APP_NAME} -am -DskipTests
 
 # Package stage
 FROM openjdk:15-alpine
-ENV APP_NAME=redditApp
+ENV APP_NAME=mediaApp
 
 COPY --from=build /M2/apps/${APP_NAME}/target/${APP_NAME}-0.0.1-SNAPSHOT-exec.jar /usr/local/lib/${APP_NAME}-exec.jar
 
 
-ENTRYPOINT ["java", "-jar", "/usr/local/lib/redditApp-exec.jar"]
+ENTRYPOINT ["java", "-jar", "/usr/local/lib/mediaApp-exec.jar"]

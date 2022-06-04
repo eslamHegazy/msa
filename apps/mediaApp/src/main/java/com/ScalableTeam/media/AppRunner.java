@@ -41,8 +41,9 @@ public class AppRunner implements CommandLineRunner {
             File f = new File("run_output.jpg");
             FileOutputStream fos = new FileOutputStream(f);
             System.out.println("Downloaded at: " + f.getAbsolutePath());
-            ByteArrayResource b = r.getResource();
-            fos.write(b.getByteArray());
+//            ByteArrayResource b = r.getResource();
+//            fos.write(b.getByteArray());
+            fos.write(r.getPhotoByteArray());
         }
     }
 

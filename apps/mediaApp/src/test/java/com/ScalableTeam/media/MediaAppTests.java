@@ -58,14 +58,14 @@ public class MediaAppTests {
         Assert.isTrue(uploadResponse.isSuccessful(), "The upload should've been successful");
         DownloadPhotoResponse downloadResponse = download(uploaded_url.substring(uploaded_url.lastIndexOf("/") + 1));
         Assert.isTrue(downloadResponse.isSuccessful(), "The download should'be been successful");
-        Assert.notNull(downloadResponse.getResource(), "The file should've been returned, not null!");
+        Assert.notNull(downloadResponse.getPhotoByteArray(), "The file should've been returned, not null!");
     }
 
     @Test
     public void download_nonExistingFile_Test() throws Exception {
         DownloadPhotoResponse downloadResponse = download("nonexistinggg.jpg");
         Assert.isTrue(!downloadResponse.isSuccessful(), "The download should've failed");
-        Assert.isNull(downloadResponse.getResource(), "Null should've been returned!");
+        Assert.isNull(downloadResponse.getPhotoByteArray(), "Null should've been returned!");
     }
 
     @Test

@@ -36,8 +36,9 @@ public class DownloadPhotoCommand implements ICommand<DownloadPhotoBody, Downloa
             );
             byte[] data = IOUtils.toByteArray(obj);
             obj.close();
-            ByteArrayResource resource = new ByteArrayResource(data);
-            return new DownloadPhotoResponse("Success", true, contentType, resource);
+//            ByteArrayResource resource = new ByteArrayResource(data);
+//            return new DownloadPhotoResponse("Success", true, contentType, resource);
+            return new DownloadPhotoResponse("Success", true, contentType, data);
         } catch (Exception e) {
             return new DownloadPhotoResponse(e.getMessage(), false, "", null);
         }

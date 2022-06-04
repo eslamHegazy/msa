@@ -20,8 +20,10 @@ public class UploadPhotoCommand implements ICommand<UploadPhotoBody, UploadPhoto
     MinioClient minioClient;
     @Value("${minio.bucket.name}")
     String defaultBucketName;
-    @Value("${minio.url}")
-    String minioUrl;
+//    @Value("${minio.url}")
+//    String minioUrl;
+    @Value("${download.route}")
+    String downloadRoute;
 
     @Override
     public UploadPhotoResponse execute(UploadPhotoBody body) {
@@ -40,8 +42,10 @@ public class UploadPhotoCommand implements ICommand<UploadPhotoBody, UploadPhoto
                             .contentType(body.getContentType())
                             .build()
             );
-            String path = defaultBucketName + "/" + fileNewName;
-            String directUrl = minioUrl + "/" + path;
+//            String path = defaultBucketName + "/" + fileNewName;
+//            String directUrl = minioExposedUrl + "/" + path;
+            String path = fileNewName;
+            String directUrl = downloadRoute + "/" + path;
             return new UploadPhotoResponse(directUrl, true);
         } catch (Exception e) {
 //            throw new RuntimeException(e.getMessage());

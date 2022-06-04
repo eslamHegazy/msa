@@ -1,0 +1,37 @@
+version: "3.7"
+services:
+  rabbitmq:
+    image: rabbitmq:3.9.11-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  minio:
+    image: quay.io/minio/minio:RELEASE.2022-06-03T01-40-53Z
+    container_name: minio
+    command: server --console-address ":9001" /data1
+    ports:
+      - "9000:9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    volumes:
+      - data1-1:/data1
+  media_app:
+    build:
+      context: "../../"
+      dockerfile: "apps/mediaApp/Dockerfile"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    command: --spring.profiles.active=docker
+    #    restart: on-failure
+    ports:
+      - "8529:8529"
+    depends_on:
+      - rabbitmq
+      - minio
+
+volumes:
+  data1-1:

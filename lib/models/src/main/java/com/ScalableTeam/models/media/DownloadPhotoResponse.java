@@ -12,5 +12,6 @@ public class DownloadPhotoResponse {
     private String message;
     private boolean successful;
     private String contentType; //TODO: map it to headers
-    private ByteArrayResource resource;
+    private byte[] photoByteArray;
+//    private ByteArrayResource resource;
 }
