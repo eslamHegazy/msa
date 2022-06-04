@@ -3,29 +3,26 @@
 #COPY ${JAR_FILE} /user-app.jar
 #ENTRYPOINT ["java", "-jar", "/user-app.jar"]
 
-FROM maven:3.8.1-openjdk-11-slim AS build
+FROM maven:3.8.1-openjdk-15-slim AS build
 ENV APP_NAME=userApp
 
-COPY pom.xml .
+COPY pom.xml /M2/
+
+WORKDIR /M2
+
 COPY lib lib
-COPY apps/pom.xml /apps/
-COPY apps/userApp/pom.xml /apps/userApp/
+COPY apps apps
+COPY service-discovery service-discovery
+COPY httpServer httpServer
 
-WORKDIR /lib/
-RUN mvn package -DskipTests
-
-WORKDIR /apps/userApp/
-
-#COPY lib lib
-#COPY apps apps
 
 RUN mvn clean package -pl :${APP_NAME} -am -DskipTests
 
 # Package stage
-FROM openjdk:11-alpine
+FROM openjdk:15-alpine
 ENV APP_NAME=userApp
 
-COPY --from=build /msa/apps/${APP_NAME}/target/${APP_NAME}-0.0.1-SNAPSHOT.jar /usr/local/lib/${APP_NAME}.jar
+COPY --from=build /M2/apps/${APP_NAME}/target/${APP_NAME}-0.0.1-SNAPSHOT-exec.jar /usr/local/lib/${APP_NAME}-exec.jar
 
 
-ENTRYPOINT ["java", "-jar", "/usr/local/lib/userApp.jar"]
+ENTRYPOINT ["java", "-jar", "/usr/local/lib/userApp-exec.jar"]

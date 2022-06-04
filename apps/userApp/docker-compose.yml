@@ -1,0 +1,79 @@
+version: "3.7"
+services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Welcome
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+
+    restart: unless-stopped
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+
+    restart: unless-stopped
+  rabbitmq:
+    image: rabbitmq:3.9.11-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  cache:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - cache:/data
+
+  arangodb:
+    image: arangodb:latest
+    environment:
+      ARANGO_NO_AUTH: 1
+    ports:
+      - "8529:8529"
+    volumes:
+      - arangodb_data_container:/var/lib/arangodb3
+      - arangodb_apps_data_container:/var/lib/arangodb3-apps
+
+  user_app:
+    container_name: user_app
+    build:
+      context: "../../"
+      dockerfile: "apps/userApp/Dockerfile"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    #    restart: on-failure
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - rabbitmq
+      - pgadmin
+      - cache
+      - arangodb
+
+
+volumes:
+  postgres:
+  pgadmin:
+  cache:
+  arangodb_data_container:
+  arangodb_apps_data_container:
+
