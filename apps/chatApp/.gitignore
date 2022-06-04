@@ -32,5 +32,5 @@ build/
 ### VS Code ###
 .vscode/
 
-/media/george/Academic/GUC/Semester 10/MSA/msa/apps/chatApp/src/main/java/com/ScalableTeam/chat/app/config/chat-app-db-service-key.json
-/src/main/java/com/ScalableTeam/chat/app/config/chat-app-db-service-key.json
+#/media/george/Academic/GUC/Semester 10/MSA/msa/apps/chatApp/src/main/java/com/ScalableTeam/chat/app/config/chat-app-db-service-key.json
+#/src/main/java/com/ScalableTeam/chat/app/config/chat-app-db-service-key.json
