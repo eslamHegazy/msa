@@ -1,3 +1,4 @@
+version: "3.7"
 services:
   rabbitmq:
     image: rabbitmq:3.9.11-management-alpine
@@ -22,8 +23,9 @@ services:
       dockerfile: "apps/chatApp/Dockerfile"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - GOOGLE_APPLICATION_CREDENTIALS=/usr/local/lib/firebase-config.json
     command: --spring.profiles.active=docker
-    #    restart: on-failure
+    restart: on-failure
     ports:
       - "8081:8081"
     depends_on:

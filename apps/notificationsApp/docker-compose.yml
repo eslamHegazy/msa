@@ -22,7 +22,7 @@ services:
       dockerfile: "apps/notificationsApp/Dockerfile"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - GOOGLE_APPLICATION_CREDENTIALS=apps/notificationsApp/src/main/resources/firebase-config.json
+      - GOOGLE_APPLICATION_CREDENTIALS=/usr/local/lib/firebase-config.json
     command: --spring.profiles.active=docker
     #    restart: on-failure
     ports:
